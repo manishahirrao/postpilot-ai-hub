@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -13,6 +14,7 @@ import LinkedInPostsPage from "./pages/Product/LinkedInPostsPage";
 import ResumeBuilderPage from "./pages/Product/ResumeBuilderPage";
 import JobMatcherPage from "./pages/Product/JobMatcherPage";
 import CareerAnalyticsPage from "./pages/Product/CareerAnalyticsPage";
+import FreeJobPostingsPage from "./pages/Product/FreeJobPostingsPage";
 
 // Solutions Pages
 import WhyUsPage from "./pages/Solutions/WhyUsPage";
@@ -54,6 +56,7 @@ const App = () => (
               <Route path="/product/resume-builder" element={<ResumeBuilderPage />} />
               <Route path="/product/job-matcher" element={<JobMatcherPage />} />
               <Route path="/product/career-analytics" element={<CareerAnalyticsPage />} />
+              <Route path="/product/free-jobs" element={<FreeJobPostingsPage />} />
               
               {/* Solutions Routes */}
               <Route path="/solutions/why-us" element={<WhyUsPage />} />
