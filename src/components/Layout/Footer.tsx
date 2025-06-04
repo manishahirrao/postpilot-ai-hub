@@ -43,6 +43,16 @@ const Footer: React.FC = () => {
                   Career Analytics & Tips
                 </Link>
               </li>
+              <li>
+                <Link to="/product/free-job-postings" className="text-gray-300 hover:text-white transition-colors">
+                  Free Job Postings
+                </Link>
+              </li>
+              <li>
+                <Link to="/product/hiring-outsourcing" className="text-gray-300 hover:text-white transition-colors">
+                  Hiring Outsourcing
+                </Link>
+              </li>
             </ul>
           </div>
 

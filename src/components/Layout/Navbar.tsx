@@ -26,6 +26,8 @@ const Navbar: React.FC = () => {
     { href: '/product/resume-builder', label: 'Resume Builder/Enhancer' },
     { href: '/product/job-matcher', label: 'Profile-Job Matcher' },
     { href: '/product/career-analytics', label: 'Career Analytics & Tips' },
+    { href: '/product/free-job-postings', label: 'Free Job Postings' },
+    { href: '/product/hiring-outsourcing', label: 'Hiring Outsourcing' },
   ];
 
   const solutionsLinks = [
