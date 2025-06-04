@@ -34,10 +34,14 @@ import ContactSalesPage from "./pages/ContactSalesPage";
 
 // Auth Pages
 import LoginPage from "./pages/Auth/LoginPage";
+import LoginPersonalPage from "./pages/Auth/LoginPersonalPage";
+import LoginCompanyPage from "./pages/Auth/LoginCompanyPage";
 import RegisterPage from "./pages/Auth/RegisterPage";
 
 // Dashboard Pages
 import DashboardPage from "./pages/Dashboard/DashboardPage";
+import PersonalDashboard from "./pages/Dashboard/PersonalDashboard";
+import CompanyDashboard from "./pages/Dashboard/CompanyDashboard";
 
 const queryClient = new QueryClient();
 
@@ -80,10 +84,14 @@ const App = () => (
               
               {/* Auth Routes */}
               <Route path="/auth/login" element={<LoginPage />} />
+              <Route path="/auth/login/personal" element={<LoginPersonalPage />} />
+              <Route path="/auth/login/companies" element={<LoginCompanyPage />} />
               <Route path="/auth/register" element={<RegisterPage />} />
               
               {/* Dashboard Routes */}
               <Route path="/dashboard" element={<DashboardPage />} />
+              <Route path="/dashboard/personal" element={<PersonalDashboard />} />
+              <Route path="/dashboard/company" element={<CompanyDashboard />} />
               
               {/* Catch-all route */}
               <Route path="*" element={<NotFound />} />

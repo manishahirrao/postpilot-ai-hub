@@ -19,55 +19,50 @@ const Footer: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Main Footer Content */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
-          {/* Product Column */}
+          {/* Personal Column */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Product</h3>
+            <h3 className="text-lg font-semibold mb-4">Personal</h3>
             <ul className="space-y-3">
               <li>
-                <Link to="/product/linkedin-posts" className="text-gray-300 hover:text-white transition-colors">
+                <Link to="/services/linkedin-posts" className="text-gray-300 hover:text-white transition-colors">
                   LinkedIn Post Generation
                 </Link>
               </li>
               <li>
-                <Link to="/product/resume-builder" className="text-gray-300 hover:text-white transition-colors">
+                <Link to="/services/resume-builder" className="text-gray-300 hover:text-white transition-colors">
                   Resume Builder/Enhancer
                 </Link>
               </li>
               <li>
-                <Link to="/product/job-matcher" className="text-gray-300 hover:text-white transition-colors">
-                  Profile-Job Matcher
+                <Link to="/services/job-matcher" className="text-gray-300 hover:text-white transition-colors">
+                  Profile & Job Matcher
                 </Link>
               </li>
               <li>
-                <Link to="/product/career-analytics" className="text-gray-300 hover:text-white transition-colors">
+                <Link to="/services/career-analytics" className="text-gray-300 hover:text-white transition-colors">
                   Career Analytics & Tips
-                </Link>
-              </li>
-              <li>
-                <Link to="/product/free-job-postings" className="text-gray-300 hover:text-white transition-colors">
-                  Free Job Postings
-                </Link>
-              </li>
-              <li>
-                <Link to="/product/hiring-outsourcing" className="text-gray-300 hover:text-white transition-colors">
-                  Hiring Outsourcing
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Solutions Column */}
+          {/* Companies Column */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Solutions</h3>
+            <h3 className="text-lg font-semibold mb-4">Companies</h3>
             <ul className="space-y-3">
               <li>
-                <Link to="/solutions/why-us" className="text-gray-300 hover:text-white transition-colors">
-                  Why Us?
+                <Link to="/product/free-job-postings" className="text-gray-300 hover:text-white transition-colors">
+                  Free Job Posting
                 </Link>
               </li>
               <li>
-                <Link to="/solutions/use-cases" className="text-gray-300 hover:text-white transition-colors">
-                  By Use Case
+                <Link to="/product/hiring-outsourcing" className="text-gray-300 hover:text-white transition-colors">
+                  Hiring & Outsourcing
+                </Link>
+              </li>
+              <li>
+                <Link to="/services/linkedin-posts" className="text-gray-300 hover:text-white transition-colors">
+                  LinkedIn Post Generation
                 </Link>
               </li>
             </ul>
@@ -92,44 +87,47 @@ const Footer: React.FC = () => {
                   Customer Support
                 </Link>
               </li>
+              <li>
+                <a href="#" className="text-gray-300 hover:text-white transition-colors">
+                  API Documentation
+                </a>
+              </li>
+              <li>
+                <Link to="/contact-sales" className="text-gray-300 hover:text-white transition-colors">
+                  Contact Sales
+                </Link>
+              </li>
             </ul>
           </div>
 
-          {/* Company Column */}
+          {/* Legal Column */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Company</h3>
+            <h3 className="text-lg font-semibold mb-4">Legal</h3>
             <ul className="space-y-3">
               <li>
-                <Link to="/about" className="text-gray-300 hover:text-white transition-colors">
-                  About Us
+                <Link to="/cookie-policy" className="text-gray-300 hover:text-white transition-colors">
+                  Cookie Policy
                 </Link>
               </li>
               <li>
-                <Link to="/about/careers" className="text-gray-300 hover:text-white transition-colors">
-                  Careers
+                <Link to="/terms" className="text-gray-300 hover:text-white transition-colors">
+                  Terms & Conditions
                 </Link>
               </li>
               <li>
-                <Link to="/about/management" className="text-gray-300 hover:text-white transition-colors">
-                  Management Team
-                </Link>
-              </li>
-              <li>
-                <Link to="/about/investors" className="text-gray-300 hover:text-white transition-colors">
-                  Investor Relations
-                </Link>
-              </li>
-              <li>
-                <Link to="/contact" className="text-gray-300 hover:text-white transition-colors">
-                  Contact Us
-                </Link>
+                <a href="#" className="text-gray-300 hover:text-white transition-colors">
+                  Privacy Policy
+                </a>
               </li>
             </ul>
           </div>
 
-          {/* Newsletter & Legal Column */}
+          {/* Newsletter & Contact Column */}
           <div>
             <h3 className="text-lg font-semibold mb-4">Stay Updated</h3>
+            <p className="text-gray-300 text-sm mb-4">
+              Join our newsletter to get the latest updates on LinkedIn automation and career tools.
+            </p>
             <form onSubmit={handleNewsletterSubmit} className="mb-6">
               <div className="flex flex-col space-y-2">
                 <Input
@@ -145,25 +143,6 @@ const Footer: React.FC = () => {
                 </Button>
               </div>
             </form>
-            
-            <h4 className="text-sm font-semibold mb-3">Legal & Contact</h4>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <a href="#" className="text-gray-300 hover:text-white transition-colors">
-                  Privacy Policy
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-300 hover:text-white transition-colors">
-                  Terms of Service
-                </a>
-              </li>
-              <li>
-                <Link to="/contact-sales" className="text-gray-300 hover:text-white transition-colors">
-                  Contact Sales
-                </Link>
-              </li>
-            </ul>
           </div>
         </div>
 

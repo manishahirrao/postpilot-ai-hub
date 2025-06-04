@@ -13,7 +13,8 @@ interface User {
 interface AuthContextType {
   user: User | null;
   token: string | null;
-  login: (token: string) => void;
+  userType: 'professional' | 'company' | null;
+  login: (token: string, userType?: 'professional' | 'company') => void;
   logout: () => void;
   isAuthenticated: boolean;
 }
@@ -23,13 +24,45 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
+  const [userType, setUserType] = useState<'professional' | 'company' | null>(null);
 
   useEffect(() => {
     const storedToken = localStorage.getItem('token');
-    if (storedToken) {
+    const storedUserType = localStorage.getItem('userType') as 'professional' | 'company' | null;
+    
+    if (storedToken && storedUserType) {
       setToken(storedToken);
-      // In a real app, you'd verify the token and fetch user data
-      // For now, we'll simulate a user
+      setUserType(storedUserType);
+      
+      // Simulate user data based on user type
+      if (storedUserType === 'professional') {
+        setUser({
+          id: '1',
+          name: 'John Doe',
+          email: 'john@example.com',
+          role: 'professional',
+          headline: 'Software Engineer at TechCorp'
+        });
+      } else {
+        setUser({
+          id: '2',
+          name: 'TechCorp Admin',
+          email: 'admin@techcorp.com',
+          role: 'company',
+          headline: 'Company Administrator'
+        });
+      }
+    }
+  }, []);
+
+  const login = (newToken: string, newUserType: 'professional' | 'company' = 'professional') => {
+    localStorage.setItem('token', newToken);
+    localStorage.setItem('userType', newUserType);
+    setToken(newToken);
+    setUserType(newUserType);
+    
+    // Set user data based on user type
+    if (newUserType === 'professional') {
       setUser({
         id: '1',
         name: 'John Doe',
@@ -37,32 +70,30 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         role: 'professional',
         headline: 'Software Engineer at TechCorp'
       });
+    } else {
+      setUser({
+        id: '2',
+        name: 'TechCorp Admin',
+        email: 'admin@techcorp.com',
+        role: 'company',
+        headline: 'Company Administrator'
+      });
     }
-  }, []);
-
-  const login = (newToken: string) => {
-    localStorage.setItem('token', newToken);
-    setToken(newToken);
-    // Simulate fetching user data
-    setUser({
-      id: '1',
-      name: 'John Doe',
-      email: 'john@example.com',
-      role: 'professional',
-      headline: 'Software Engineer at TechCorp'
-    });
   };
 
   const logout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('userType');
     setToken(null);
     setUser(null);
+    setUserType(null);
   };
 
   return (
     <AuthContext.Provider value={{
       user,
       token,
+      userType,
       login,
       logout,
       isAuthenticated: !!token

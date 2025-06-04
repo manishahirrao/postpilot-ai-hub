@@ -9,7 +9,7 @@ const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, userType, logout } = useAuth();
   const location = useLocation();
 
   useEffect(() => {
@@ -21,13 +21,25 @@ const Navbar: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const productLinks = [
-    { href: '/product/linkedin-posts', label: 'LinkedIn Post Generation' },
-    { href: '/product/resume-builder', label: 'Resume Builder/Enhancer' },
-    { href: '/product/job-matcher', label: 'Profile-Job Matcher' },
-    { href: '/product/career-analytics', label: 'Career Analytics & Tips' },
-    { href: '/product/free-job-postings', label: 'Free Job Postings' },
-    { href: '/product/hiring-outsourcing', label: 'Hiring Outsourcing' },
+  // Personal user navigation links
+  const personalLinks = [
+    { href: '/services/linkedin-posts', label: 'LinkedIn Post Generation' },
+    { href: '/services/resume-builder', label: 'Resume Builder/Enhancer' },
+    { href: '/services/job-matcher', label: 'Profile & Job Matcher' },
+    { href: '/services/career-analytics', label: 'Career Analytics & Tips' },
+  ];
+
+  // Company user navigation links
+  const companyLinks = [
+    { href: '/product/free-job-postings', label: 'Free Job Posting' },
+    { href: '/product/hiring-outsourcing', label: 'Hiring & Outsourcing' },
+    { href: '/services/linkedin-posts', label: 'LinkedIn Post Generation' },
+  ];
+
+  // Login dropdown options (when not authenticated)
+  const loginOptions = [
+    { href: '/auth/login/personal', label: 'Personal' },
+    { href: '/auth/login/companies', label: 'Companies' },
   ];
 
   const solutionsLinks = [
@@ -79,6 +91,17 @@ const Navbar: React.FC = () => {
     </div>
   );
 
+  // Get the appropriate product links based on user type
+  const getProductLinks = () => {
+    if (!isAuthenticated) return [];
+    return userType === 'professional' ? personalLinks : companyLinks;
+  };
+
+  const getProductLabel = () => {
+    if (!isAuthenticated) return 'Login';
+    return userType === 'professional' ? 'Personal Tools' : 'Business Tools';
+  };
+
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
       isScrolled ? 'bg-white shadow-lg' : 'bg-transparent'
@@ -92,11 +115,17 @@ const Navbar: React.FC = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center space-x-2">
+            {/* Conditional Product/Login Dropdown */}
             <DropdownMenu 
-              label="Product" 
-              links={productLinks} 
-              isActive={location.pathname.startsWith('/product')}
+              label={getProductLabel()}
+              links={isAuthenticated ? getProductLinks() : loginOptions}
+              isActive={
+                isAuthenticated 
+                  ? (userType === 'professional' ? location.pathname.startsWith('/services') : location.pathname.startsWith('/product'))
+                  : location.pathname.startsWith('/auth/login')
+              }
             />
+            
             <DropdownMenu 
               label="Solutions" 
               links={solutionsLinks} 
@@ -143,7 +172,10 @@ const Navbar: React.FC = () => {
             </Link>
             {isAuthenticated ? (
               <div className="flex items-center space-x-4">
-                <Link to="/dashboard" className="text-gray-700 hover:text-indigo-600 text-sm font-medium">
+                <Link 
+                  to={userType === 'professional' ? '/dashboard/personal' : '/dashboard/company'} 
+                  className="text-gray-700 hover:text-indigo-600 text-sm font-medium"
+                >
                   Dashboard
                 </Link>
                 <Button onClick={logout} variant="outline" size="sm">
@@ -152,12 +184,6 @@ const Navbar: React.FC = () => {
               </div>
             ) : (
               <>
-                <Link 
-                  to="/auth/login" 
-                  className="text-gray-700 hover:text-indigo-600 text-sm font-medium"
-                >
-                  Log In
-                </Link>
                 <Link 
                   to="/auth/register" 
                   className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-4 py-2 rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all text-sm font-medium"
@@ -182,9 +208,10 @@ const Navbar: React.FC = () => {
       {isMobileMenuOpen && (
         <div className="lg:hidden bg-white border-t border-gray-100 shadow-lg">
           <div className="px-4 py-6 space-y-4">
+            {/* Mobile Product/Login Links */}
             <div className="space-y-2">
-              <div className="font-medium text-gray-900 mb-2">Product</div>
-              {productLinks.map((link) => (
+              <div className="font-medium text-gray-900 mb-2">{getProductLabel()}</div>
+              {(isAuthenticated ? getProductLinks() : loginOptions).map((link) => (
                 <Link
                   key={link.href}
                   to={link.href}
@@ -246,7 +273,7 @@ const Navbar: React.FC = () => {
               {isAuthenticated ? (
                 <>
                   <Link 
-                    to="/dashboard" 
+                    to={userType === 'professional' ? '/dashboard/personal' : '/dashboard/company'} 
                     className="block text-center py-2 text-sm font-medium text-gray-900 hover:text-indigo-600"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
@@ -260,22 +287,13 @@ const Navbar: React.FC = () => {
                   </button>
                 </>
               ) : (
-                <>
-                  <Link 
-                    to="/auth/login" 
-                    className="block text-center py-2 text-sm font-medium text-gray-900 hover:text-indigo-600"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    Log In
-                  </Link>
-                  <Link 
-                    to="/auth/register" 
-                    className="block w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-center px-4 py-2 rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all text-sm font-medium"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    Sign Up Free
-                  </Link>
-                </>
+                <Link 
+                  to="/auth/register" 
+                  className="block w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-center px-4 py-2 rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all text-sm font-medium"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Sign Up Free
+                </Link>
               )}
             </div>
           </div>
