@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -5,8 +6,10 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import Layout from "@/components/Layout/Layout";
-import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
+
+// Main Landing Page
+import CombinedHome from "./pages/Home/CombinedHome";
 
 // Product Pages
 import LinkedInPostsPage from "./pages/Product/LinkedInPostsPage";
@@ -42,7 +45,7 @@ import DashboardPage from "./pages/Dashboard/DashboardPage";
 import PersonalDashboard from "./pages/Dashboard/PersonalDashboard";
 import CompanyDashboard from "./pages/Dashboard/CompanyDashboard";
 
-// New Home Pages
+// Home Pages
 import PersonalHome from "./pages/Home/PersonalHome";
 import CompanyHome from "./pages/Home/CompanyHome";
 
@@ -65,9 +68,10 @@ const App = () => (
         <BrowserRouter>
           <Layout>
             <Routes>
-              <Route path="/" element={<Home />} />
+              {/* Main Landing Page */}
+              <Route path="/" element={<CombinedHome />} />
               
-              {/* New Home Routes */}
+              {/* Specific Home Routes */}
               <Route path="/home/personal" element={<PersonalHome />} />
               <Route path="/home/company" element={<CompanyHome />} />
               
@@ -97,7 +101,7 @@ const App = () => (
               <Route path="/support" element={<SupportPage />} />
               <Route path="/contact-sales" element={<ContactSalesPage />} />
               
-              {/* Auth Routes - Updated */}
+              {/* Auth Routes */}
               <Route path="/login/personal" element={<LoginPersonalPage />} />
               <Route path="/login/company" element={<LoginCompanyPage />} />
               <Route path="/auth/login" element={<LoginPage />} />
