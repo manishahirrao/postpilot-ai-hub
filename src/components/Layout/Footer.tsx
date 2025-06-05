@@ -19,36 +19,36 @@ const Footer: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Main Footer Content */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
-          {/* Personal Column */}
+          {/* Personal Services Column */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Personal</h3>
+            <h3 className="text-lg font-semibold mb-4">Personal Services</h3>
             <ul className="space-y-3">
               <li>
-                <Link to="/services/linkedin-posts" className="text-gray-300 hover:text-white transition-colors">
-                  LinkedIn Post Generation
+                <Link to="/product/linkedin-posts" className="text-gray-300 hover:text-white transition-colors">
+                  LinkedIn Post Generator
                 </Link>
               </li>
               <li>
-                <Link to="/services/resume-builder" className="text-gray-300 hover:text-white transition-colors">
+                <Link to="/product/resume-builder" className="text-gray-300 hover:text-white transition-colors">
                   Resume Builder/Enhancer
                 </Link>
               </li>
               <li>
-                <Link to="/services/job-matcher" className="text-gray-300 hover:text-white transition-colors">
-                  Profile & Job Matcher
+                <Link to="/product/job-matcher" className="text-gray-300 hover:text-white transition-colors">
+                  Profile Job Matcher
                 </Link>
               </li>
               <li>
-                <Link to="/services/career-analytics" className="text-gray-300 hover:text-white transition-colors">
+                <Link to="/product/career-analytics" className="text-gray-300 hover:text-white transition-colors">
                   Career Analytics & Tips
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Companies Column */}
+          {/* Company Services Column */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Companies</h3>
+            <h3 className="text-lg font-semibold mb-4">Company Services</h3>
             <ul className="space-y-3">
               <li>
                 <Link to="/product/free-job-postings" className="text-gray-300 hover:text-white transition-colors">
@@ -57,12 +57,12 @@ const Footer: React.FC = () => {
               </li>
               <li>
                 <Link to="/product/hiring-outsourcing" className="text-gray-300 hover:text-white transition-colors">
-                  Hiring & Outsourcing
+                  Hiring Outsourcing
                 </Link>
               </li>
               <li>
-                <Link to="/services/linkedin-posts" className="text-gray-300 hover:text-white transition-colors">
-                  LinkedIn Post Generation
+                <Link to="/product/linkedin-posts" className="text-gray-300 hover:text-white transition-colors">
+                  LinkedIn Post Generator
                 </Link>
               </li>
             </ul>

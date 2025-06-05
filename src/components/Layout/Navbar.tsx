@@ -23,23 +23,23 @@ const Navbar: React.FC = () => {
 
   // Personal user navigation links
   const personalLinks = [
-    { href: '/services/linkedin-posts', label: 'LinkedIn Post Generation' },
-    { href: '/services/resume-builder', label: 'Resume Builder/Enhancer' },
-    { href: '/services/job-matcher', label: 'Profile & Job Matcher' },
-    { href: '/services/career-analytics', label: 'Career Analytics & Tips' },
+    { href: '/product/linkedin-posts', label: 'LinkedIn Post Generator' },
+    { href: '/product/resume-builder', label: 'Resume Builder/Enhancer' },
+    { href: '/product/job-matcher', label: 'Profile Job Matcher' },
+    { href: '/product/career-analytics', label: 'Career Analytics & Tips' },
   ];
 
   // Company user navigation links
   const companyLinks = [
     { href: '/product/free-job-postings', label: 'Free Job Posting' },
-    { href: '/product/hiring-outsourcing', label: 'Hiring & Outsourcing' },
-    { href: '/services/linkedin-posts', label: 'LinkedIn Post Generation' },
+    { href: '/product/hiring-outsourcing', label: 'Hiring Outsourcing' },
+    { href: '/product/linkedin-posts', label: 'LinkedIn Post Generator' },
   ];
 
   // Login dropdown options (when not authenticated)
   const loginOptions = [
-    { href: '/auth/login/personal', label: 'Personal' },
-    { href: '/auth/login/companies', label: 'Companies' },
+    { href: '/login/personal', label: 'Personal' },
+    { href: '/login/company', label: 'Company' },
   ];
 
   const solutionsLinks = [
@@ -92,12 +92,12 @@ const Navbar: React.FC = () => {
   );
 
   // Get the appropriate product links based on user type
-  const getProductLinks = () => {
+  const getServiceLinks = () => {
     if (!isAuthenticated) return [];
     return userType === 'professional' ? personalLinks : companyLinks;
   };
 
-  const getProductLabel = () => {
+  const getServiceLabel = () => {
     if (!isAuthenticated) return 'Login';
     return userType === 'professional' ? 'Personal Tools' : 'Business Tools';
   };
@@ -115,14 +115,14 @@ const Navbar: React.FC = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center space-x-2">
-            {/* Conditional Product/Login Dropdown */}
+            {/* Conditional Service/Login Dropdown */}
             <DropdownMenu 
-              label={getProductLabel()}
-              links={isAuthenticated ? getProductLinks() : loginOptions}
+              label={getServiceLabel()}
+              links={isAuthenticated ? getServiceLinks() : loginOptions}
               isActive={
                 isAuthenticated 
-                  ? (userType === 'professional' ? location.pathname.startsWith('/services') : location.pathname.startsWith('/product'))
-                  : location.pathname.startsWith('/auth/login')
+                  ? (userType === 'professional' ? location.pathname.startsWith('/product') : location.pathname.startsWith('/product'))
+                  : location.pathname.startsWith('/login')
               }
             />
             
@@ -178,6 +178,12 @@ const Navbar: React.FC = () => {
                 >
                   Dashboard
                 </Link>
+                <Link 
+                  to={userType === 'professional' ? '/profile/personal' : '/profile/company'} 
+                  className="text-gray-700 hover:text-indigo-600 text-sm font-medium"
+                >
+                  Profile
+                </Link>
                 <Button onClick={logout} variant="outline" size="sm">
                   Logout
                 </Button>
@@ -208,10 +214,10 @@ const Navbar: React.FC = () => {
       {isMobileMenuOpen && (
         <div className="lg:hidden bg-white border-t border-gray-100 shadow-lg">
           <div className="px-4 py-6 space-y-4">
-            {/* Mobile Product/Login Links */}
+            {/* Mobile Service/Login Links */}
             <div className="space-y-2">
-              <div className="font-medium text-gray-900 mb-2">{getProductLabel()}</div>
-              {(isAuthenticated ? getProductLinks() : loginOptions).map((link) => (
+              <div className="font-medium text-gray-900 mb-2">{getServiceLabel()}</div>
+              {(isAuthenticated ? getServiceLinks() : loginOptions).map((link) => (
                 <Link
                   key={link.href}
                   to={link.href}
@@ -278,6 +284,13 @@ const Navbar: React.FC = () => {
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     Dashboard
+                  </Link>
+                  <Link 
+                    to={userType === 'professional' ? '/profile/personal' : '/profile/company'} 
+                    className="block text-center py-2 text-sm font-medium text-gray-900 hover:text-indigo-600"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Profile
                   </Link>
                   <button 
                     onClick={() => { logout(); setIsMobileMenuOpen(false); }}
