@@ -1,6 +1,5 @@
-
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ChevronDown, Menu, X } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -9,6 +8,7 @@ const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [isSignupDropdownOpen, setIsSignupDropdownOpen] = useState(false);
   const { isAuthenticated, userType, logout } = useAuth();
   const location = useLocation();
 
@@ -17,26 +17,35 @@ const Navbar: React.FC = () => {
       setIsScrolled(window.scrollY > 20);
     };
 
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (!target.closest('.signup-dropdown')) {
+        setIsSignupDropdownOpen(false);
+      }
+    };
+
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
   }, []);
 
-  // Personal user navigation links
   const personalLinks = [
-    { href: '/product/linkedin-posts', label: 'LinkedIn Post Generator' },
+    { href: '/product/linkedin-posts', label: 'Social Media Post Generator' },
     { href: '/product/resume-builder', label: 'Resume Builder/Enhancer' },
     { href: '/product/job-matcher', label: 'Profile Job Matcher' },
     { href: '/product/career-analytics', label: 'Career Analytics & Tips' },
   ];
 
-  // Company user navigation links
   const companyLinks = [
     { href: '/product/free-job-postings', label: 'Free Job Posting' },
     { href: '/product/hiring-outsourcing', label: 'Hiring Outsourcing' },
-    { href: '/product/linkedin-posts', label: 'LinkedIn Post Generator' },
+    { href: '/product/linkedin-posts', label: 'Social Media Post Generator' },
   ];
 
-  // Login dropdown options (when not authenticated)
   const loginOptions = [
     { href: '/login/personal', label: 'Personal' },
     { href: '/login/company', label: 'Company' },
@@ -55,6 +64,13 @@ const Navbar: React.FC = () => {
     { href: '/contact', label: 'Contact Us' },
   ];
 
+   const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();          // your logout function
+    navigate("/");     // navigate to home page
+  };
+
   const DropdownMenu: React.FC<{ 
     label: string; 
     links: { href: string; label: string }[];
@@ -71,7 +87,6 @@ const Navbar: React.FC = () => {
         {label}
         <ChevronDown className="w-4 h-4 ml-1" />
       </button>
-      
       {activeDropdown === label && (
         <div className="absolute left-0 top-full mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-100 z-50 opacity-100 translate-y-0 transition-all duration-200">
           <div className="py-2">
@@ -91,7 +106,6 @@ const Navbar: React.FC = () => {
     </div>
   );
 
-  // Get the appropriate product links based on user type
   const getServiceLinks = () => {
     if (!isAuthenticated) return [];
     return userType === 'professional' ? personalLinks : companyLinks;
@@ -108,24 +122,19 @@ const Navbar: React.FC = () => {
     }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Logo */}
           <Link to="/" className="flex items-center">
             <div className="text-2xl font-bold text-indigo-600">PostPilot</div>
           </Link>
 
-          {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center space-x-2">
-            {/* Conditional Service/Login Dropdown */}
-            <DropdownMenu 
-              label={getServiceLabel()}
-              links={isAuthenticated ? getServiceLinks() : loginOptions}
-              isActive={
-                isAuthenticated 
-                  ? (userType === 'professional' ? location.pathname.startsWith('/product') : location.pathname.startsWith('/product'))
-                  : location.pathname.startsWith('/login')
-              }
-            />
-            
+               <Link 
+              to="/" 
+              className={`px-4 py-2 text-sm font-medium transition-colors hover:text-indigo-600 ${
+                location.pathname === '/' ? 'text-indigo-600' : 'text-gray-700'
+              }`}
+            >
+              Home
+            </Link>
             <DropdownMenu 
               label="Solutions" 
               links={solutionsLinks} 
@@ -160,9 +169,15 @@ const Navbar: React.FC = () => {
             >
               Customer Support
             </Link>
+            {isAuthenticated && (
+              <DropdownMenu 
+                label={getServiceLabel()} 
+                links={getServiceLinks()} 
+                isActive={false} 
+              />
+            )}
           </div>
 
-          {/* Auth Buttons */}
           <div className="hidden lg:flex items-center space-x-4">
             <Link 
               to="/contact-sales" 
@@ -184,23 +199,44 @@ const Navbar: React.FC = () => {
                 >
                   Profile
                 </Link>
-                <Button onClick={logout} variant="outline" size="sm">
+                <Button 
+                
+                onClick={handleLogout} variant="outline" size="sm">
                   Logout
                 </Button>
               </div>
             ) : (
-              <>
-                <Link 
-                  to="/auth/register" 
-                  className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-4 py-2 rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all text-sm font-medium"
+              <div className="relative signup-dropdown">
+                <button
+                  onClick={() => setIsSignupDropdownOpen((prev) => !prev)}
+                  className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-4 py-2 rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all text-sm font-medium inline-flex items-center"
                 >
                   Sign Up Free
-                </Link>
-              </>
+                  <ChevronDown className="w-4 h-4 ml-2" />
+                </button>
+
+                {isSignupDropdownOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50">
+                    <Link
+                      to="/auth/register/personal"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      onClick={() => setIsSignupDropdownOpen(false)}
+                    >
+                      Personal
+                    </Link>
+                    <Link
+                      to="/auth/register/company"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      onClick={() => setIsSignupDropdownOpen(false)}
+                    >
+                      Company
+                    </Link>
+                  </div>
+                )}
+              </div>
             )}
           </div>
 
-          {/* Mobile menu button */}
           <button
             className="lg:hidden p-2"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -209,109 +245,6 @@ const Navbar: React.FC = () => {
           </button>
         </div>
       </div>
-
-      {/* Mobile Menu */}
-      {isMobileMenuOpen && (
-        <div className="lg:hidden bg-white border-t border-gray-100 shadow-lg">
-          <div className="px-4 py-6 space-y-4">
-            {/* Mobile Service/Login Links */}
-            <div className="space-y-2">
-              <div className="font-medium text-gray-900 mb-2">{getServiceLabel()}</div>
-              {(isAuthenticated ? getServiceLinks() : loginOptions).map((link) => (
-                <Link
-                  key={link.href}
-                  to={link.href}
-                  className="block pl-4 py-2 text-sm text-gray-600 hover:text-indigo-600"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </div>
-            
-            <div className="space-y-2">
-              <div className="font-medium text-gray-900 mb-2">Solutions</div>
-              {solutionsLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  to={link.href}
-                  className="block pl-4 py-2 text-sm text-gray-600 hover:text-indigo-600"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </div>
-
-            <Link to="/pricing" className="block py-2 text-sm font-medium text-gray-900 hover:text-indigo-600">
-              Pricing
-            </Link>
-            <Link to="/resources" className="block py-2 text-sm font-medium text-gray-900 hover:text-indigo-600">
-              Resources
-            </Link>
-            
-            <div className="space-y-2">
-              <div className="font-medium text-gray-900 mb-2">About</div>
-              {aboutLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  to={link.href}
-                  className="block pl-4 py-2 text-sm text-gray-600 hover:text-indigo-600"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </div>
-            
-            <Link to="/support" className="block py-2 text-sm font-medium text-gray-900 hover:text-indigo-600">
-              Customer Support
-            </Link>
-            
-            <div className="pt-4 border-t border-gray-200 space-y-3">
-              <Link 
-                to="/contact-sales" 
-                className="block w-full bg-indigo-600 text-white text-center px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Contact Sales
-              </Link>
-              {isAuthenticated ? (
-                <>
-                  <Link 
-                    to={userType === 'professional' ? '/dashboard/personal' : '/dashboard/company'} 
-                    className="block text-center py-2 text-sm font-medium text-gray-900 hover:text-indigo-600"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    Dashboard
-                  </Link>
-                  <Link 
-                    to={userType === 'professional' ? '/profile/personal' : '/profile/company'} 
-                    className="block text-center py-2 text-sm font-medium text-gray-900 hover:text-indigo-600"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    Profile
-                  </Link>
-                  <button 
-                    onClick={() => { logout(); setIsMobileMenuOpen(false); }}
-                    className="block w-full text-center py-2 text-sm font-medium text-gray-900 hover:text-indigo-600"
-                  >
-                    Logout
-                  </button>
-                </>
-              ) : (
-                <Link 
-                  to="/auth/register" 
-                  className="block w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-center px-4 py-2 rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all text-sm font-medium"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  Sign Up Free
-                </Link>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
     </nav>
   );
 };

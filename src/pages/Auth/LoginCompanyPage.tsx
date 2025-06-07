@@ -24,14 +24,14 @@ const LoginCompanyPage: React.FC = () => {
     setTimeout(() => {
       // Set user type as company for company login
       login('demo-company-token', 'company');
-      navigate('/dashboard/company');
+      navigate('/Home/CompanyHome');
     }, 1000);
   };
 
   const handleLinkedInLogin = () => {
     // Simulate LinkedIn OAuth for company account
     login('demo-linkedin-company-token', 'company');
-    navigate('/dashboard/company');
+    navigate('/Home/CompanyHome');
   };
 
   return (

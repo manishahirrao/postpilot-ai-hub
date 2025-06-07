@@ -10,7 +10,7 @@ const PersonalDashboard: React.FC = () => {
   const { user } = useAuth();
 
   const stats = [
-    { label: 'LinkedIn Posts Generated', value: '12', icon: PenTool },
+    { label: 'Social Media Posts Generated', value: '12', icon: PenTool },
     { label: 'Resume Enhancements', value: '3', icon: FileText },
     { label: 'Job Matches Found', value: '28', icon: Briefcase },
     { label: 'Career Tips Read', value: '15', icon: TrendingUp },
@@ -18,31 +18,31 @@ const PersonalDashboard: React.FC = () => {
 
   const services = [
     {
-      title: 'LinkedIn Post Generation',
+      title: 'Social Media Post Generation',
       description: 'Create engaging LinkedIn posts with AI assistance',
       icon: PenTool,
-      href: '/services/linkedin-posts',
+      href: '/Product/LinkedInPostsPage',
       color: 'bg-blue-500'
     },
     {
       title: 'Resume Builder/Enhancer',
       description: 'Optimize your resume with AI-powered suggestions',
       icon: FileText,
-      href: '/services/resume-builder',
+      href: '/Product/ResumeBuilderPage',
       color: 'bg-green-500'
     },
     {
       title: 'Profile & Job Matcher',
       description: 'Find jobs that match your skills and experience',
       icon: Briefcase,
-      href: '/services/job-matcher',
+      href: '/Product/JobMatcherPage',
       color: 'bg-purple-500'
     },
     {
       title: 'Career Analytics & Tips',
       description: 'Get insights and tips to advance your career',
       icon: TrendingUp,
-      href: '/services/career-analytics',
+      href: '/Product/CareerAnalyticsPage',
       color: 'bg-orange-500'
     }
   ];
@@ -142,7 +142,7 @@ const PersonalDashboard: React.FC = () => {
                   ))}
                 </div>
                 <Button variant="outline" className="w-full mt-4" asChild>
-                  <Link to="/services/job-matcher">View All Matches</Link>
+                  <Link to="/Product/JobMatcherPage">View All Matches</Link>
                 </Button>
               </CardContent>
             </Card>
@@ -168,7 +168,7 @@ const PersonalDashboard: React.FC = () => {
                   </div>
                 </div>
                 <Button variant="outline" className="w-full mt-4" asChild>
-                  <Link to="/services/career-analytics">View All Tips</Link>
+                  <Link to="/Product/CareerAnalyticsPage">View All Tips</Link>
                 </Button>
               </CardContent>
             </Card>

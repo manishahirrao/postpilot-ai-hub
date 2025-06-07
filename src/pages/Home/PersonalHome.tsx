@@ -9,7 +9,7 @@ const PersonalHome: React.FC = () => {
   const personalFeatures = [
     {
       icon: <FileText className="w-12 h-12 text-indigo-600" />,
-      title: 'LinkedIn Post Generator',
+      title: 'Social Media Post Generator',
       description: 'Create engaging LinkedIn posts that reflect your personal brand and professional expertise.',
       link: '/product/linkedin-posts'
     },

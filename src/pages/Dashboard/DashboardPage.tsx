@@ -22,7 +22,7 @@ const DashboardPage: React.FC = () => {
 
   const quickActions = [
     {
-      title: 'Create LinkedIn Post',
+      title: 'Create Social Media Post',
       description: 'Generate engaging content with AI',
       icon: <Zap className="w-6 h-6 text-blue-600" />,
       link: '/dashboard/post-generator',
@@ -53,7 +53,7 @@ const DashboardPage: React.FC = () => {
 
   const recentActivity = [
     {
-      action: 'Generated LinkedIn post',
+      action: 'Generated Social Media post',
       title: '"5 Key Trends in Software Development"',
       time: '2 hours ago',
       status: 'Published'
@@ -146,7 +146,7 @@ const DashboardPage: React.FC = () => {
             {/* Recent Posts Preview */}
             <Card className="mt-8">
               <CardHeader>
-                <CardTitle>Recent LinkedIn Posts</CardTitle>
+                <CardTitle>Recent Social Media Posts</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">

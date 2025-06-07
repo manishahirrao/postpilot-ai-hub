@@ -18,7 +18,7 @@ const CombinedHome: React.FC = () => {
   const individualServices = [
     {
       icon: <FileText className="w-8 h-8 text-indigo-600" />,
-      title: 'LinkedIn Post Generator',
+      title: 'Social Media Post Generator',
       description: 'Create engaging posts with tone, style, and length controls. Rate suggestions and regenerate with personal anecdotes.',
       features: ['Tone Control', 'Style Options', 'Length Settings', 'Anecdote Integration']
     },
@@ -57,7 +57,7 @@ const CombinedHome: React.FC = () => {
     },
     {
       icon: <FileText className="w-8 h-8 text-purple-600" />,
-      title: 'LinkedIn Post/Video Generation',
+      title: 'Social Media Post/Video Generation',
       description: 'Create on-brand content with company voice, tone controls, and regeneration options.',
       features: ['Brand Voice', 'Content Calendar', 'Video Generation', 'Performance Tracking']
     }
@@ -98,20 +98,20 @@ const CombinedHome: React.FC = () => {
           <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
             Empowering 
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600"> Everyone </span>
-            on LinkedIn
+            on Social Media
           </h1>
           <p className="text-xl text-gray-600 mb-8 max-w-4xl mx-auto">
             Whether you're a job seeker building your career or a company scaling your team, 
             our AI-powered tools help you create powerful content, hire smarter, and stand out online.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/home/personal">
+            <Link to="/home/LoginPersonalPage">
               <Button size="lg" className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-8 py-3">
                 I'm an Individual
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </Link>
-            <Link to="/home/company">
+            <Link to="/home/LoginCompanyPage">
               <Button size="lg" variant="outline" className="px-8 py-3 border-2">
                 I'm a Company
                 <ArrowRight className="w-4 h-4 ml-2" />

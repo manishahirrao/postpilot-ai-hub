@@ -21,7 +21,7 @@ const CompanyHome: React.FC = () => {
     },
     {
       icon: <FileText className="w-12 h-12 text-indigo-600" />,
-      title: 'LinkedIn Post Generator',
+      title: 'Social Media Post Generator',
       description: 'Create on-brand LinkedIn content that showcases your company culture and attracts talent.',
       link: '/product/linkedin-posts'
     }

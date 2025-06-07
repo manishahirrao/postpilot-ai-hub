@@ -10,7 +10,7 @@ const Home: React.FC = () => {
   const features = [
     {
       icon: <Zap className="w-8 h-8 text-indigo-600" />,
-      title: 'LinkedIn Post Generation',
+      title: 'Social Media Post Generation',
       description: 'Create engaging LinkedIn content with AI-powered titles, content, and images.',
       link: '/product/linkedin-posts'
     },
@@ -69,7 +69,7 @@ const Home: React.FC = () => {
             <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
               Automate Your
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">
-                {" "}LinkedIn Content Strategy
+                {" "}Social Media Content Strategy
               </span>
             </h1>
             <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
@@ -97,7 +97,7 @@ const Home: React.FC = () => {
                   <Zap className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900">LinkedIn Post Generator</h3>
+                  <h3 className="font-semibold text-gray-900">Social Media Post Generator</h3>
                   <p className="text-gray-600">AI-powered content creation</p>
                 </div>
               </div>
@@ -182,7 +182,7 @@ const Home: React.FC = () => {
                 <h3 className="text-2xl font-bold text-gray-900 mb-4">Why Choose PostPilot?</h3>
                 <p className="text-gray-600 mb-6">
                   Discover what makes our platform the preferred choice for professionals and companies 
-                  looking to excel on LinkedIn and advance their careers.
+                  looking to excel on Social Media and advance their careers.
                 </p>
                 <ul className="space-y-3 mb-6">
                   <li className="flex items-center space-x-2">
@@ -292,7 +292,7 @@ const Home: React.FC = () => {
       <section className="py-20 bg-gradient-to-r from-indigo-600 to-purple-600">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Ready to transform your LinkedIn presence?
+            Ready to transform your Social Media presence?
           </h2>
           <p className="text-xl text-indigo-100 mb-8">
             Join thousands of professionals who are already using PostPilot to accelerate their careers.

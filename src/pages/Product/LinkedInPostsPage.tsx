@@ -1,49 +1,96 @@
-
-import React from 'react';
+import React, { useState } from 'react';
+import { useToast } from '@/hooks/use-toast';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Textarea } from '@/components/ui/textarea';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ArrowRight, Zap, Image, FileText, Share, CheckCircle } from 'lucide-react';
+import CareerAnalyticsPage from './CareerAnalyticsPage';
+import ResumeBuilderPage from './ResumeBuilderPage';
+import JobMatcherPage from './JobMatcherPage';
+import { ContentGenerator } from './Postgeneration';
+
 
 const LinkedInPostsPage: React.FC = () => {
-  const steps = [
-    {
-      icon: <FileText className="w-8 h-8 text-indigo-600" />,
-      title: 'Generate Title',
-      description: 'AI creates engaging titles based on your industry and role'
-    },
-    {
-      icon: <Zap className="w-8 h-8 text-indigo-600" />,
-      title: 'Create Content',
-      description: 'AI writes compelling posts that resonate with your network'
-    },
-    {
-      icon: <Image className="w-8 h-8 text-indigo-600" />,
-      title: 'Generate Image',
-      description: 'DALL-E creates professional visuals to accompany your posts'
-    },
-    {
-      icon: <CheckCircle className="w-8 h-8 text-indigo-600" />,
-      title: 'Preview & Edit',
-      description: 'Review and customize before publishing'
-    },
-    {
-      icon: <Share className="w-8 h-8 text-indigo-600" />,
-      title: 'Publish',
-      description: 'Post directly to LinkedIn or copy to clipboard'
+  const [jobTitle, setJobTitle] = useState('');
+  const [jobDescription, setJobDescription] = useState('');
+  const [achievementText, setAchievementText] = useState('');
+  const [generatedContent, setGeneratedContent] = useState('');
+  const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
+   const [activeTab, setActiveTab] = useState('jobs');
+
+  const generateProposal = async () => {
+    if (!jobTitle || !jobDescription) {
+      toast({
+        title: 'Missing Information',
+        description: 'Please fill in the job title and description.',
+        variant: 'destructive',
+      });
+      return;
     }
+    setLoading(true);
+    setTimeout(() => {
+      setGeneratedContent(`🚀 Proposal for ${jobTitle}:\n${jobDescription}`);
+      setLoading(false);
+    }, 1500);
+  };
+
+  const generateLinkedInPost = async () => {
+    if (!achievementText) {
+      toast({
+        title: 'Missing Information',
+        description: 'Please enter an achievement or insight.',
+        variant: 'destructive',
+      });
+      return;
+    }
+    setLoading(true);
+    setTimeout(() => {
+      setGeneratedContent(`🌟 Sharing a recent milestone: ${achievementText}`);
+      setLoading(false);
+    }, 1500);
+  };
+
+  const generateResumeOptimization = async () => {
+    setLoading(true);
+    setTimeout(() => {
+      setGeneratedContent(
+        `📝 Resume Tip: Tailor your resume to job descriptions, use action verbs, and quantify results.`
+      );
+      setLoading(false);
+    }, 1500);
+  };
+
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(generatedContent);
+    toast({
+      title: 'Copied!',
+      description: 'Generated content copied to clipboard.',
+    });
+  };
+
+  const steps = [
+    { icon: <FileText className="w-8 h-8 text-indigo-600" />, title: 'Generate Title', description: 'AI creates engaging titles based on your industry and role' },
+    { icon: <Zap className="w-8 h-8 text-indigo-600" />, title: 'Create Content', description: 'AI writes compelling posts that resonate with your network' },
+    { icon: <Image className="w-8 h-8 text-indigo-600" />, title: 'Generate Image', description: 'DALL·E creates professional visuals to accompany your posts' },
+    { icon: <CheckCircle className="w-8 h-8 text-indigo-600" />, title: 'Preview & Edit', description: 'Review and customize before publishing' },
+    { icon: <Share className="w-8 h-8 text-indigo-600" />, title: 'Publish', description: 'Post directly to LinkedIn or copy to clipboard' },
   ];
 
   const features = [
     'AI-powered content generation',
-    'Professional image creation with DALL-E',
+    'Professional image creation with DALL·E',
     'Industry-specific templates',
     'Engagement optimization',
     'Direct LinkedIn publishing',
     'Content calendar integration',
     'Analytics and insights',
-    'Video generation (Business plan)'
+    'Video generation (Business plan)',
   ];
 
   return (
@@ -53,29 +100,20 @@ const LinkedInPostsPage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
-              <Badge className="mb-4 bg-indigo-100 text-indigo-800">
-                LinkedIn Post Generation
-              </Badge>
-              <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-                Create Engaging LinkedIn Content in Minutes
-              </h1>
+              <Badge className="mb-4 bg-indigo-100 text-indigo-800">LinkedIn Post Generation</Badge>
+              <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">Create Engaging LinkedIn Content in Minutes</h1>
               <p className="text-xl text-gray-600 mb-8">
-                Let AI handle your LinkedIn content creation. Generate titles, write compelling posts, 
-                create professional images, and publish directly to LinkedIn – all in one seamless workflow.
+                Let AI handle your LinkedIn content creation. Generate titles, write compelling posts, create visuals, and publish.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link to="/auth/register">
                   <Button size="lg" className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700">
-                    Get Started
-                    <ArrowRight className="w-5 h-5 ml-2" />
+                    Get Started <ArrowRight className="w-5 h-5 ml-2" />
                   </Button>
                 </Link>
-                <Button size="lg" variant="outline">
-                  Try Demo
-                </Button>
+                <Button size="lg" variant="outline">Try Demo</Button>
               </div>
             </div>
-            
             <div className="relative">
               <Card className="bg-white shadow-2xl">
                 <CardHeader>
@@ -85,19 +123,13 @@ const LinkedInPostsPage: React.FC = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Generated Title</label>
-                    <div className="p-3 bg-gray-50 rounded border">
-                      "5 Essential Skills Every Software Engineer Needs in 2025"
-                    </div>
+                  <div className="p-3 bg-gray-50 rounded border">
+                    <strong>Generated Title:</strong> “5 Essential Skills Every Software Engineer Needs in 2025”
                   </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">AI-Generated Content</label>
-                    <div className="p-3 bg-gray-50 rounded border h-24 overflow-hidden">
-                      The tech landscape is evolving rapidly. Here are the key skills that will set you apart...
-                    </div>
+                  <div className="p-3 bg-gray-50 rounded border h-24 overflow-hidden">
+                    <strong>AI-Generated Content:</strong> The tech landscape is evolving rapidly. Here are the key skills that will set you apart...
                   </div>
-                  <div className="flex items-center justify-between">
+                  <div className="flex justify-between items-center">
                     <span className="text-sm text-gray-600">Professional image generated ✓</span>
                     <Button size="sm">Publish to LinkedIn</Button>
                   </div>
@@ -108,27 +140,47 @@ const LinkedInPostsPage: React.FC = () => {
         </div>
       </section>
 
-      {/* How It Works */}
+         {/* bar of all social media content */}
+       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <TabsList className="grid w-full grid-cols-4 mb-6">
+          <TabsTrigger value="LinkedIn">LinkedIn</TabsTrigger>
+          <TabsTrigger value="Facebook">Facebook</TabsTrigger>
+          <TabsTrigger value="Instagram">Instagram</TabsTrigger>
+          <TabsTrigger value="Twitter">Twitter</TabsTrigger>
+         
+        </TabsList>
+
+        <TabsContent value="LinkedIn">
+          <ContentGenerator />
+        </TabsContent>
+
+       <TabsContent value="Facebook">
+          <ContentGenerator />
+        </TabsContent>
+        
+        <TabsContent value="Instagram">
+          <ContentGenerator />
+        </TabsContent>
+
+        <TabsContent value="Twitter">
+          <ContentGenerator />
+        </TabsContent>
+
+
+       
+      </Tabs>
+
+      {/* Steps */}
       <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              How It Works
-            </h2>
-            <p className="text-xl text-gray-600">
-              Create professional LinkedIn content in 5 simple steps
-            </p>
-          </div>
-          
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">How It Works</h2>
+          <p className="text-xl text-gray-600 mb-12">Create professional LinkedIn content in 5 simple steps</p>
           <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
             {steps.map((step, index) => (
-              <div key={index} className="text-center relative">
+              <div key={index} className="text-center">
                 <div className="mb-4 flex justify-center">{step.icon}</div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">{step.title}</h3>
-                <p className="text-gray-600 text-sm">{step.description}</p>
-                {index < steps.length - 1 && (
-                  <ArrowRight className="hidden md:block absolute top-4 -right-4 w-6 h-6 text-gray-300" />
-                )}
+                <h3 className="text-lg font-semibold">{step.title}</h3>
+                <p className="text-sm text-gray-600">{step.description}</p>
               </div>
             ))}
           </div>
@@ -138,77 +190,55 @@ const LinkedInPostsPage: React.FC = () => {
       {/* Features */}
       <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
             <div>
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-                Everything you need for LinkedIn success
-              </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {features.map((feature, index) => (
-                  <div key={index} className="flex items-center space-x-2">
-                    <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
-                    <span className="text-gray-700">{feature}</span>
+              <h2 className="text-3xl font-bold mb-6">Everything you need for LinkedIn success</h2>
+              <div className="grid sm:grid-cols-2 gap-4">
+                {features.map((feature, i) => (
+                  <div key={i} className="flex items-center space-x-2">
+                    <CheckCircle className="w-5 h-5 text-green-500" />
+                    <span>{feature}</span>
                   </div>
                 ))}
               </div>
             </div>
-            
             <div className="space-y-6">
-              <Card>
-                <CardContent className="p-6">
-                  <h3 className="font-semibold text-gray-900 mb-2">AI-Powered Content</h3>
-                  <p className="text-gray-600">
-                    Our advanced AI understands your industry, role, and audience to create content that drives engagement.
-                  </p>
-                </CardContent>
-              </Card>
-              
-              <Card>
-                <CardContent className="p-6">
-                  <h3 className="font-semibold text-gray-900 mb-2">Professional Visuals</h3>
-                  <p className="text-gray-600">
-                    Generate eye-catching images with DALL-E that perfectly complement your professional message.
-                  </p>
-                </CardContent>
-              </Card>
-              
-              <Card>
-                <CardContent className="p-6">
-                  <h3 className="font-semibold text-gray-900 mb-2">Direct Publishing</h3>
-                  <p className="text-gray-600">
-                    Seamlessly publish to LinkedIn or schedule posts for optimal engagement times.
-                  </p>
-                </CardContent>
-              </Card>
+              {['AI-Powered Content', 'Professional Visuals', 'Direct Publishing'].map((title, i) => (
+                <Card key={i}>
+                  <CardContent className="p-6">
+                    <h3 className="font-semibold mb-2">{title}</h3>
+                    <p className="text-gray-600">
+                      {title === 'AI-Powered Content' && 'Our AI understands your industry and audience to craft tailored content.'}
+                      {title === 'Professional Visuals' && 'Generate DALL·E images to support your message visually.'}
+                      {title === 'Direct Publishing' && 'Post directly or schedule for peak engagement times.'}
+                    </p>
+                  </CardContent>
+                </Card>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-indigo-600 to-purple-600">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Ready to transform your LinkedIn presence?
-          </h2>
-          <p className="text-xl text-indigo-100 mb-8">
-            Start creating professional content that drives engagement and grows your network.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+      <section className="py-20 bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-center">
+        <div className="max-w-4xl mx-auto px-4">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to transform your LinkedIn presence?</h2>
+          <p className="text-xl mb-8">Start creating professional content that drives engagement.</p>
+          <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Link to="/auth/register">
-              <Button size="lg" className="bg-white text-indigo-600 hover:bg-gray-100">
-                Start Creating Posts
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </Button>
+              <Button size="lg" className="bg-white text-indigo-600 hover:bg-gray-100">Start Creating Posts <ArrowRight className="w-5 h-5 ml-2" /></Button>
             </Link>
             <Link to="/pricing">
-              <Button size="lg" variant="outline" className="text-white border-white hover:bg-white hover:text-indigo-600">
-                View Pricing
-              </Button>
+              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-indigo-600">View Pricing</Button>
             </Link>
           </div>
         </div>
       </section>
+
+     
+
+         
     </div>
   );
 };
