@@ -105,13 +105,13 @@ const CombinedHome: React.FC = () => {
             our AI-powered tools help you create powerful content, hire smarter, and stand out online.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/home/LoginPersonalPage">
+            <Link to="/Home/LoginPersonalPage">
               <Button size="lg" className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-8 py-3">
-                I'm an Individual
+                I'm a Professional
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </Link>
-            <Link to="/home/LoginCompanyPage">
+            <Link to="/Home/LoginCompanyPage">
               <Button size="lg" variant="outline" className="px-8 py-3 border-2">
                 I'm a Company
                 <ArrowRight className="w-4 h-4 ml-2" />

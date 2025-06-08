@@ -24,7 +24,8 @@ const FieldWithControls = ({ label, value, setValue }: { label: string; value: s
           <RefreshCwIcon className="w-4 h-4" />
         </Button>
       ) : (
-        <LightbulbIcon className="w-4 h-4 text-yellow-400" title="Suggestions" />
+        <LightbulbIcon className="w-6 h-6 cursor-pointer text-yellow-400" 
+        title="Suggestions" />
       )}
       {value && (
         <Button

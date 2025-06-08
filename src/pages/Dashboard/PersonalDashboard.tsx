@@ -21,7 +21,7 @@ const PersonalDashboard: React.FC = () => {
       title: 'Social Media Post Generation',
       description: 'Create engaging LinkedIn posts with AI assistance',
       icon: PenTool,
-      href: '/Product/LinkedInPostsPage',
+      href: '/Product/PersonalPostGeneration',
       color: 'bg-blue-500'
     },
     {

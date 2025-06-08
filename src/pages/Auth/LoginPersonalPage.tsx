@@ -24,14 +24,14 @@ const LoginPersonalPage: React.FC = () => {
     setTimeout(() => {
       // Set user type as professional for personal login
       login('demo-personal-token', 'professional');
-      navigate('/Home/PersonalHome');
+      navigate('/dashboard/personal');
     }, 1000);
   };
 
   const handleLinkedInLogin = () => {
     // Simulate LinkedIn OAuth for personal account
     login('demo-linkedin-personal-token', 'professional');
-    navigate('/Home/PersonalHome');
+    navigate('/dashboard/personal');
   };
 
   return (

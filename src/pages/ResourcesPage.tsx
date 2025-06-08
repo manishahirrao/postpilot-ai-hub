@@ -7,48 +7,152 @@ import { Badge } from '@/components/ui/badge';
 import { ArrowRight, BookOpen, HelpCircle, MessageCircle, Video, FileText, Users } from 'lucide-react';
 
 const ResourcesPage: React.FC = () => {
-  const blogPosts = [
-    {
-      title: 'The Ultimate Guide to LinkedIn Content Strategy in 2025',
-      excerpt: 'Learn how to create content that drives engagement and builds your professional brand.',
-      author: 'Sarah Chen',
-      date: 'Dec 15, 2024',
-      readTime: '8 min read',
-      category: 'Strategy'
-    },
-    {
-      title: 'How to Write Resume Bullet Points That Get You Hired',
-      excerpt: 'Transform weak job descriptions into powerful achievements that catch recruiters\' attention.',
-      author: 'Michael Rodriguez',
-      date: 'Dec 12, 2024',
-      readTime: '6 min read',
-      category: 'Resume Tips'
-    },
-    {
-      title: 'AI-Powered Job Search: Finding Hidden Opportunities',
-      excerpt: 'Discover how AI can help you find job opportunities you never knew existed.',
-      author: 'Emily Johnson',
-      date: 'Dec 10, 2024',
-      readTime: '10 min read',
-      category: 'Job Search'
-    },
-    {
-      title: 'Building Your Personal Brand on LinkedIn: A Step-by-Step Guide',
-      excerpt: 'Everything you need to know about establishing yourself as a thought leader.',
-      author: 'David Kim',
-      date: 'Dec 8, 2024',
-      readTime: '12 min read',
-      category: 'Personal Branding'
-    },
-    {
-      title: 'The Future of Recruiting: How AI is Changing the Game',
-      excerpt: 'Understand how artificial intelligence is transforming talent acquisition.',
-      author: 'Lisa Wang',
-      date: 'Dec 5, 2024',
-      readTime: '7 min read',
-      category: 'Industry Trends'
-    }
-  ];
+ const blogPosts = [
+  {
+    title: 'How LinkedIn Automation Can Supercharge Your Job Search in 2025',
+    excerpt: 'Discover how automation tools can personalize outreach, increase visibility, and speed up your job hunt.',
+    category: 'Job Search',
+    author: 'Manish Ahirrao',
+    date: 'June 8, 2025',
+    readTime: '5 min read',
+  },
+  {
+    title: 'The Future of Recruiting: Why Every Company Needs LinkedIn Content Automation',
+    excerpt: 'Recruiters and hiring managers are saving time and finding better candidates—here’s how.',
+    category: 'Recruiting',
+    author: 'Manish Ahirrao',
+    date: 'June 7, 2025',
+    readTime: '6 min read',
+  },
+  {
+    title: 'LinkedIn Post Generator Tools: How AI is Changing the Way We Network Professionally',
+    excerpt: 'AI-generated LinkedIn posts are reshaping professional networking and brand building.',
+    category: 'Networking',
+    author: 'Manish Ahirrao',
+    date: 'June 6, 2025',
+    readTime: '4 min read',
+  },
+  {
+    title: 'Build Your Personal Brand on LinkedIn in 10 Minutes a Day with AI',
+    excerpt: 'Short on time? Here’s how to grow your personal brand with automation.',
+    category: 'Personal Branding',
+    author: 'Manish Ahirrao',
+    date: 'June 5, 2025',
+    readTime: '5 min read',
+  },
+  {
+    title: 'Top LinkedIn Strategies for Startup Founders to Attract Investors and Talent',
+    excerpt: 'Learn how founders are using LinkedIn content to build credibility and recruit top talent.',
+    category: 'Startups',
+    author: 'Manish Ahirrao',
+    date: 'June 4, 2025',
+    readTime: '6 min read',
+  },
+  {
+    title: 'How to Write LinkedIn Posts That Get 10x More Engagement—Automatically!',
+    excerpt: 'Unlock tips for creating high-engagement posts with the help of AI.',
+    category: 'Content Marketing',
+    author: 'Manish Ahirrao',
+    date: 'June 3, 2025',
+    readTime: '5 min read',
+  },
+  {
+    title: '5 Ways LinkedIn Content Automation Saves Time for Busy Professionals',
+    excerpt: 'From scheduling to smart post suggestions, automation helps you stay active without the hassle.',
+    category: 'Productivity',
+    author: 'Manish Ahirrao',
+    date: 'June 2, 2025',
+    readTime: '4 min read',
+  },
+  {
+    title: 'The Beginner\'s Guide to LinkedIn Automation: Grow Faster, Smarter, Better',
+    excerpt: 'Just starting out with LinkedIn automation? Here’s everything you need to know.',
+    category: 'Beginner Guide',
+    author: 'Manish Ahirrao',
+    date: 'June 1, 2025',
+    readTime: '5 min read',
+  },
+  {
+    title: 'How Recruiters Can Use AI to Source Better Candidates on LinkedIn',
+    excerpt: 'AI tools help recruiters discover, vet, and connect with top talent more efficiently.',
+    category: 'HR Tech',
+    author: 'Manish Ahirrao',
+    date: 'May 31, 2025',
+    readTime: '6 min read',
+  },
+  {
+    title: 'Why Every Freelancer Should Be Using LinkedIn AI Tools in 2025',
+    excerpt: 'Build authority, generate leads, and maintain presence with AI-driven automation.',
+    category: 'Freelancing',
+    author: 'Manish Ahirrao',
+    date: 'May 30, 2025',
+    readTime: '4 min read',
+  },
+  {
+    title: 'The Top 7 Mistakes Job Seekers Make on LinkedIn (And How Automation Fixes Them)',
+    excerpt: 'Avoid common pitfalls and let automation elevate your profile and messaging.',
+    category: 'Career Tips',
+    author: 'Manish Ahirrao',
+    date: 'May 29, 2025',
+    readTime: '5 min read',
+  },
+  {
+    title: 'From Ghosted to Hired: How LinkedIn Automation Tools Boost Response Rates',
+    excerpt: 'More replies, more interviews—see how smart automation makes you stand out.',
+    category: 'Success Stories',
+    author: 'Manish Ahirrao',
+    date: 'May 28, 2025',
+    readTime: '5 min read',
+  },
+  {
+    title: 'How Our AI Resume and LinkedIn Toolkit is Revolutionizing the Hiring Game',
+    excerpt: 'A deep dive into how resume builders and LinkedIn optimizers work together to land your next role.',
+    category: 'AI Tools',
+    author: 'Manish Ahirrao',
+    date: 'May 27, 2025',
+    readTime: '6 min read',
+  },
+  {
+    title: 'Hiring for Startups? Why You Should Automate Your LinkedIn Job Posting',
+    excerpt: 'Scale your hiring efforts with less effort and more results using automation.',
+    category: 'Startup Hiring',
+    author: 'Manish Ahirrao',
+    date: 'May 26, 2025',
+    readTime: '5 min read',
+  },
+  {
+    title: 'AI + LinkedIn = Gamechanger for Career Growth—Here’s How',
+    excerpt: 'Learn how AI-enhanced LinkedIn strategies are shaping the future of work.',
+    category: 'Future of Work',
+    author: 'Manish Ahirrao',
+    date: 'May 25, 2025',
+    readTime: '5 min read',
+  },
+  {
+    title: 'Why Manual LinkedIn Posting is Dead in 2025',
+    excerpt: 'The shift to AI-driven social engagement is here. Don’t get left behind.',
+    category: 'Trends',
+    author: 'Manish Ahirrao',
+    date: 'May 24, 2025',
+    readTime: '4 min read',
+  },
+  {
+    title: 'Get Hired Faster: How Our LinkedIn Optimization Tool Helps You Stand Out',
+    excerpt: 'Perfect your profile, headline, and posts to get noticed by top employers.',
+    category: 'Job Hunt',
+    author: 'Manish Ahirrao',
+    date: 'May 23, 2025',
+    readTime: '5 min read',
+  },
+  {
+    title: 'The Ultimate LinkedIn Content Calendar for Founders and Creators (Free Template Inside)',
+    excerpt: 'Plan, post, and profit with this free template and AI tool for effortless execution.',
+    category: 'Founders',
+    author: 'Manish Ahirrao',
+    date: 'May 22, 2025',
+    readTime: '6 min read',
+  },
+];
 
   const helpTopics = [
     {
@@ -152,51 +256,51 @@ const ResourcesPage: React.FC = () => {
       </section>
 
       {/* Blog Section */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Latest from Our Blog
-            </h2>
-            <p className="text-xl text-gray-600">
-              Stay up-to-date with the latest career advice and industry insights
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {blogPosts.map((post, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <div className="flex items-center justify-between mb-2">
-                    <Badge variant="outline">{post.category}</Badge>
-                    <span className="text-sm text-gray-500">{post.readTime}</span>
-                  </div>
-                  <CardTitle className="text-lg line-clamp-2">{post.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-600 mb-4 line-clamp-3">{post.excerpt}</p>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium text-gray-900">{post.author}</p>
-                      <p className="text-sm text-gray-500">{post.date}</p>
-                    </div>
-                    <Button size="sm" variant="outline">
-                      Read More
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-
-          <div className="text-center mt-12">
-            <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
-              View All Articles
-              <ArrowRight className="w-5 h-5 ml-2" />
-            </Button>
-          </div>
+        <section className="py-20 bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            Latest from Our Blog
+          </h2>
+          <p className="text-xl text-gray-600">
+            Stay up-to-date with the latest career advice and industry insights
+          </p>
         </div>
-      </section>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {blogPosts.map((post, index) => (
+            <Card key={index} className="hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <div className="flex items-center justify-between mb-2">
+                  <Badge variant="outline">{post.category}</Badge>
+                  <span className="text-sm text-gray-500">{post.readTime}</span>
+                </div>
+                <CardTitle className="text-lg line-clamp-2">{post.title}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600 mb-4 line-clamp-3">{post.excerpt}</p>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-900">{post.author}</p>
+                    <p className="text-sm text-gray-500">{post.date}</p>
+                  </div>
+                  <Button size="sm" variant="outline">
+                    Read More
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        <div className="text-center mt-12">
+          <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white">
+            View All Articles
+            <ArrowRight className="w-5 h-5 ml-2" />
+          </Button>
+        </div>
+      </div>
+    </section>
 
       {/* Help Topics */}
       <section className="py-20 bg-white">

@@ -51,7 +51,7 @@ const HiringOutsourcingPage: React.FC = () => {
         '1-week turnaround',
         'Dedicated recruiter'
       ],
-      popular: true
+      popular: false
     },
     {
       id: 'enterprise',
@@ -150,11 +150,7 @@ const HiringOutsourcingPage: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {packages.map((pkg) => (
               <Card key={pkg.id} className={`relative ${pkg.popular ? 'ring-2 ring-indigo-500' : ''}`}>
-                {pkg.popular && (
-                  <Badge className="absolute top-4 right-4 bg-indigo-500">
-                    Most Popular
-                  </Badge>
-                )}
+                
                 <CardHeader>
                   <CardTitle className="text-xl">{pkg.name}</CardTitle>
                   <div className="text-2xl font-bold text-indigo-600">{pkg.price}</div>

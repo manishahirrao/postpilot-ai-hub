@@ -35,7 +35,7 @@ const CompanyDashboard: React.FC = () => {
       title: 'LinkedIn Post Generation',
       description: 'Create on-brand LinkedIn content for your company',
       icon: PenTool,
-      href: '/services/linkedin-posts',
+      href: '/product/LinkedInPostsPage',
       color: 'bg-purple-500'
     }
   ];

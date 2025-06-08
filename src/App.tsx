@@ -12,7 +12,7 @@ import NotFound from "./pages/NotFound";
 import CombinedHome from "./pages/Home/CombinedHome";
 
 // Product Pages
-import LinkedInPostsPage from "./pages/Product/LinkedInPostsPage";
+import LinkedInPostsPage from "./pages/Product/CompanyPostGeneration";
 import ResumeBuilderPage from "./pages/Product/ResumeBuilderPage";
 import JobMatcherPage from "./pages/Product/JobMatcherPage";
 import CareerAnalyticsPage from "./pages/Product/CareerAnalyticsPage";
@@ -33,6 +33,7 @@ import InvestorsPage from "./pages/About/InvestorsPage";
 import ContactPage from "./pages/ContactPage";
 import SupportPage from "./pages/SupportPage";
 import ContactSalesPage from "./pages/ContactSalesPage";
+import BlogArticle from "./pages/Blog/BlogArticle";
 
 // Auth Pages
 import LoginPage from "./pages/Auth/LoginPage";
@@ -58,6 +59,9 @@ import CompanyProfile from "./pages/Profile/CompanyProfile";
 // Legal Pages
 import TermsPage from "./pages/Legal/TermsPage";
 import CookiePolicyPage from "./pages/Legal/CookiePolicyPage";
+import PersonalPostGeneration from "./pages/Product/PersonalPostGeneration";
+import PrivacyPolicyPage from "./pages/Legal/PrivacyPolicyPage";
+// import CompanyRegisterPage from "./pages/Auth/CompanyRegisterPage";
 
 const queryClient = new QueryClient();
 
@@ -80,6 +84,8 @@ const App = () => (
               <Route path="/home/login-company" element={<LoginCompanyPage />} />
               <Route path="/Home/PersonalHome" element={<PersonalHome />} />
               <Route path="/Home/CompanyHome" element={<CompanyHome/>}/>
+              <Route path="/Home/LoginPersonalPage" element={<LoginPersonalPage/> }/>
+              <Route path="/Home/LoginCompanyPage" element={<LoginCompanyPage/> }/>
 
               {/* Product Routes */}
               <Route path="/product/linkedin-posts" element={<LinkedInPostsPage />} />
@@ -92,6 +98,7 @@ const App = () => (
               <Route path="/product/CareerAnalyticsPage" element={<CareerAnalyticsPage />} />
               <Route path="/product/free-job-postings" element={<FreeJobPostingsPage />} />
               <Route path="/product/hiring-outsourcing" element={<HiringOutsourcingPage />} />
+              <Route path="/product/personalpostgeneration" element={<PersonalPostGeneration/> }/>
 
               {/* Solutions Routes */}
               <Route path="/solutions/why-us" element={<WhyUsPage />} />
@@ -100,6 +107,7 @@ const App = () => (
               {/* Other Routes */}
               <Route path="/pricing" element={<PricingPage />} />
               <Route path="/resources" element={<ResourcesPage />} />
+               <Route path="/blog/:slug" element={<BlogArticle />} />
 
               {/* About Routes */}
               <Route path="/about" element={<AboutUsPage />} />
@@ -120,6 +128,7 @@ const App = () => (
               <Route path="/auth/register" element={<RegisterPage />} />
               <Route path="/auth/register/personal" element={<RegisterPersonalPage />} />
               <Route path="/auth/register/company" element={<RegisterCompanyPage />} />
+              {/* <Route path="/auth/company/register" element={<CompanyRegisterPage/> }/> */}
 
               {/* Profile Routes */}
               <Route path="/profile/personal" element={<PersonalProfile />} />
@@ -133,6 +142,7 @@ const App = () => (
               {/* Legal Routes */}
               <Route path="/terms" element={<TermsPage />} />
               <Route path="/cookie-policy" element={<CookiePolicyPage />} />
+              <Route path="/privacy" element={<PrivacyPolicyPage/>}/>
 
               {/* Catch-all route */}
               <Route path="*" element={<NotFound />} />

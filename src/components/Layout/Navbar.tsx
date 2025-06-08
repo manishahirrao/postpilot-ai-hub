@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { ChevronDown, Menu, X } from 'lucide-react';
+import { ChevronDown, LogIn, Menu, X } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 
@@ -179,12 +179,16 @@ const Navbar: React.FC = () => {
           </div>
 
           <div className="hidden lg:flex items-center space-x-4">
-            <Link 
-              to="/contact-sales" 
-              className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium"
-            >
-              Contact Sales
-            </Link>
+          {!isAuthenticated && (
+  <Link 
+    to="/contact-sales" 
+    className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium"
+  >
+    Contact Sales
+  </Link>
+)}
+
+
             {isAuthenticated ? (
               <div className="flex items-center space-x-4">
                 <Link 

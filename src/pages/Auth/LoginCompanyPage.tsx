@@ -24,14 +24,14 @@ const LoginCompanyPage: React.FC = () => {
     setTimeout(() => {
       // Set user type as company for company login
       login('demo-company-token', 'company');
-      navigate('/Home/CompanyHome');
+      navigate('/dashboard/company');
     }, 1000);
   };
 
   const handleLinkedInLogin = () => {
     // Simulate LinkedIn OAuth for company account
     login('demo-linkedin-company-token', 'company');
-    navigate('/Home/CompanyHome');
+    navigate('/dashboard/company');
   };
 
   return (
@@ -127,7 +127,7 @@ const LoginCompanyPage: React.FC = () => {
             <div className="text-center">
               <p className="text-sm text-gray-600">
                 Don't have a company account?{' '}
-                <Link to="/auth/register" className="text-indigo-600 hover:text-indigo-500 font-medium">
+                <Link to="/auth/company/register" className="text-indigo-600 hover:text-indigo-500 font-medium">
                   Sign up for free
                 </Link>
               </p>

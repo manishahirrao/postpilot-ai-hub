@@ -87,7 +87,7 @@ const LinkedInPostsPage: React.FC = () => {
     'Professional image creation with DALL·E',
     'Industry-specific templates',
     'Engagement optimization',
-    'Direct LinkedIn publishing',
+    'Direct Social Media publishing',
     'Content calendar integration',
     'Analytics and insights',
     'Video generation (Business plan)',
@@ -100,10 +100,10 @@ const LinkedInPostsPage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
-              <Badge className="mb-4 bg-indigo-100 text-indigo-800">LinkedIn Post Generation</Badge>
-              <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">Create Engaging LinkedIn Content in Minutes</h1>
+              <Badge className="mb-4 bg-indigo-100 text-indigo-800">Social Media Post Generation</Badge>
+              <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">Create Engaging Social Media Content in Minutes</h1>
               <p className="text-xl text-gray-600 mb-8">
-                Let AI handle your LinkedIn content creation. Generate titles, write compelling posts, create visuals, and publish.
+                Let AI handle your Social Media content creation. Generate titles, write compelling posts, create visuals, and publish.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link to="/auth/register">
@@ -131,7 +131,7 @@ const LinkedInPostsPage: React.FC = () => {
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-gray-600">Professional image generated ✓</span>
-                    <Button size="sm">Publish to LinkedIn</Button>
+                    <Button size="sm">Publish to Social Media</Button>
                   </div>
                 </CardContent>
               </Card>
@@ -146,7 +146,7 @@ const LinkedInPostsPage: React.FC = () => {
           <TabsTrigger value="LinkedIn">LinkedIn</TabsTrigger>
           <TabsTrigger value="Facebook">Facebook</TabsTrigger>
           <TabsTrigger value="Instagram">Instagram</TabsTrigger>
-          <TabsTrigger value="Twitter">Twitter</TabsTrigger>
+          <TabsTrigger value="Pinterest">Pinterest</TabsTrigger>
          
         </TabsList>
 
@@ -162,7 +162,7 @@ const LinkedInPostsPage: React.FC = () => {
           <ContentGenerator />
         </TabsContent>
 
-        <TabsContent value="Twitter">
+        <TabsContent value="Pinterest">
           <ContentGenerator />
         </TabsContent>
 
@@ -174,7 +174,7 @@ const LinkedInPostsPage: React.FC = () => {
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">How It Works</h2>
-          <p className="text-xl text-gray-600 mb-12">Create professional LinkedIn content in 5 simple steps</p>
+          <p className="text-xl text-gray-600 mb-12">Create professional Social Media content in 5 simple steps</p>
           <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
             {steps.map((step, index) => (
               <div key={index} className="text-center">
@@ -192,7 +192,7 @@ const LinkedInPostsPage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
             <div>
-              <h2 className="text-3xl font-bold mb-6">Everything you need for LinkedIn success</h2>
+              <h2 className="text-3xl font-bold mb-6">Everything you need for Social Media success</h2>
               <div className="grid sm:grid-cols-2 gap-4">
                 {features.map((feature, i) => (
                   <div key={i} className="flex items-center space-x-2">
@@ -223,7 +223,7 @@ const LinkedInPostsPage: React.FC = () => {
       {/* CTA Section */}
       <section className="py-20 bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-center">
         <div className="max-w-4xl mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to transform your LinkedIn presence?</h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to transform your Social Media presence?</h2>
           <p className="text-xl mb-8">Start creating professional content that drives engagement.</p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Link to="/auth/register">
