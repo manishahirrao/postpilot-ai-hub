@@ -62,7 +62,7 @@ const Footer: React.FC = () => {
               </li>
               <li>
                 <Link to="/product/linkedin-posts" className="text-gray-300 hover:text-white transition-colors">
-                  LinkedIn Post Generator
+                  Social Media Post Generator
                 </Link>
               </li>
             </ul>

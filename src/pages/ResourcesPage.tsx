@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -24,135 +24,137 @@ const ResourcesPage: React.FC = () => {
     date: 'June 7, 2025',
     readTime: '6 min read',
   },
-  {
-    title: 'LinkedIn Post Generator Tools: How AI is Changing the Way We Network Professionally',
-    excerpt: 'AI-generated LinkedIn posts are reshaping professional networking and brand building.',
-    category: 'Networking',
-    author: 'Manish Ahirrao',
-    date: 'June 6, 2025',
-    readTime: '4 min read',
-  },
-  {
-    title: 'Build Your Personal Brand on LinkedIn in 10 Minutes a Day with AI',
-    excerpt: 'Short on time? Here’s how to grow your personal brand with automation.',
-    category: 'Personal Branding',
-    author: 'Manish Ahirrao',
-    date: 'June 5, 2025',
-    readTime: '5 min read',
-  },
-  {
-    title: 'Top LinkedIn Strategies for Startup Founders to Attract Investors and Talent',
-    excerpt: 'Learn how founders are using LinkedIn content to build credibility and recruit top talent.',
-    category: 'Startups',
-    author: 'Manish Ahirrao',
-    date: 'June 4, 2025',
-    readTime: '6 min read',
-  },
-  {
-    title: 'How to Write LinkedIn Posts That Get 10x More Engagement—Automatically!',
-    excerpt: 'Unlock tips for creating high-engagement posts with the help of AI.',
-    category: 'Content Marketing',
-    author: 'Manish Ahirrao',
-    date: 'June 3, 2025',
-    readTime: '5 min read',
-  },
-  {
-    title: '5 Ways LinkedIn Content Automation Saves Time for Busy Professionals',
-    excerpt: 'From scheduling to smart post suggestions, automation helps you stay active without the hassle.',
-    category: 'Productivity',
-    author: 'Manish Ahirrao',
-    date: 'June 2, 2025',
-    readTime: '4 min read',
-  },
-  {
-    title: 'The Beginner\'s Guide to LinkedIn Automation: Grow Faster, Smarter, Better',
-    excerpt: 'Just starting out with LinkedIn automation? Here’s everything you need to know.',
-    category: 'Beginner Guide',
-    author: 'Manish Ahirrao',
-    date: 'June 1, 2025',
-    readTime: '5 min read',
-  },
-  {
-    title: 'How Recruiters Can Use AI to Source Better Candidates on LinkedIn',
-    excerpt: 'AI tools help recruiters discover, vet, and connect with top talent more efficiently.',
-    category: 'HR Tech',
-    author: 'Manish Ahirrao',
-    date: 'May 31, 2025',
-    readTime: '6 min read',
-  },
-  {
-    title: 'Why Every Freelancer Should Be Using LinkedIn AI Tools in 2025',
-    excerpt: 'Build authority, generate leads, and maintain presence with AI-driven automation.',
-    category: 'Freelancing',
-    author: 'Manish Ahirrao',
-    date: 'May 30, 2025',
-    readTime: '4 min read',
-  },
-  {
-    title: 'The Top 7 Mistakes Job Seekers Make on LinkedIn (And How Automation Fixes Them)',
-    excerpt: 'Avoid common pitfalls and let automation elevate your profile and messaging.',
-    category: 'Career Tips',
-    author: 'Manish Ahirrao',
-    date: 'May 29, 2025',
-    readTime: '5 min read',
-  },
-  {
-    title: 'From Ghosted to Hired: How LinkedIn Automation Tools Boost Response Rates',
-    excerpt: 'More replies, more interviews—see how smart automation makes you stand out.',
-    category: 'Success Stories',
-    author: 'Manish Ahirrao',
-    date: 'May 28, 2025',
-    readTime: '5 min read',
-  },
-  {
-    title: 'How Our AI Resume and LinkedIn Toolkit is Revolutionizing the Hiring Game',
-    excerpt: 'A deep dive into how resume builders and LinkedIn optimizers work together to land your next role.',
-    category: 'AI Tools',
-    author: 'Manish Ahirrao',
-    date: 'May 27, 2025',
-    readTime: '6 min read',
-  },
-  {
-    title: 'Hiring for Startups? Why You Should Automate Your LinkedIn Job Posting',
-    excerpt: 'Scale your hiring efforts with less effort and more results using automation.',
-    category: 'Startup Hiring',
-    author: 'Manish Ahirrao',
-    date: 'May 26, 2025',
-    readTime: '5 min read',
-  },
-  {
-    title: 'AI + LinkedIn = Gamechanger for Career Growth—Here’s How',
-    excerpt: 'Learn how AI-enhanced LinkedIn strategies are shaping the future of work.',
-    category: 'Future of Work',
-    author: 'Manish Ahirrao',
-    date: 'May 25, 2025',
-    readTime: '5 min read',
-  },
-  {
-    title: 'Why Manual LinkedIn Posting is Dead in 2025',
-    excerpt: 'The shift to AI-driven social engagement is here. Don’t get left behind.',
-    category: 'Trends',
-    author: 'Manish Ahirrao',
-    date: 'May 24, 2025',
-    readTime: '4 min read',
-  },
-  {
-    title: 'Get Hired Faster: How Our LinkedIn Optimization Tool Helps You Stand Out',
-    excerpt: 'Perfect your profile, headline, and posts to get noticed by top employers.',
-    category: 'Job Hunt',
-    author: 'Manish Ahirrao',
-    date: 'May 23, 2025',
-    readTime: '5 min read',
-  },
-  {
-    title: 'The Ultimate LinkedIn Content Calendar for Founders and Creators (Free Template Inside)',
-    excerpt: 'Plan, post, and profit with this free template and AI tool for effortless execution.',
-    category: 'Founders',
-    author: 'Manish Ahirrao',
-    date: 'May 22, 2025',
-    readTime: '6 min read',
-  },
+  // {
+  //   title: 'LinkedIn Post Generator Tools: How AI is Changing the Way We Network Professionally',
+  //   excerpt: 'AI-generated LinkedIn posts are reshaping professional networking and brand building.',
+  //   category: 'Networking',
+  //   author: 'Manish Ahirrao',
+  //   date: 'June 6, 2025',
+  //   readTime: '4 min read',
+  // },
+  // {
+  //   title: 'Build Your Personal Brand on LinkedIn in 10 Minutes a Day with AI',
+  //   excerpt: 'Short on time? Here’s how to grow your personal brand with automation.',
+  //   category: 'Personal Branding',
+  //   author: 'Manish Ahirrao',
+  //   date: 'June 5, 2025',
+  //   readTime: '5 min read',
+  // },
+  // {
+  //   title: 'Top LinkedIn Strategies for Startup Founders to Attract Investors and Talent',
+  //   excerpt: 'Learn how founders are using LinkedIn content to build credibility and recruit top talent.',
+  //   category: 'Startups',
+  //   author: 'Manish Ahirrao',
+  //   date: 'June 4, 2025',
+  //   readTime: '6 min read',
+  // },
+  // {
+  //   title: 'How to Write LinkedIn Posts That Get 10x More Engagement—Automatically!',
+  //   excerpt: 'Unlock tips for creating high-engagement posts with the help of AI.',
+  //   category: 'Content Marketing',
+  //   author: 'Manish Ahirrao',
+  //   date: 'June 3, 2025',
+  //   readTime: '5 min read',
+  // },
+  // {
+  //   title: '5 Ways LinkedIn Content Automation Saves Time for Busy Professionals',
+  //   excerpt: 'From scheduling to smart post suggestions, automation helps you stay active without the hassle.',
+  //   category: 'Productivity',
+  //   author: 'Manish Ahirrao',
+  //   date: 'June 2, 2025',
+  //   readTime: '4 min read',
+  // },
+  // {
+  //   title: 'The Beginner\'s Guide to LinkedIn Automation: Grow Faster, Smarter, Better',
+  //   excerpt: 'Just starting out with LinkedIn automation? Here’s everything you need to know.',
+  //   category: 'Beginner Guide',
+  //   author: 'Manish Ahirrao',
+  //   date: 'June 1, 2025',
+  //   readTime: '5 min read',
+  // },
+  // {
+  //   title: 'How Recruiters Can Use AI to Source Better Candidates on LinkedIn',
+  //   excerpt: 'AI tools help recruiters discover, vet, and connect with top talent more efficiently.',
+  //   category: 'HR Tech',
+  //   author: 'Manish Ahirrao',
+  //   date: 'May 31, 2025',
+  //   readTime: '6 min read',
+  // },
+  // {
+  //   title: 'Why Every Freelancer Should Be Using LinkedIn AI Tools in 2025',
+  //   excerpt: 'Build authority, generate leads, and maintain presence with AI-driven automation.',
+  //   category: 'Freelancing',
+  //   author: 'Manish Ahirrao',
+  //   date: 'May 30, 2025',
+  //   readTime: '4 min read',
+  // },
+  // {
+  //   title: 'The Top 7 Mistakes Job Seekers Make on LinkedIn (And How Automation Fixes Them)',
+  //   excerpt: 'Avoid common pitfalls and let automation elevate your profile and messaging.',
+  //   category: 'Career Tips',
+  //   author: 'Manish Ahirrao',
+  //   date: 'May 29, 2025',
+  //   readTime: '5 min read',
+  // },
+  // {
+  //   title: 'From Ghosted to Hired: How LinkedIn Automation Tools Boost Response Rates',
+  //   excerpt: 'More replies, more interviews—see how smart automation makes you stand out.',
+  //   category: 'Success Stories',
+  //   author: 'Manish Ahirrao',
+  //   date: 'May 28, 2025',
+  //   readTime: '5 min read',
+  // },
+  // {
+  //   title: 'How Our AI Resume and LinkedIn Toolkit is Revolutionizing the Hiring Game',
+  //   excerpt: 'A deep dive into how resume builders and LinkedIn optimizers work together to land your next role.',
+  //   category: 'AI Tools',
+  //   author: 'Manish Ahirrao',
+  //   date: 'May 27, 2025',
+  //   readTime: '6 min read',
+  // },
+  // {
+  //   title: 'Hiring for Startups? Why You Should Automate Your LinkedIn Job Posting',
+  //   excerpt: 'Scale your hiring efforts with less effort and more results using automation.',
+  //   category: 'Startup Hiring',
+  //   author: 'Manish Ahirrao',
+  //   date: 'May 26, 2025',
+  //   readTime: '5 min read',
+  // },
+  // {
+  //   title: 'AI + LinkedIn = Gamechanger for Career Growth—Here’s How',
+  //   excerpt: 'Learn how AI-enhanced LinkedIn strategies are shaping the future of work.',
+  //   category: 'Future of Work',
+  //   author: 'Manish Ahirrao',
+  //   date: 'May 25, 2025',
+  //   readTime: '5 min read',
+  // },
+  // {
+  //   title: 'Why Manual LinkedIn Posting is Dead in 2025',
+  //   excerpt: 'The shift to AI-driven social engagement is here. Don’t get left behind.',
+  //   category: 'Trends',
+  //   author: 'Manish Ahirrao',
+  //   date: 'May 24, 2025',
+  //   readTime: '4 min read',
+  // },
+  // {
+  //   title: 'Get Hired Faster: How Our LinkedIn Optimization Tool Helps You Stand Out',
+  //   excerpt: 'Perfect your profile, headline, and posts to get noticed by top employers.',
+  //   category: 'Job Hunt',
+  //   author: 'Manish Ahirrao',
+  //   date: 'May 23, 2025',
+  //   readTime: '5 min read',
+  // },
+  // {
+  //   title: 'The Ultimate LinkedIn Content Calendar for Founders and Creators (Free Template Inside)',
+  //   excerpt: 'Plan, post, and profit with this free template and AI tool for effortless execution.',
+  //   category: 'Founders',
+  //   author: 'Manish Ahirrao',
+  //   date: 'May 22, 2025',
+  //   readTime: '6 min read',
+  // },
 ];
+
+const navigate = useNavigate();
 
   const helpTopics = [
     {
@@ -193,7 +195,7 @@ const ResourcesPage: React.FC = () => {
             </span>
           </h1>
           <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-            Everything you need to master LinkedIn, advance your career, and get the most out of PostPilot.
+            Everything you need to master LinkedIn for Professional and Social Media for Company, advance your career, and get the most out of PostPilot.
           </p>
         </div>
       </section>
@@ -211,7 +213,9 @@ const ResourcesPage: React.FC = () => {
                 <p className="text-gray-600 mb-4">
                   Expert insights, tips, and strategies for career growth and LinkedIn success.
                 </p>
-                <Button variant="outline">
+                <Button 
+                
+                variant="outline">
                   Read Articles
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>

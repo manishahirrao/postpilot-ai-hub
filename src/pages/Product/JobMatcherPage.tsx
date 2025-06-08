@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { ArrowRight, Search, Target, TrendingUp, CheckCircle, MapPin, Building, DollarSign } from 'lucide-react';
+import { ArrowRight, Search, Target, TrendingUp, CheckCircle, MapPin, Building, DollarSign, IndianRupee } from 'lucide-react';
 
 const JobMatcherPage: React.FC = () => {
   const sampleJobs = [
@@ -12,7 +12,7 @@ const JobMatcherPage: React.FC = () => {
       title: 'Senior Software Engineer',
       company: 'TechCorp',
       location: 'San Francisco, CA',
-      salary: '$120k - $180k',
+      salary: '120k - 180k',
       matchScore: 92,
       skills: ['React', 'Node.js', 'AWS']
     },
@@ -20,7 +20,7 @@ const JobMatcherPage: React.FC = () => {
       title: 'Full Stack Developer',
       company: 'InnovateLab',
       location: 'New York, NY',
-      salary: '$100k - $140k',
+      salary: '100k - 140k',
       matchScore: 87,
       skills: ['JavaScript', 'Python', 'Docker']
     },
@@ -28,7 +28,7 @@ const JobMatcherPage: React.FC = () => {
       title: 'Frontend Engineer',
       company: 'StartupXYZ',
       location: 'Austin, TX',
-      salary: '$90k - $130k',
+      salary: '90k - 130k',
       matchScore: 83,
       skills: ['Vue.js', 'TypeScript', 'CSS']
     }
@@ -102,7 +102,7 @@ const JobMatcherPage: React.FC = () => {
                           {job.location}
                         </span>
                         <span className="flex items-center">
-                          <DollarSign className="w-4 h-4 mr-1" />
+                          <IndianRupee className="w-4 h-4 mr-1" />
                           {job.salary}
                         </span>
                       </div>
@@ -261,7 +261,7 @@ const JobMatcherPage: React.FC = () => {
                           {job.location}
                         </span>
                         <span className="flex items-center">
-                          <DollarSign className="w-4 h-4 mr-1" />
+                          <IndianRupee className="w-4 h-4 mr-1" />
                           {job.salary}
                         </span>
                       </div>

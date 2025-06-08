@@ -86,7 +86,7 @@ const InvestorsPage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
             Investor
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-blue-600">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">
               {" "}Relations
             </span>
           </h1>
@@ -96,7 +96,7 @@ const InvestorsPage: React.FC = () => {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700">
+            <Button size="lg" className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-green-700 hover:to-blue-700">
               Download Investment Deck
             </Button>
             <Button size="lg" variant="outline">

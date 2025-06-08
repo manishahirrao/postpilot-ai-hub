@@ -38,7 +38,7 @@ const ResumeBuilderPage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
-              <Badge className="mb-4 bg-green-100 text-green-800">
+              <Badge className="mb-4 bg-gradient-to-r from-indigo-600 to-purple-600">
                 Resume Builder/Enhancer
               </Badge>
               <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
@@ -51,7 +51,7 @@ const ResumeBuilderPage: React.FC = () => {
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link to="/auth/register">
-                  <Button size="lg" className="bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700">
+                  <Button size="lg" className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-green-700 hover:to-blue-700">
                     Try It Now
                     <ArrowRight className="w-5 h-5 ml-2" />
                   </Button>
@@ -235,7 +235,7 @@ const ResumeBuilderPage: React.FC = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-green-600 to-blue-600">
+      <section className="py-20 bg-gradient-to-r from-indigo-600 to-purple-600">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
             Ready to enhance your resume?

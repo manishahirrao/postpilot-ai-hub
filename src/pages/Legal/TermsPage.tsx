@@ -111,7 +111,7 @@ const TermsPage: React.FC = () => {
             <p className="text-gray-700">If you have any questions about these Terms, contact us at:</p>
             <div className="bg-gray-50 p-4 rounded-lg">
               <p className="text-gray-700">Email: legal@postpilot.com</p>
-              <p className="text-gray-700">Address: 1234 AI-Lane, Tech City, Country</p>
+              <p className="text-gray-700">Address: Delhi, India</p>
             </div>
           </section>
         </div>

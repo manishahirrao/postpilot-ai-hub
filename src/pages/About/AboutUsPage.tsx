@@ -216,7 +216,7 @@ const AboutUsPage: React.FC = () => {
                   <span className="text-white font-bold text-xl">HR</span>
                 </div>
                 <h3 className="font-semibold text-gray-900">Harsh Singh Rajput</h3>
-                <p className="text-gray-600 text-sm">Co-Founder</p>
+                <p className="text-gray-600 text-sm">Founder</p>
               </CardContent>
             </Card>
             

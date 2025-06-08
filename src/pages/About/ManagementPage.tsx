@@ -8,9 +8,9 @@ const ManagementPage: React.FC = () => {
   const executives = [
     {
       name: 'Harsh Singh Rajput',
-      title: 'Co-Founder',
+      title: 'Founder',
       bio: 'Harsh Kumar Singh founded PostPilot with a mission to simplify customer engagement for modern businesses. With a B.Com. in Business Process Management and a specialization in CRM from Delhi Skills and Entrepreneurship University, Harsh brings a deep understanding of customer behavior, digital marketing, and data-driven decision-making. He has led multiple research and consulting projects focused on market analysis, process optimization, and digital transformation. His work reflects a passion for building strategic, customer-centric solutions that help businesses grow smarter and faster.',
-      previousRoles: ['Market Research & CRM Strategy Intern'],
+      previousRoles: [`Market Research & CRM Strategy`,`Sales Manager` ],
       education: ['B.Com. in Business Process Management (BPM),Delhi'],
       linkedin: '#',
       image: 'HR'
@@ -19,7 +19,7 @@ const ManagementPage: React.FC = () => {
       name: 'Manish Ahirrao',
       title: 'Co-founder',
       bio: 'Manish Ahirrao co-founded PostPilot to bridge the gap between intelligent automation and user-centric product experiences. With a background in Computer Science from Savitribai Phule Pune University and hands-on expertise in full-stack web development, Manish has built scalable tech solutions using modern frameworks like React, Node.js, and MongoDB. His deep interest in machine learning and AI led him to complete a Data Science & ML internship, where he applied predictive analytics to real-world problems. At PostPilot, Manish leads the technology vision—driving innovation at the intersection of AI and digital engagement.',
-      previousRoles: ['Data Science & Machine Learning Intern '],
+      previousRoles: ['Data Science & Machine Learning '],
       education: ['Bachelor of Engineering in Computer Science,Pune'],
       linkedin: '#',
       image: 'MA'

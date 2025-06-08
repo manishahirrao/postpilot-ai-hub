@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { MapPin, Clock, DollarSign, Users, Coffee, Laptop, Heart, TrendingUp } from 'lucide-react';
+import { MapPin, Clock, DollarSign, Users, Coffee, Laptop, Heart, TrendingUp, IndianRupee } from 'lucide-react';
 
 const CareersPage: React.FC = () => {
   const openPositions = [
@@ -13,7 +13,7 @@ const CareersPage: React.FC = () => {
       department: 'Engineering',
       location: 'San Francisco, CA / Remote',
       type: 'Full-time',
-      salary: '$130k - $180k',
+      salary: '130k - 180k',
       description: 'Join our engineering team to build the next generation of AI-powered career tools.',
       requirements: ['5+ years of React/Node.js experience', 'Experience with AI/ML systems', 'Strong CS fundamentals'],
       posted: '2 days ago'
@@ -23,7 +23,7 @@ const CareersPage: React.FC = () => {
       department: 'Marketing',
       location: 'New York, NY / Remote',
       type: 'Full-time',
-      salary: '$90k - $130k',
+      salary: '90k - 130k',
       description: 'Drive product marketing strategy and go-to-market execution for our AI features.',
       requirements: ['3+ years product marketing experience', 'B2B SaaS background', 'Data-driven mindset'],
       posted: '1 week ago'
@@ -33,7 +33,7 @@ const CareersPage: React.FC = () => {
       department: 'Design',
       location: 'Austin, TX / Remote',
       type: 'Full-time',
-      salary: '$85k - $120k',
+      salary: '85k - 120k',
       description: 'Design intuitive user experiences for our AI-powered career advancement platform.',
       requirements: ['4+ years UX/UI design experience', 'Figma proficiency', 'User research skills'],
       posted: '3 days ago'
@@ -43,7 +43,7 @@ const CareersPage: React.FC = () => {
       department: 'Customer Success',
       location: 'Chicago, IL / Remote',
       type: 'Full-time',
-      salary: '$70k - $95k',
+      salary: '70k - 95k',
       description: 'Help our enterprise customers achieve success with PostPilot\'s platform.',
       requirements: ['2+ years customer success experience', 'SaaS experience preferred', 'Excellent communication'],
       posted: '5 days ago'
@@ -53,7 +53,7 @@ const CareersPage: React.FC = () => {
       department: 'Engineering',
       location: 'Remote',
       type: 'Full-time',
-      salary: '$150k - $200k',
+      salary: '150k - 200k',
       description: 'Build and improve our AI models for content generation and job matching.',
       requirements: ['PhD or MS in CS/ML', 'Experience with LLMs', 'Python/PyTorch expertise'],
       posted: '1 day ago'
@@ -87,7 +87,7 @@ const CareersPage: React.FC = () => {
       description: 'Competitive equity compensation for all employees'
     },
     {
-      icon: <DollarSign className="w-6 h-6 text-yellow-500" />,
+      icon: <IndianRupee className="w-6 h-6 text-yellow-500" />,
       title: 'Competitive Pay',
       description: 'Market-leading salaries with annual reviews and bonuses'
     }
@@ -239,7 +239,7 @@ const CareersPage: React.FC = () => {
                           {position.location}
                         </span>
                         <span className="flex items-center">
-                          <DollarSign className="w-4 h-4 mr-1" />
+                          <IndianRupee className="w-4 h-4 mr-1" />
                           {position.salary}
                         </span>
                         <span className="flex items-center">

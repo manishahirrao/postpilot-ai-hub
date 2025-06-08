@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { ChevronDown, LogIn, Menu, X } from 'lucide-react';
+import { ChevronDown, LogIn, Menu, X, CreditCard, Zap, TrendingUp, Settings, Bell, User } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 
@@ -9,8 +9,27 @@ const Navbar: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [isSignupDropdownOpen, setIsSignupDropdownOpen] = useState(false);
+  const [isCreditDropdownOpen, setIsCreditDropdownOpen] = useState(false);
   const { isAuthenticated, userType, logout } = useAuth();
   const location = useLocation();
+
+  // Mock credit data - replace with your actual credit context/API
+  const userData = {
+    name: "John Doe",
+    plan: userType === 'professional' ? "Pro" : "Business",
+    credits: 1247,
+    maxCredits: 5000,
+    renewalDate: "Dec 15, 2024"
+  };
+
+  const creditPercentage = (userData.credits / userData.maxCredits) * 100;
+  const isLowCredits = creditPercentage < 20;
+
+  const getProgressColor = () => {
+    if (creditPercentage > 50) return 'bg-emerald-500';
+    if (creditPercentage > 20) return 'bg-amber-500';
+    return 'bg-red-500';
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -21,6 +40,9 @@ const Navbar: React.FC = () => {
       const target = event.target as HTMLElement;
       if (!target.closest('.signup-dropdown')) {
         setIsSignupDropdownOpen(false);
+      }
+      if (!target.closest('.credit-dropdown')) {
+        setIsCreditDropdownOpen(false);
       }
     };
 
@@ -64,11 +86,11 @@ const Navbar: React.FC = () => {
     { href: '/contact', label: 'Contact Us' },
   ];
 
-   const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleLogout = () => {
-    logout();          // your logout function
-    navigate("/");     // navigate to home page
+    logout();
+    navigate("/");
   };
 
   const DropdownMenu: React.FC<{ 
@@ -116,6 +138,120 @@ const Navbar: React.FC = () => {
     return userType === 'professional' ? 'Personal Tools' : 'Business Tools';
   };
 
+  const CreditDisplay: React.FC = () => (
+    <div className="credit-dropdown relative">
+      <button
+        onClick={() => setIsCreditDropdownOpen(!isCreditDropdownOpen)}
+        className="flex items-center bg-gray-50 hover:bg-gray-100 rounded-lg px-3 py-2 border transition-colors"
+      >
+        <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-2">
+            <CreditCard className="w-4 h-4 text-gray-600" />
+            <div className="flex flex-col">
+              <div className="flex items-center space-x-1">
+                <span className={`text-sm font-semibold ${isLowCredits ? 'text-red-600' : 'text-gray-900'}`}>
+                  {userData.credits.toLocaleString()}
+                </span>
+                <span className="text-xs text-gray-500">/ {userData.maxCredits.toLocaleString()}</span>
+              </div>
+              <div className="w-16 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                <div 
+                  className={`h-full transition-all duration-300 ${getProgressColor()}`}
+                  style={{ width: `${creditPercentage}%` }}
+                />
+              </div>
+            </div>
+          </div>
+          
+          {isLowCredits && (
+            <Link
+              to="/pricing"
+              className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-3 py-1 rounded-md text-xs font-medium hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 transform hover:scale-105"
+            >
+              Upgrade
+            </Link>
+          )}
+        </div>
+      </button>
+
+      {/* Credit Dropdown Menu */}
+      {isCreditDropdownOpen && (
+        <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
+          <div className="p-4 border-b border-gray-100">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-sm font-semibold text-gray-900">Credit Usage</h3>
+              <Link to="/settings" className="text-gray-400 hover:text-gray-600">
+                <Settings className="w-4 h-4" />
+              </Link>
+            </div>
+            
+            <div className="space-y-3">
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-gray-600">Current Usage</span>
+                <span className="text-sm font-medium text-gray-900">
+                  {(userData.maxCredits - userData.credits).toLocaleString()} / {userData.maxCredits.toLocaleString()}
+                </span>
+              </div>
+              
+              <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+                <div 
+                  className={`h-full transition-all duration-500 ${getProgressColor()}`}
+                  style={{ width: `${100 - creditPercentage}%` }}
+                />
+              </div>
+              
+              <div className="flex justify-between text-xs text-gray-500">
+                <span>Remaining: {userData.credits.toLocaleString()}</span>
+                <span>Renews: {userData.renewalDate}</span>
+              </div>
+            </div>
+          </div>
+          
+          <div className="p-2">
+            <Link
+              to="/analytics"
+              className="w-full flex items-center space-x-3 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md transition-colors"
+              onClick={() => setIsCreditDropdownOpen(false)}
+            >
+              <TrendingUp className="w-4 h-4" />
+              <span>Usage Analytics</span>
+            </Link>
+            <Link
+              to="/billing"
+              className="w-full flex items-center space-x-3 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md transition-colors"
+              onClick={() => setIsCreditDropdownOpen(false)}
+            >
+              <CreditCard className="w-4 h-4" />
+              <span>Billing & Plans</span>
+            </Link>
+            <Link
+              to="/settings"
+              className="w-full flex items-center space-x-3 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md transition-colors"
+              onClick={() => setIsCreditDropdownOpen(false)}
+            >
+              <Settings className="w-4 h-4" />
+              <span>Account Settings</span>
+            </Link>
+          </div>
+          
+          {isLowCredits && (
+            <div className="p-4 bg-gradient-to-r from-indigo-50 to-purple-50 border-t border-gray-100">
+              <div className="text-sm font-medium text-gray-900 mb-1">Running low on credits!</div>
+              <div className="text-xs text-gray-600 mb-3">Upgrade your plan to avoid interruptions</div>
+              <Link
+                to="/pricing"
+                className="w-full block bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-2 px-4 rounded-md text-sm font-medium hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 transform hover:scale-105 text-center"
+                onClick={() => setIsCreditDropdownOpen(false)}
+              >
+                Upgrade Now
+              </Link>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
       isScrolled ? 'bg-white shadow-lg' : 'bg-transparent'
@@ -127,7 +263,7 @@ const Navbar: React.FC = () => {
           </Link>
 
           <div className="hidden lg:flex items-center space-x-2">
-               <Link 
+            <Link 
               to="/" 
               className={`px-4 py-2 text-sm font-medium transition-colors hover:text-indigo-600 ${
                 location.pathname === '/' ? 'text-indigo-600' : 'text-gray-700'
@@ -179,18 +315,28 @@ const Navbar: React.FC = () => {
           </div>
 
           <div className="hidden lg:flex items-center space-x-4">
-          {!isAuthenticated && (
-  <Link 
-    to="/contact-sales" 
-    className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium"
-  >
-    Contact Sales
-  </Link>
-)}
-
+            {!isAuthenticated && (
+              <Link 
+                to="/contact-sales" 
+                className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium"
+              >
+                Contact Sales
+              </Link>
+            )}
 
             {isAuthenticated ? (
               <div className="flex items-center space-x-4">
+                {/* Credit Display */}
+                <CreditDisplay />
+                
+                {/* Notifications */}
+                <button className="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors">
+                  <Bell className="w-5 h-5" />
+                  {isLowCredits && (
+                    <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
+                  )}
+                </button>
+
                 <Link 
                   to={userType === 'professional' ? '/dashboard/personal' : '/dashboard/company'} 
                   className="text-gray-700 hover:text-indigo-600 text-sm font-medium"
@@ -203,9 +349,7 @@ const Navbar: React.FC = () => {
                 >
                   Profile
                 </Link>
-                <Button 
-                
-                onClick={handleLogout} variant="outline" size="sm">
+                <Button onClick={handleLogout} variant="outline" size="sm">
                   Logout
                 </Button>
               </div>
@@ -248,6 +392,95 @@ const Navbar: React.FC = () => {
             {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
+
+        {/* Mobile Menu */}
+        {isMobileMenuOpen && (
+          <div className="lg:hidden border-t border-gray-200 py-4 bg-white">
+            <div className="space-y-2">
+              <Link 
+                to="/" 
+                className="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50 rounded-md transition-colors"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Home
+              </Link>
+              <Link 
+                to="/pricing" 
+                className="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50 rounded-md transition-colors"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Pricing
+              </Link>
+              <Link 
+                to="/resources" 
+                className="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50 rounded-md transition-colors"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Resources
+              </Link>
+              <Link 
+                to="/support" 
+                className="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50 rounded-md transition-colors"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Customer Support
+              </Link>
+              
+              {isAuthenticated && (
+                <>
+                  {/* Mobile Credits Display */}
+                  <div className="px-3 py-2 bg-gray-50 rounded-md border mt-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm font-medium text-gray-900">Credits</span>
+                      <span className={`text-sm font-semibold ${isLowCredits ? 'text-red-600' : 'text-gray-900'}`}>
+                        {userData.credits.toLocaleString()} / {userData.maxCredits.toLocaleString()}
+                      </span>
+                    </div>
+                    <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+                      <div 
+                        className={`h-full transition-all duration-300 ${getProgressColor()}`}
+                        style={{ width: `${creditPercentage}%` }}
+                      />
+                    </div>
+                    {isLowCredits && (
+                      <Link
+                        to="/pricing"
+                        className="w-full mt-3 block bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-2 px-4 rounded-md text-sm font-medium hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 text-center"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        Upgrade Plan
+                      </Link>
+                    )}
+                  </div>
+                  
+                  <Link 
+                    to={userType === 'professional' ? '/dashboard/personal' : '/dashboard/company'} 
+                    className="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50 rounded-md transition-colors"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Dashboard
+                  </Link>
+                  <Link 
+                    to={userType === 'professional' ? '/profile/personal' : '/profile/company'} 
+                    className="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50 rounded-md transition-colors"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Profile
+                  </Link>
+                  <button 
+                    onClick={() => {
+                      handleLogout();
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="block w-full text-left px-3 py-2 text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50 rounded-md transition-colors"
+                  >
+                    Logout
+                  </button>
+                </>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </nav>
   );

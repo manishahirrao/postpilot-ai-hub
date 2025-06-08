@@ -126,7 +126,7 @@ const PrivacyPolicyPage: React.FC = () => {
             <h2 className="text-2xl font-semibold text-gray-900 mb-4">13. Contact Us</h2>
             <div className="bg-gray-50 p-4 rounded-lg">
               <p className="text-gray-700">Email: <a href="mailto:privacy@postpilot.com" className="text-blue-600 underline">privacy@postpilot.com</a></p>
-              <p className="text-gray-700">Address: 1234 AI-Lane, Tech City, Country</p>
+              <p className="text-gray-700">Address: Delhi, India</p>
             </div>
           </section>
         </div>

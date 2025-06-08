@@ -23,51 +23,49 @@ const HiringOutsourcingPage: React.FC = () => {
   const packages = [
     {
       id: 'basic',
-      name: 'Basic Package',
-      price: 'Starting at $2,999',
+      name: 'Intern Talent-Link',
+      price: 'Flat ₹2,000 per intern placement',
       description: 'Perfect for small teams with straightforward hiring needs',
       features: [
-        'Screen up to 10 candidates',
-        'Initial phone interviews',
-        'Background verification',
-        'Shortlist top 3 candidates',
-        'Basic skills assessment',
-        '2-week turnaround'
+       `  - Dedicated intern sourcing & screening
+- Interview scheduling & coordination
+- Onboarding support materials
+- Monthly check-ins & progress reports
+- Compliance with internship regulations
+- 1-month replacement guarantee if intern departs early`
       ],
       popular: false
     },
     {
       id: 'pro',
-      name: 'Pro Package',
-      price: 'Starting at $4,999',
+      name: 'Full-Time ExpertCare',
+      price: '10% of employee’s annual salary',
       description: 'Comprehensive hiring solution for growing companies',
       features: [
-        'Everything in Basic',
-        'Technical skills testing',
-        'Video interviews',
-        'Detailed candidate reports',
-        'Reference checks',
-        'Cultural fit assessment',
-        '1-week turnaround',
-        'Dedicated recruiter'
+    `- End-to-end recruitment (sourcing, screening, interviewing)
+- Offer negotiation & onboarding
+- Payroll setup & processing
+- Benefits administration & statutory compliance
+- Dedicated HR account manager
+- Quarterly performance insights
+- 1-month replacement guarantee if hire exits within 30 days
+ ` 
       ],
       popular: false
     },
     {
       id: 'enterprise',
-      name: 'Enterprise Package',
-      price: 'Custom Pricing',
+      name: 'Project-Flex Freelance',
+      price: '5% of contractor’s project fee',
       description: 'Full-service recruitment for large organizations',
       features: [
-        'Everything in Pro',
-        'Custom recruitment strategy',
-        'Employer branding support',
-        'Multi-stage interview process',
-        'Executive search capabilities',
-        'Onboarding assistance',
-        'SLA guarantees',
-        'Account management'
-      ],
+       `- Curated freelancer marketplace access
+- Skill-based vetting & portfolio review
+- Contract drafting & milestone tracking
+- Invoicing support & payment facilitation
+- Quick scale-up/down flexibility
+- Project delivery check-ins
+- 1-month replacement guarantee if contractor disengages early`    ],
       popular: false
     }
   ];
