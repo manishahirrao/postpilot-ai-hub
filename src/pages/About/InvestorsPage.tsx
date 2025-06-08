@@ -69,14 +69,14 @@ const InvestorsPage: React.FC = () => {
   ];
 
   const milestones = [
-    { date: 'Q1 2023', event: 'Company Founded', description: 'PostPilot incorporated with founding team' },
-    { date: 'Q2 2023', event: 'Seed Funding', description: '$5M seed round led by First Round Capital' },
-    { date: 'Q3 2023', event: 'Product Launch', description: 'Beta launch with 1,000 early users' },
-    { date: 'Q4 2023', event: 'Market Validation', description: 'Achieved product-market fit metrics' },
-    { date: 'Q1 2024', event: 'Scale Phase', description: 'Crossed 10,000 active users milestone' },
-    { date: 'Q2 2024', event: 'Series A', description: '$20M Series A led by Andreessen Horowitz' },
-    { date: 'Q3 2024', event: 'Enterprise Launch', description: 'Launched enterprise features and team plans' },
-    { date: 'Q4 2024', event: 'International Expansion', description: 'Expanded to European and Asian markets' }
+    { date: 'Q1 2025', event: 'Company Founded', description: 'PostPilot incorporated with founding team' },
+    // { date: 'Q2 2023', event: 'Seed Funding', description: '$5M seed round led by First Round Capital' },
+    { date: 'Q3 2025', event: 'Product Launch', description: 'Beta launch with 1,000 early users' },
+    { date: 'Q4 2025', event: 'Market Validation', description: 'Achieved product-market fit metrics' },
+    // { date: 'Q1 2024', event: 'Scale Phase', description: 'Crossed 10,000 active users milestone' },
+    // { date: 'Q2 2024', event: 'Series A', description: '$20M Series A led by Andreessen Horowitz' },
+    // { date: 'Q3 2024', event: 'Enterprise Launch', description: 'Launched enterprise features and team plans' },
+    // { date: 'Q4 2024', event: 'International Expansion', description: 'Expanded to European and Asian markets' }
   ];
 
   return (
@@ -135,7 +135,7 @@ const InvestorsPage: React.FC = () => {
       </section>
 
       {/* Investors */}
-      <section className="py-20 bg-gray-50">
+      {/* <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
@@ -179,7 +179,7 @@ const InvestorsPage: React.FC = () => {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Company Milestones */}
       <section className="py-20 bg-white">
@@ -292,7 +292,7 @@ const InvestorsPage: React.FC = () => {
       </section>
 
       {/* Contact Information */}
-      <section className="py-20 bg-gradient-to-r from-green-600 to-blue-600">
+      {/* <section className="py-20 bg-gradient-to-r from-green-600 to-blue-600">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
             Investor Relations Contact
@@ -317,7 +317,7 @@ const InvestorsPage: React.FC = () => {
             </Button>
           </div>
         </div>
-      </section>
+      </section> */}
     </div>
   );
 };

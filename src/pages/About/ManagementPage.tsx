@@ -7,84 +7,49 @@ import { Button } from '@/components/ui/button';
 const ManagementPage: React.FC = () => {
   const executives = [
     {
-      name: 'Sarah Chen',
-      title: 'Chief Executive Officer & Founder',
-      bio: 'Sarah founded PostPilot after experiencing firsthand the challenges of career advancement in tech. With 12+ years at companies like Google and Spotify, she led product teams that served millions of users. Sarah holds an MBA from Stanford and a BS in Computer Science from MIT.',
-      previousRoles: ['VP Product at Spotify', 'Senior PM at Google', 'Software Engineer at Microsoft'],
-      education: ['MBA, Stanford Graduate School of Business', 'BS Computer Science, MIT'],
+      name: 'Harsh Singh Rajput',
+      title: 'Co-Founder',
+      bio: 'Harsh Kumar Singh founded PostPilot with a mission to simplify customer engagement for modern businesses. With a B.Com. in Business Process Management and a specialization in CRM from Delhi Skills and Entrepreneurship University, Harsh brings a deep understanding of customer behavior, digital marketing, and data-driven decision-making. He has led multiple research and consulting projects focused on market analysis, process optimization, and digital transformation. His work reflects a passion for building strategic, customer-centric solutions that help businesses grow smarter and faster.',
+      previousRoles: ['Market Research & CRM Strategy Intern'],
+      education: ['B.Com. in Business Process Management (BPM),Delhi'],
       linkedin: '#',
-      image: 'SC'
+      image: 'HR'
     },
     {
-      name: 'Michael Rodriguez',
-      title: 'Chief Technology Officer',
-      bio: 'Michael brings 15+ years of experience building scalable AI systems. Previously, he was Principal Engineer at OpenAI, where he worked on GPT models. He also led engineering teams at Uber and Facebook, focusing on ML infrastructure and recommendation systems.',
-      previousRoles: ['Principal Engineer at OpenAI', 'Staff Engineer at Uber', 'Senior Engineer at Facebook'],
-      education: ['PhD Computer Science, Stanford University', 'MS Computer Science, Carnegie Mellon'],
+      name: 'Manish Ahirrao',
+      title: 'Co-founder',
+      bio: 'Manish Ahirrao co-founded PostPilot to bridge the gap between intelligent automation and user-centric product experiences. With a background in Computer Science from Savitribai Phule Pune University and hands-on expertise in full-stack web development, Manish has built scalable tech solutions using modern frameworks like React, Node.js, and MongoDB. His deep interest in machine learning and AI led him to complete a Data Science & ML internship, where he applied predictive analytics to real-world problems. At PostPilot, Manish leads the technology vision—driving innovation at the intersection of AI and digital engagement.',
+      previousRoles: ['Data Science & Machine Learning Intern '],
+      education: ['Bachelor of Engineering in Computer Science,Pune'],
       linkedin: '#',
-      image: 'MR'
+      image: 'MA'
     },
-    {
-      name: 'Emily Johnson',
-      title: 'Chief Product Officer',
-      bio: 'Emily has spent 10+ years building products that millions of professionals use daily. She previously led product at LinkedIn, where she drove the development of their content creation tools. Before that, she was VP Product at Slack, focusing on workplace collaboration.',
-      previousRoles: ['VP Product at LinkedIn', 'VP Product at Slack', 'Senior PM at Twitter'],
-      education: ['MBA, Wharton School', 'BA Psychology, Harvard University'],
-      linkedin: '#',
-      image: 'EJ'
-    },
-    {
-      name: 'David Kim',
-      title: 'Chief Financial Officer',
-      bio: 'David brings deep financial expertise from both public and private technology companies. He previously served as CFO at DocuSign and held senior finance roles at Salesforce. David is a CPA and has led multiple successful fundraising rounds totaling over $500M.',
-      previousRoles: ['CFO at DocuSign', 'VP Finance at Salesforce', 'Director at Deloitte'],
-      education: ['MBA Finance, Kellogg School', 'BS Accounting, UC Berkeley'],
-      linkedin: '#',
-      image: 'DK'
-    },
-    {
-      name: 'Lisa Wang',
-      title: 'Chief Marketing Officer',
-      bio: 'Lisa has 12+ years of experience building global brands in the B2B SaaS space. She previously led marketing at HubSpot, where she drove the company from $100M to $1B ARR. Before that, she was VP Marketing at Zoom during their hypergrowth phase.',
-      previousRoles: ['VP Marketing at HubSpot', 'VP Marketing at Zoom', 'Marketing Director at Dropbox'],
-      education: ['MBA Marketing, Harvard Business School', 'BA Communications, UCLA'],
-      linkedin: '#',
-      image: 'LW'
-    },
-    {
-      name: 'James Thompson',
-      title: 'Chief Revenue Officer',
-      bio: 'James has 14+ years of experience scaling revenue organizations. He previously led sales at Intercom, growing revenue from $50M to $200M ARR. Before that, he was VP Sales at Zendesk and held enterprise sales roles at Salesforce.',
-      previousRoles: ['VP Sales at Intercom', 'VP Sales at Zendesk', 'Enterprise AE at Salesforce'],
-      education: ['MBA, Chicago Booth', 'BA Business, University of Michigan'],
-      linkedin: '#',
-      image: 'JT'
-    }
+    
   ];
 
-  const advisors = [
-    {
-      name: 'Dr. Jennifer Walsh',
-      title: 'AI Advisor',
-      company: 'Former VP AI at Google',
-      bio: 'Leading AI researcher with 20+ publications in top-tier conferences.',
-      image: 'JW'
-    },
-    {
-      name: 'Robert Martinez',
-      title: 'Go-to-Market Advisor',
-      company: 'Former CMO at Slack',
-      bio: 'Expert in scaling B2B SaaS companies from startup to IPO.',
-      image: 'RM'
-    },
-    {
-      name: 'Amanda Foster',
-      title: 'HR Technology Advisor',
-      company: 'Former Chief People Officer at Stripe',
-      bio: 'Pioneer in people analytics and future of work technologies.',
-      image: 'AF'
-    }
-  ];
+  // const advisors = [
+  //   {
+  //     name: 'Dr. Jennifer Walsh',
+  //     title: 'AI Advisor',
+  //     company: 'Former VP AI at Google',
+  //     bio: 'Leading AI researcher with 20+ publications in top-tier conferences.',
+  //     image: 'JW'
+  //   },
+  //   {
+  //     name: 'Robert Martinez',
+  //     title: 'Go-to-Market Advisor',
+  //     company: 'Former CMO at Slack',
+  //     bio: 'Expert in scaling B2B SaaS companies from startup to IPO.',
+  //     image: 'RM'
+  //   },
+  //   {
+  //     name: 'Amanda Foster',
+  //     title: 'HR Technology Advisor',
+  //     company: 'Former Chief People Officer at Stripe',
+  //     bio: 'Pioneer in people analytics and future of work technologies.',
+  //     image: 'AF'
+  //   }
+  // ];
 
   return (
     <div className="min-h-screen pt-16">
@@ -175,7 +140,7 @@ const ManagementPage: React.FC = () => {
       </section>
 
       {/* Board of Advisors */}
-      <section className="py-20 bg-gray-50">
+      {/* <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
@@ -202,7 +167,7 @@ const ManagementPage: React.FC = () => {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Company Stats */}
       <section className="py-20 bg-blue-50">

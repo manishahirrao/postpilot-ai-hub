@@ -61,6 +61,7 @@ import TermsPage from "./pages/Legal/TermsPage";
 import CookiePolicyPage from "./pages/Legal/CookiePolicyPage";
 import PersonalPostGeneration from "./pages/Product/PersonalPostGeneration";
 import PrivacyPolicyPage from "./pages/Legal/PrivacyPolicyPage";
+import CompanyRegistrationForm from "./pages/Auth/CompanyRegisterPage";
 // import CompanyRegisterPage from "./pages/Auth/CompanyRegisterPage";
 
 const queryClient = new QueryClient();
@@ -128,7 +129,7 @@ const App = () => (
               <Route path="/auth/register" element={<RegisterPage />} />
               <Route path="/auth/register/personal" element={<RegisterPersonalPage />} />
               <Route path="/auth/register/company" element={<RegisterCompanyPage />} />
-              {/* <Route path="/auth/company/register" element={<CompanyRegisterPage/> }/> */}
+              <Route path="/auth/company/register" element={<CompanyRegistrationForm/>}/>
 
               {/* Profile Routes */}
               <Route path="/profile/personal" element={<PersonalProfile />} />

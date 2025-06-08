@@ -32,30 +32,16 @@ const AboutUsPage: React.FC = () => {
 
   const timeline = [
     {
-      year: '2023',
+      year: '2025',
       title: 'Company Founded',
       description: 'PostPilot was founded with a mission to democratize professional networking and career advancement.'
     },
     {
-      year: '2023',
-      title: 'First 1,000 Users',
-      description: 'Reached our first milestone of 1,000 active users within 6 months of launch.'
-    },
-    {
-      year: '2024',
-      title: 'AI Video Generation',
-      description: 'Launched AI-powered video generation for company pages, revolutionizing LinkedIn content.'
-    },
-    {
-      year: '2024',
-      title: '50,000+ Users',
-      description: 'Grew to over 50,000 professionals using PostPilot to accelerate their careers.'
-    },
-    {
       year: '2025',
-      title: 'Series A Funding',
-      description: 'Raised $15M Series A to expand our AI capabilities and global reach.'
-    }
+      title: 'First 1,000 Users',
+      description: 'Reached our first milestone of 1,000 active users within 3 months of launch.'
+    },
+   
   ];
 
   const stats = [
@@ -223,36 +209,27 @@ const AboutUsPage: React.FC = () => {
             Passionate professionals dedicated to transforming careers worldwide
           </p>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
             <Card>
               <CardContent className="p-6 text-center">
                 <div className="w-20 h-20 bg-gradient-to-br from-blue-400 to-purple-600 rounded-full mx-auto mb-4 flex items-center justify-center">
-                  <span className="text-white font-bold text-xl">SC</span>
+                  <span className="text-white font-bold text-xl">HR</span>
                 </div>
-                <h3 className="font-semibold text-gray-900">Sarah Chen</h3>
-                <p className="text-gray-600 text-sm">CEO & Founder</p>
+                <h3 className="font-semibold text-gray-900">Harsh Singh Rajput</h3>
+                <p className="text-gray-600 text-sm">Co-Founder</p>
               </CardContent>
             </Card>
             
             <Card>
               <CardContent className="p-6 text-center">
                 <div className="w-20 h-20 bg-gradient-to-br from-green-400 to-blue-600 rounded-full mx-auto mb-4 flex items-center justify-center">
-                  <span className="text-white font-bold text-xl">MR</span>
+                  <span className="text-white font-bold text-xl">MA</span>
                 </div>
-                <h3 className="font-semibold text-gray-900">Michael Rodriguez</h3>
-                <p className="text-gray-600 text-sm">CTO</p>
+                <h3 className="font-semibold text-gray-900">Manish Ahirrao</h3>
+                <p className="text-gray-600 text-sm">Co-founder</p>
               </CardContent>
             </Card>
             
-            <Card>
-              <CardContent className="p-6 text-center">
-                <div className="w-20 h-20 bg-gradient-to-br from-purple-400 to-pink-600 rounded-full mx-auto mb-4 flex items-center justify-center">
-                  <span className="text-white font-bold text-xl">EJ</span>
-                </div>
-                <h3 className="font-semibold text-gray-900">Emily Johnson</h3>
-                <p className="text-gray-600 text-sm">VP of Product</p>
-              </CardContent>
-            </Card>
           </div>
           
           <Link to="/about/management">
