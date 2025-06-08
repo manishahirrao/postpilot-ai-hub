@@ -21,54 +21,57 @@ const HiringOutsourcingPage: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const packages = [
-    {
-      id: 'basic',
-      name: 'Intern Talent-Link',
-      price: 'Flat ₹2,000 per intern placement',
-      description: 'Perfect for small teams with straightforward hiring needs',
-      features: [
-       `  - Dedicated intern sourcing & screening
-- Interview scheduling & coordination
-- Onboarding support materials
-- Monthly check-ins & progress reports
-- Compliance with internship regulations
-- 1-month replacement guarantee if intern departs early`
-      ],
-      popular: false
-    },
-    {
-      id: 'pro',
-      name: 'Full-Time ExpertCare',
-      price: '10% of employee’s annual salary',
-      description: 'Comprehensive hiring solution for growing companies',
-      features: [
-    `- End-to-end recruitment (sourcing, screening, interviewing)
-- Offer negotiation & onboarding
-- Payroll setup & processing
-- Benefits administration & statutory compliance
-- Dedicated HR account manager
-- Quarterly performance insights
-- 1-month replacement guarantee if hire exits within 30 days
- ` 
-      ],
-      popular: false
-    },
-    {
-      id: 'enterprise',
-      name: 'Project-Flex Freelance',
-      price: '5% of contractor’s project fee',
-      description: 'Full-service recruitment for large organizations',
-      features: [
-       `- Curated freelancer marketplace access
-- Skill-based vetting & portfolio review
-- Contract drafting & milestone tracking
-- Invoicing support & payment facilitation
-- Quick scale-up/down flexibility
-- Project delivery check-ins
-- 1-month replacement guarantee if contractor disengages early`    ],
-      popular: false
-    }
-  ];
+   
+  {
+    id: 'basic',
+    name: 'Intern Talent-Link',
+    price: 'Flat ₹2,000 per intern placement',
+    description: 'Perfect for small teams with straightforward hiring needs',
+    features: [
+      'Dedicated intern sourcing & screening',
+      'Interview scheduling & coordination',
+      'Onboarding support materials',
+      'Monthly check-ins & progress reports',
+      'Compliance with internship regulations',
+      '1-month replacement guarantee if intern departs early'
+    ],
+    popular: false
+  },
+  {
+    id: 'pro',
+    name: 'Full-Time ExpertCare',
+    price: '10% of employee’s annual salary',
+    description: 'Comprehensive hiring solution for growing companies',
+    features: [
+      'End-to-end recruitment (sourcing, screening, interviewing)',
+      'Offer negotiation & onboarding',
+      'Payroll setup & processing',
+      'Benefits administration & statutory compliance',
+      'Dedicated HR account manager',
+      'Quarterly performance insights',
+      '1-month replacement guarantee if hire exits within 30 days'
+    ],
+    popular: false
+  },
+  {
+    id: 'enterprise',
+    name: 'Project-Flex Freelance',
+    price: '5% of contractor’s project fee',
+    description: 'Full-service recruitment for large organizations',
+    features: [
+      'Curated freelancer marketplace access',
+      'Skill-based vetting & portfolio review',
+      'Contract drafting & milestone tracking',
+      'Invoicing support & payment facilitation',
+      'Quick scale-up/down flexibility',
+      'Project delivery check-ins',
+      '1-month replacement guarantee if contractor disengages early'
+    ],
+    popular: false
+  }
+];
+
+  
 
   const trustedCompanies = [
     { name: 'TechCorp', logo: '/api/placeholder/120/60' },

@@ -9,11 +9,11 @@ const Navbar: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [isSignupDropdownOpen, setIsSignupDropdownOpen] = useState(false);
-  const [isCreditDropdownOpen, setIsCreditDropdownOpen] = useState(false);
+  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const { isAuthenticated, userType, logout } = useAuth();
   const location = useLocation();
 
-  // Mock credit data - replace with your actual credit context/API
+  // Mock credit data
   const userData = {
     name: "John Doe",
     plan: userType === 'professional' ? "Pro" : "Business",
@@ -41,8 +41,8 @@ const Navbar: React.FC = () => {
       if (!target.closest('.signup-dropdown')) {
         setIsSignupDropdownOpen(false);
       }
-      if (!target.closest('.credit-dropdown')) {
-        setIsCreditDropdownOpen(false);
+      if (!target.closest('.profile-dropdown')) {
+        setIsProfileDropdownOpen(false);
       }
     };
 
@@ -138,120 +138,6 @@ const Navbar: React.FC = () => {
     return userType === 'professional' ? 'Personal Tools' : 'Business Tools';
   };
 
-  const CreditDisplay: React.FC = () => (
-    <div className="credit-dropdown relative">
-      <button
-        onClick={() => setIsCreditDropdownOpen(!isCreditDropdownOpen)}
-        className="flex items-center bg-gray-50 hover:bg-gray-100 rounded-lg px-3 py-2 border transition-colors"
-      >
-        <div className="flex items-center space-x-3">
-          <div className="flex items-center space-x-2">
-            <CreditCard className="w-4 h-4 text-gray-600" />
-            <div className="flex flex-col">
-              <div className="flex items-center space-x-1">
-                <span className={`text-sm font-semibold ${isLowCredits ? 'text-red-600' : 'text-gray-900'}`}>
-                  {userData.credits.toLocaleString()}
-                </span>
-                <span className="text-xs text-gray-500">/ {userData.maxCredits.toLocaleString()}</span>
-              </div>
-              <div className="w-16 h-1.5 bg-gray-200 rounded-full overflow-hidden">
-                <div 
-                  className={`h-full transition-all duration-300 ${getProgressColor()}`}
-                  style={{ width: `${creditPercentage}%` }}
-                />
-              </div>
-            </div>
-          </div>
-          
-          {isLowCredits && (
-            <Link
-              to="/pricing"
-              className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-3 py-1 rounded-md text-xs font-medium hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 transform hover:scale-105"
-            >
-              Upgrade
-            </Link>
-          )}
-        </div>
-      </button>
-
-      {/* Credit Dropdown Menu */}
-      {isCreditDropdownOpen && (
-        <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
-          <div className="p-4 border-b border-gray-100">
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-semibold text-gray-900">Credit Usage</h3>
-              <Link to="/settings" className="text-gray-400 hover:text-gray-600">
-                <Settings className="w-4 h-4" />
-              </Link>
-            </div>
-            
-            <div className="space-y-3">
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-600">Current Usage</span>
-                <span className="text-sm font-medium text-gray-900">
-                  {(userData.maxCredits - userData.credits).toLocaleString()} / {userData.maxCredits.toLocaleString()}
-                </span>
-              </div>
-              
-              <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
-                <div 
-                  className={`h-full transition-all duration-500 ${getProgressColor()}`}
-                  style={{ width: `${100 - creditPercentage}%` }}
-                />
-              </div>
-              
-              <div className="flex justify-between text-xs text-gray-500">
-                <span>Remaining: {userData.credits.toLocaleString()}</span>
-                <span>Renews: {userData.renewalDate}</span>
-              </div>
-            </div>
-          </div>
-          
-          <div className="p-2">
-            <Link
-              to="/analytics"
-              className="w-full flex items-center space-x-3 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md transition-colors"
-              onClick={() => setIsCreditDropdownOpen(false)}
-            >
-              <TrendingUp className="w-4 h-4" />
-              <span>Usage Analytics</span>
-            </Link>
-            <Link
-              to="/billing"
-              className="w-full flex items-center space-x-3 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md transition-colors"
-              onClick={() => setIsCreditDropdownOpen(false)}
-            >
-              <CreditCard className="w-4 h-4" />
-              <span>Billing & Plans</span>
-            </Link>
-            <Link
-              to="/settings"
-              className="w-full flex items-center space-x-3 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md transition-colors"
-              onClick={() => setIsCreditDropdownOpen(false)}
-            >
-              <Settings className="w-4 h-4" />
-              <span>Account Settings</span>
-            </Link>
-          </div>
-          
-          {isLowCredits && (
-            <div className="p-4 bg-gradient-to-r from-indigo-50 to-purple-50 border-t border-gray-100">
-              <div className="text-sm font-medium text-gray-900 mb-1">Running low on credits!</div>
-              <div className="text-xs text-gray-600 mb-3">Upgrade your plan to avoid interruptions</div>
-              <Link
-                to="/pricing"
-                className="w-full block bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-2 px-4 rounded-md text-sm font-medium hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 transform hover:scale-105 text-center"
-                onClick={() => setIsCreditDropdownOpen(false)}
-              >
-                Upgrade Now
-              </Link>
-            </div>
-          )}
-        </div>
-      )}
-    </div>
-  );
-
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
       isScrolled ? 'bg-white shadow-lg' : 'bg-transparent'
@@ -326,9 +212,6 @@ const Navbar: React.FC = () => {
 
             {isAuthenticated ? (
               <div className="flex items-center space-x-4">
-                {/* Credit Display */}
-                <CreditDisplay />
-                
                 {/* Notifications */}
                 <button className="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors">
                   <Bell className="w-5 h-5" />
@@ -337,21 +220,111 @@ const Navbar: React.FC = () => {
                   )}
                 </button>
 
-                <Link 
-                  to={userType === 'professional' ? '/dashboard/personal' : '/dashboard/company'} 
-                  className="text-gray-700 hover:text-indigo-600 text-sm font-medium"
-                >
-                  Dashboard
-                </Link>
-                <Link 
-                  to={userType === 'professional' ? '/profile/personal' : '/profile/company'} 
-                  className="text-gray-700 hover:text-indigo-600 text-sm font-medium"
-                >
-                  Profile
-                </Link>
-                <Button onClick={handleLogout} variant="outline" size="sm">
-                  Logout
-                </Button>
+                {/* Profile Dropdown */}
+                <div className="profile-dropdown relative">
+                  <button
+                    onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
+                    className="flex items-center space-x-2 p-2 rounded-full hover:bg-gray-100 transition-colors"
+                  >
+                    <div className="flex items-center space-x-2">
+                      <User className="w-5 h-5 text-gray-600" />
+                    </div>
+                  </button>
+
+                  {isProfileDropdownOpen && (
+                    <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
+                      {/* User Info Section */}
+                      <div className="p-4 border-b border-gray-100">
+                        <div className="flex items-center justify-between mb-3">
+                          <div>
+                            <h3 className="text-sm font-semibold text-gray-900">{userData.name}</h3>
+                            <p className="text-xs text-gray-500">{userData.plan} Plan</p>
+                          </div>
+                          <Link to="/settings" className="text-gray-400 hover:text-gray-600">
+                            <Settings className="w-4 h-4" />
+                          </Link>
+                        </div>
+                        
+                        {/* Credit Display */}
+                        <div className="space-y-3 mt-4">
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm text-gray-600">Credits</span>
+                            <span className="text-sm font-medium text-gray-900">
+                              {userData.credits.toLocaleString()} / {userData.maxCredits.toLocaleString()}
+                            </span>
+                          </div>
+                          
+                          <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+                            <div 
+                              className={`h-full transition-all duration-500 ${getProgressColor()}`}
+                              style={{ width: `${creditPercentage}%` }}
+                            />
+                          </div>
+                          
+                          <div className="flex justify-between text-xs text-gray-500">
+                            <span>Renews: {userData.renewalDate}</span>
+                            <span>{Math.floor(creditPercentage)}% used</span>
+                          </div>
+                        </div>
+                        
+                        {isLowCredits && (
+                          <Link
+                            to="/pricing"
+                            className="w-full mt-3 block bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-2 px-4 rounded-md text-sm font-medium hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 text-center"
+                            onClick={() => setIsProfileDropdownOpen(false)}
+                          >
+                            Upgrade Plan
+                          </Link>
+                        )}
+                      </div>
+                      
+                      <div className="p-2">
+                        <Link
+                          to={userType === 'professional' ? '/dashboard/personal' : '/dashboard/company'}
+                          className="w-full flex items-center space-x-3 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md transition-colors"
+                          onClick={() => setIsProfileDropdownOpen(false)}
+                        >
+                          <Zap className="w-4 h-4" />
+                          <span>Dashboard</span>
+                        </Link>
+                        <Link
+                          to={userType === 'professional' ? '/profile/personal' : '/profile/company'}
+                          className="w-full flex items-center space-x-3 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md transition-colors"
+                          onClick={() => setIsProfileDropdownOpen(false)}
+                        >
+                          <User className="w-4 h-4" />
+                          <span>View Profile</span>
+                        </Link>
+                        <Link
+                          to="/analytics"
+                          className="w-full flex items-center space-x-3 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md transition-colors"
+                          onClick={() => setIsProfileDropdownOpen(false)}
+                        >
+                          <TrendingUp className="w-4 h-4" />
+                          <span>Usage Analytics</span>
+                        </Link>
+                        <Link
+                          to="/billing"
+                          className="w-full flex items-center space-x-3 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md transition-colors"
+                          onClick={() => setIsProfileDropdownOpen(false)}
+                        >
+                          <CreditCard className="w-4 h-4" />
+                          <span>Billing & Plans</span>
+                        </Link>
+                        <button
+                          onClick={() => {
+                            handleLogout();
+                            setIsProfileDropdownOpen(false);
+                          }}
+                          className="w-full flex items-center space-x-3 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md transition-colors text-left"
+                        >
+                          <LogIn className="w-4 h-4 transform rotate-180" />
+                          <span>Logout</span>
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             ) : (
               <div className="relative signup-dropdown">
