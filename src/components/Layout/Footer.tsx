@@ -65,6 +65,21 @@ const Footer: React.FC = () => {
                   Social Media Post Generator
                 </Link>
               </li>
+              <li>
+                <Link to="/products/automations" className="text-gray-300 hover:text-white transition-colors">
+                  Workflow Automation
+                </Link>
+              </li>
+              <li>
+                <Link to="/products/support" className="text-gray-300 hover:text-white transition-colors">
+                  AI Customer Support
+                </Link>
+              </li>
+              <li>
+                <Link to="/products/voice-agents" className="text-gray-300 hover:text-white transition-colors">
+                  AI Voice Agents
+                </Link>
+              </li>
             </ul>
           </div>
 

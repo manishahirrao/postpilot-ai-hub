@@ -18,6 +18,9 @@ import JobMatcherPage from "./pages/Product/JobMatcherPage";
 import CareerAnalyticsPage from "./pages/Product/CareerAnalyticsPage";
 import FreeJobPostingsPage from "./pages/Product/FreeJobPostingsPage";
 import HiringOutsourcingPage from "./pages/Product/HiringOutsourcingPage";
+import AutomationsPage from "./pages/Product/AutomationsPage";
+import SupportPage from "./pages/Product/SupportPage";
+import VoiceAgentsPage from "./pages/Product/VoiceAgentsPage";
 
 // Solutions Pages
 import WhyUsPage from "./pages/Solutions/WhyUsPage";
@@ -100,6 +103,11 @@ const App = () => (
               <Route path="/product/free-job-postings" element={<FreeJobPostingsPage />} />
               <Route path="/product/hiring-outsourcing" element={<HiringOutsourcingPage />} />
               <Route path="/product/personalpostgeneration" element={<PersonalPostGeneration/> }/>
+
+              {/* New Company Product Routes */}
+              <Route path="/products/automations" element={<AutomationsPage />} />
+              <Route path="/products/support" element={<SupportPage />} />
+              <Route path="/products/voice-agents" element={<VoiceAgentsPage />} />
 
               {/* Solutions Routes */}
               <Route path="/solutions/why-us" element={<WhyUsPage />} />
