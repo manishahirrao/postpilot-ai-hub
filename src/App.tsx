@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import React from "react";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -19,7 +20,6 @@ import CareerAnalyticsPage from "./pages/Product/CareerAnalyticsPage";
 import FreeJobPostingsPage from "./pages/Product/FreeJobPostingsPage";
 import HiringOutsourcingPage from "./pages/Product/HiringOutsourcingPage";
 import AutomationsPage from "./pages/Product/AutomationsPage";
-import SupportPage from "./pages/Product/SupportPage";
 import VoiceAgentsPage from "./pages/Product/VoiceAgentsPage";
 
 // Solutions Pages
@@ -65,7 +65,9 @@ import CookiePolicyPage from "./pages/Legal/CookiePolicyPage";
 import PersonalPostGeneration from "./pages/Product/PersonalPostGeneration";
 import PrivacyPolicyPage from "./pages/Legal/PrivacyPolicyPage";
 import CompanyRegistrationForm from "./pages/Auth/CompanyRegisterPage";
-// import CompanyRegisterPage from "./pages/Auth/CompanyRegisterPage";
+
+// New Product Pages
+import ProductSupportPage from "./pages/Product/SupportPage";
 
 const queryClient = new QueryClient();
 
@@ -106,7 +108,7 @@ const App = () => (
 
               {/* New Company Product Routes */}
               <Route path="/products/automations" element={<AutomationsPage />} />
-              <Route path="/products/support" element={<SupportPage />} />
+              <Route path="/products/support" element={<ProductSupportPage />} />
               <Route path="/products/voice-agents" element={<VoiceAgentsPage />} />
 
               {/* Solutions Routes */}

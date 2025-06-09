@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -20,12 +21,11 @@ const FieldWithControls = ({ label, value, setValue }: { label: string; value: s
     />
     <div className="absolute right-2 top-8 flex gap-2 items-center">
       {value ? (
-        <Button size="icon" variant="ghost" onClick={() => setValue('')} title={`Retry ${label}`}>
+        <Button size="icon" variant="ghost" onClick={() => setValue('')}>
           <RefreshCwIcon className="w-4 h-4" />
         </Button>
       ) : (
-        <LightbulbIcon className="w-6 h-6 cursor-pointer text-yellow-400" 
-        title="Suggestions" />
+        <LightbulbIcon className="w-6 h-6 cursor-pointer text-yellow-400" />
       )}
       {value && (
         <Button
@@ -117,7 +117,7 @@ export const ContentGenerator: React.FC = () => {
             <div className="flex justify-between items-center">
               <CardTitle className="text-xl">Generated Content</CardTitle>
               {generatedContent && (
-                <Button variant="outline" size="sm" onClick={() => navigator.clipboard.writeText(generatedContent)} title="Copy to Clipboard">
+                <Button variant="outline" size="sm" onClick={() => navigator.clipboard.writeText(generatedContent)}>
                   <ClipboardCopy className="w-4 h-4" />
                 </Button>
               )}
