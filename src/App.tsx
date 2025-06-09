@@ -1,4 +1,5 @@
 
+
 import { Toaster } from "@/components/ui/toaster";
 import React from "react";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -21,6 +22,7 @@ import FreeJobPostingsPage from "./pages/Product/FreeJobPostingsPage";
 import HiringOutsourcingPage from "./pages/Product/HiringOutsourcingPage";
 import AutomationsPage from "./pages/Product/AutomationsPage";
 import VoiceAgentsPage from "./pages/Product/VoiceAgentsPage";
+import AdsGeneratorPage from "./pages/Product/AdsGeneratorPage";
 
 // Solutions Pages
 import WhyUsPage from "./pages/Solutions/WhyUsPage";
@@ -110,6 +112,7 @@ const App = () => (
               <Route path="/products/automations" element={<AutomationsPage />} />
               <Route path="/products/support" element={<ProductSupportPage />} />
               <Route path="/products/voice-agents" element={<VoiceAgentsPage />} />
+              <Route path="/products/ads-generator" element={<AdsGeneratorPage />} />
 
               {/* Solutions Routes */}
               <Route path="/solutions/why-us" element={<WhyUsPage />} />
@@ -166,3 +169,4 @@ const App = () => (
 );
 
 export default App;
+
