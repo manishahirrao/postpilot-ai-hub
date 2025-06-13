@@ -1,5 +1,3 @@
-
-
 import { Toaster } from "@/components/ui/toaster";
 import React from "react";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -23,6 +21,9 @@ import HiringOutsourcingPage from "./pages/Product/HiringOutsourcingPage";
 import AutomationsPage from "./pages/Product/AutomationsPage";
 import VoiceAgentsPage from "./pages/Product/VoiceAgentsPage";
 import AdsGeneratorPage from "./pages/Product/AdsGeneratorPage";
+import PersonalPostGeneration from "./pages/Product/PersonalPostGeneration";
+import SupportPage from "./pages/Product/SupportPage";
+import ProductSupportPage from "./pages/Product/SupportPage";
 
 // Solutions Pages
 import WhyUsPage from "./pages/Solutions/WhyUsPage";
@@ -36,9 +37,7 @@ import CareersPage from "./pages/About/CareersPage";
 import ManagementPage from "./pages/About/ManagementPage";
 import InvestorsPage from "./pages/About/InvestorsPage";
 import ContactPage from "./pages/ContactPage";
-import SupportPage from "./pages/Product/SupportPage";
 import ContactSalesPage from "./pages/ContactSalesPage";
-
 
 // Auth Pages
 import LoginPage from "./pages/Auth/LoginPage";
@@ -47,6 +46,7 @@ import LoginCompanyPage from "./pages/Auth/LoginCompanyPage";
 import RegisterPage from "./pages/Auth/RegisterPage";
 import RegisterPersonalPage from "./pages/Auth/LoginPersonalPage";
 import RegisterCompanyPage from "./pages/Auth/LoginCompanyPage";
+import CompanyRegistrationForm from "./pages/Auth/CompanyRegisterPage";
 
 // Dashboard Pages
 import DashboardPage from "./pages/Dashboard/DashboardPage";
@@ -64,22 +64,14 @@ import CompanyProfile from "./pages/Profile/CompanyProfile";
 // Legal Pages
 import TermsPage from "./pages/Legal/TermsPage";
 import CookiePolicyPage from "./pages/Legal/CookiePolicyPage";
-import PersonalPostGeneration from "./pages/Product/PersonalPostGeneration";
 import PrivacyPolicyPage from "./pages/Legal/PrivacyPolicyPage";
-import CompanyRegistrationForm from "./pages/Auth/CompanyRegisterPage";
-<<<<<<< HEAD
 
-// New Product Pages
-import ProductSupportPage from "./pages/Product/SupportPage";
-=======
-import AdsGeneratorPage from "./pages/Product/AdsGeneratorPage";
-import AutomationsPage from "./pages/Product/AutomationsPage";
-import VoiceAgentsPage from "./pages/Product/VoiceAgentPage";
+// Blog
 import BlogArticle from "./pages/BlogArticle";
 import Blog from "./pages/Blog";
+
+// Chatbot
 import Chatbot from "./ChatBot/Chatbot";
-// import CompanyRegisterPage from "./pages/Auth/CompanyRegisterPage";
->>>>>>> f6197df ("upadte")
 
 const queryClient = new QueryClient();
 
@@ -101,9 +93,9 @@ const App = () => (
               <Route path="/home/login-personal" element={<LoginPersonalPage />} />
               <Route path="/home/login-company" element={<LoginCompanyPage />} />
               <Route path="/Home/PersonalHome" element={<PersonalHome />} />
-              <Route path="/Home/CompanyHome" element={<CompanyHome/>}/>
-              <Route path="/Home/LoginPersonalPage" element={<LoginPersonalPage/> }/>
-              <Route path="/Home/LoginCompanyPage" element={<LoginCompanyPage/> }/>
+              <Route path="/Home/CompanyHome" element={<CompanyHome />} />
+              <Route path="/Home/LoginPersonalPage" element={<LoginPersonalPage />} />
+              <Route path="/Home/LoginCompanyPage" element={<LoginCompanyPage />} />
 
               {/* Product Routes */}
               <Route path="/product/linkedin-posts" element={<LinkedInPostsPage />} />
@@ -116,12 +108,11 @@ const App = () => (
               <Route path="/product/CareerAnalyticsPage" element={<CareerAnalyticsPage />} />
               <Route path="/product/free-job-postings" element={<FreeJobPostingsPage />} />
               <Route path="/product/hiring-outsourcing" element={<HiringOutsourcingPage />} />
-              <Route path="/product/personalpostgeneration" element={<PersonalPostGeneration/> }/>
+              <Route path="/product/personalpostgeneration" element={<PersonalPostGeneration />} />
               <Route path="/product/ads-generator" element={<AdsGeneratorPage />} />
               <Route path="/product/automation-page" element={<AutomationsPage />} />
               <Route path="/product/support-page" element={<SupportPage />} />
               <Route path="/product/voice-agent" element={<VoiceAgentsPage />} />
-             
               <Route path="/product/support" element={<SupportPage />} />
 
               {/* New Company Product Routes */}
@@ -137,12 +128,8 @@ const App = () => (
               {/* Other Routes */}
               <Route path="/pricing" element={<PricingPage />} />
               <Route path="/resources" element={<ResourcesPage />} />
-               <Route path="/blog/${article.id}" element={<BlogArticle />} />
-               <Route path="/blog/${article.id}" element={<Blog/>} />
-               <Route path="/blog/:slug" element={<BlogArticle />} />
-               
-
-
+              <Route path="/blog/:slug" element={<BlogArticle />} />
+              <Route path="/blog" element={<Blog />} />
 
               {/* About Routes */}
               <Route path="/about" element={<AboutUsPage />} />
@@ -150,6 +137,7 @@ const App = () => (
               <Route path="/about/management" element={<ManagementPage />} />
               <Route path="/about/investors" element={<InvestorsPage />} />
 
+              {/* Contact and Support */}
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/support" element={<SupportPage />} />
               <Route path="/contact-sales" element={<ContactSalesPage />} />
@@ -163,7 +151,7 @@ const App = () => (
               <Route path="/auth/register" element={<RegisterPage />} />
               <Route path="/auth/register/personal" element={<RegisterPersonalPage />} />
               <Route path="/auth/register/company" element={<RegisterCompanyPage />} />
-              <Route path="/auth/company/register" element={<CompanyRegistrationForm/>}/>
+              <Route path="/auth/company/register" element={<CompanyRegistrationForm />} />
 
               {/* Profile Routes */}
               <Route path="/profile/personal" element={<PersonalProfile />} />
@@ -177,13 +165,13 @@ const App = () => (
               {/* Legal Routes */}
               <Route path="/terms" element={<TermsPage />} />
               <Route path="/cookie-policy" element={<CookiePolicyPage />} />
-              <Route path="/privacy" element={<PrivacyPolicyPage/>}/>
+              <Route path="/privacy" element={<PrivacyPolicyPage />} />
 
               {/* Catch-all route */}
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Layout>
-          <Chatbot/>
+          <Chatbot />
         </BrowserRouter>
       </AuthProvider>
     </TooltipProvider>
@@ -191,4 +179,3 @@ const App = () => (
 );
 
 export default App;
-
