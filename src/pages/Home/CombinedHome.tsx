@@ -126,7 +126,7 @@ const CombinedHome: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              For Individuals
+              For Working Professionals
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Accelerate your career with AI-powered tools designed for job seekers and professionals.

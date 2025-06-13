@@ -149,7 +149,7 @@ const PersonalPostGeneration: React.FC = () => {
         </TabsList>
 
         <TabsContent value="LinkedIn">
-          <ContentGenerator />
+          <ContentGenerator selectedAdType="LinkedIn" />
         </TabsContent>
 
        

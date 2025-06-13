@@ -18,29 +18,29 @@ const PersonalDashboard: React.FC = () => {
 
   const services = [
     {
-      title: 'Social Media Post Generation',
-      description: 'Create engaging LinkedIn posts with AI assistance',
+      title: ' LinedIn Post Builder',
+      description: 'Craft impactful, professional LinkedIn posts in seconds with AI. Grow your network, build your brand, and stay active — effortlessly.',
       icon: PenTool,
       href: '/Product/PersonalPostGeneration',
       color: 'bg-blue-500'
     },
     {
-      title: 'Resume Builder/Enhancer',
-      description: 'Optimize your resume with AI-powered suggestions',
+      title: 'Resume Enhancer',
+      description: 'Polish your resume with AI-powered improvements tailored to your role and industry. Get noticed by recruiters with optimized formatting and content.',
       icon: FileText,
       href: '/Product/ResumeBuilderPage',
       color: 'bg-green-500'
     },
     {
-      title: 'Profile & Job Matcher',
-      description: 'Find jobs that match your skills and experience',
+      title: 'Career Match',
+      description: 'Discover roles that align with your skills, goals, and personality. AI analyzes your profile and recommends jobs you’re truly a match for.',
       icon: Briefcase,
       href: '/Product/JobMatcherPage',
       color: 'bg-purple-500'
     },
     {
-      title: 'Career Analytics & Tips',
-      description: 'Get insights and tips to advance your career',
+      title: 'Career Insights & Tips',
+      description: 'Stay ahead with personalized career advice, industry trends, and growth tips — all curated by AI to help you succeed at every step',
       icon: TrendingUp,
       href: '/Product/CareerAnalyticsPage',
       color: 'bg-orange-500'
@@ -105,7 +105,7 @@ const PersonalDashboard: React.FC = () => {
                   </CardHeader>
                   <CardContent>
                     <p className="text-gray-600 mb-4">{service.description}</p>
-                    <Button asChild className="w-full">
+                    <Button asChild className="w-full ">
                       <Link to={service.href}>Go to Tool</Link>
                     </Button>
                   </CardContent>

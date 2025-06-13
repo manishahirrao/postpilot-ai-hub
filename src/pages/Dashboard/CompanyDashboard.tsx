@@ -18,26 +18,54 @@ const CompanyDashboard: React.FC = () => {
 
   const services = [
     {
-      title: 'Free Job Posting',
-      description: 'Post unlimited jobs on our free job board',
+      title: 'Post a Job',
+      description: 'Easily publish job openings with AI-assisted descriptions that attract top talent. Reach the right candidates in minutes, not hours.',
       icon: Briefcase,
       href: '/product/free-job-postings',
       color: 'bg-green-500'
     },
     {
-      title: 'Hiring & Outsourcing',
-      description: 'Outsource your hiring process to our experts',
+      title: 'Hire Assist',
+      description: 'Let AI streamline your hiring — from screening resumes to scheduling interviews. Focus on the best-fit candidates while we handle the heavy lifting.',
       icon: Users,
       href: '/product/hiring-outsourcing',
       color: 'bg-blue-500'
     },
     {
-      title: 'LinkedIn Post Generation',
-      description: 'Create on-brand LinkedIn content for your company',
+      title: ' AI Post Builder',
+      description: 'Create engaging LinkedIn posts and content in seconds. Just add your topic — the AI handles structure, tone, and SEO to boost visibility and reach.',
       icon: PenTool,
       href: '/product/LinkedInPostsPage',
       color: 'bg-purple-500'
-    }
+    },
+    {
+      title: 'AI Workflow',
+      description: 'Automate repetitive business tasks using smart, no-code workflows powered by AI. Seamlessly integrate steps like email drafting, lead response, and data extraction — all on autopilot.',
+      icon: Users,
+      href: '/product/hiring-outsourcing',
+      color: 'bg-blue-500'
+    },
+    {
+      title: 'Voice Agent',
+      description: 'Engage customers with natural, real-time conversations powered by AI voice technology. Perfect for support, sales, or appointment booking — available 24/7.',
+      icon: Users,
+      href: '/product/hiring-outsourcing',
+      color: 'bg-blue-500'
+    },
+    {
+      title: 'Ad Copy AI',
+      description: 'Generate high-converting ad copies for Google, Facebook, LinkedIn, and more. Just input your product and audience — get ready-to-run ads in seconds.',
+      icon: Users,
+      href: '/product/hiring-outsourcing',
+      color: 'bg-blue-500'
+    },
+    {
+      title: 'AI Customer Support Page',
+      description: 'Deliver instant, human-like support using AI chatbots trained on your FAQs, docs, and support history. Reduce tickets and delight customers — without lifting a finger.',
+      icon: Users,
+      href: '/product/hiring-outsourcing',
+      color: 'bg-blue-500'
+    },
   ];
 
   const recentJobs = [

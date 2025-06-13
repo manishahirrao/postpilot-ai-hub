@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ChevronDown, LogIn, Menu, X, CreditCard, Zap, TrendingUp, Settings, Bell, User } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
@@ -12,6 +12,7 @@ const Navbar: React.FC = () => {
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const { isAuthenticated, userType, logout } = useAuth();
   const location = useLocation();
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Mock credit data
   const userData = {
@@ -44,6 +45,9 @@ const Navbar: React.FC = () => {
       if (!target.closest('.profile-dropdown')) {
         setIsProfileDropdownOpen(false);
       }
+      if (!target.closest('.dropdown-container') && !target.closest('.dropdown-trigger')) {
+        setActiveDropdown(null);
+      }
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -66,6 +70,23 @@ const Navbar: React.FC = () => {
     { href: '/product/free-job-postings', label: 'Free Job Posting' },
     { href: '/product/hiring-outsourcing', label: 'Hiring Outsourcing' },
     { href: '/product/linkedin-posts', label: 'Social Media Post Generator' },
+  ];
+
+  const productPersonalLinks = [
+    { href: '/product/personal/linkedin-post-builder', label: 'LinkedIn Post Builder' },
+    { href: '/product/personal/resume-enhancer', label: 'Resume Enhancer' },
+    { href: '/product/personal/career-match', label: 'Career Match' },
+    { href: '/product/personal/career-insights', label: 'Career Insights & Tips' },
+  ];
+
+  const productCompanyLinks = [
+    { href: '/product/company/post-a-job', label: 'Post a Job' },
+    { href: '/product/company/hire-assist', label: 'Hire Assist' },
+    { href: '/product/company/ai-post-builder', label: 'AI Post Builder' },
+    { href: '/product/company/ai-workflow', label: 'AI Workflow' },
+    { href: '/product/company/voice-agent', label: 'Voice Agent' },
+    { href: '/product/company/ad-copy-ai', label: 'Ad Copy AI' },
+    { href: '/product/company/ai-customer-support', label: 'AI Customer Support' },
   ];
 
   const loginOptions = [
@@ -93,40 +114,75 @@ const Navbar: React.FC = () => {
     navigate("/");
   };
 
-  const DropdownMenu: React.FC<{ 
-    label: string; 
+  interface DropdownMenuProps {
+    label: string;
     links: { href: string; label: string }[];
     isActive: boolean;
-  }> = ({ label, links, isActive }) => (
-    <div 
-      className="relative group"
-      onMouseEnter={() => setActiveDropdown(label)}
-      onMouseLeave={() => setActiveDropdown(null)}
-    >
-      <button className={`flex items-center px-4 py-2 text-sm font-medium transition-colors hover:text-indigo-600 ${
-        isActive ? 'text-indigo-600' : 'text-gray-700'
-      }`}>
-        {label}
-        <ChevronDown className="w-4 h-4 ml-1" />
-      </button>
-      {activeDropdown === label && (
-        <div className="absolute left-0 top-full mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-100 z-50 opacity-100 translate-y-0 transition-all duration-200">
-          <div className="py-2">
-            {links.map((link) => (
-              <Link
-                key={link.href}
-                to={link.href}
-                className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-indigo-600 transition-colors"
-                onClick={() => setActiveDropdown(null)}
-              >
-                {link.label}
-              </Link>
-            ))}
+    customContent?: React.ReactNode;
+  }
+
+  const DropdownMenu: React.FC<DropdownMenuProps> = ({ label, links, isActive, customContent }) => {
+    const [isHovered, setIsHovered] = useState(false);
+    const [isClicked, setIsClicked] = useState(false);
+
+    return (
+      <div 
+        className="relative dropdown-container"
+        onMouseEnter={() => {
+          setIsHovered(true);
+          setActiveDropdown(label);
+        }}
+        onMouseLeave={() => {
+          setIsHovered(false);
+          if (!isClicked) {
+            setTimeout(() => {
+              if (!isHovered) setActiveDropdown(null);
+            }, 200);
+          }
+        }}
+        ref={dropdownRef}
+      >
+        <button 
+          className={`dropdown-trigger flex items-center px-4 py-2 text-sm font-medium transition-colors hover:text-indigo-600 ${
+            isActive ? 'text-indigo-600' : 'text-gray-700'
+          }`}
+          onClick={() => {
+            setIsClicked(!isClicked);
+            setActiveDropdown(isClicked ? null : label);
+          }}
+        >
+          {label}
+          <ChevronDown className={`w-4 h-4 ml-1 transition-transform ${activeDropdown === label ? 'rotate-180' : ''}`} />
+        </button>
+        
+        {(activeDropdown === label) && (
+          <div 
+            className="absolute left-0 top-full mt-1 min-w-[240px] bg-white rounded-lg shadow-xl border border-gray-100 z-50"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+          >
+            {customContent || (
+              <div className="py-2">
+                {links.map((link) => (
+                  <Link
+                    key={link.href}
+                    to={link.href}
+                    className="block px-4 py-3 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
+                    onClick={() => {
+                      setActiveDropdown(null);
+                      setIsClicked(false);
+                    }}
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
+            )}
           </div>
-        </div>
-      )}
-    </div>
-  );
+        )}
+      </div>
+    );
+  };
 
   const getServiceLinks = () => {
     if (!isAuthenticated) return [];
@@ -140,7 +196,7 @@ const Navbar: React.FC = () => {
 
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-      isScrolled ? 'bg-white shadow-lg' : 'bg-transparent'
+      isScrolled ? 'bg-white shadow-lg' : 'bg-white/95 backdrop-blur-sm'
     }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
@@ -148,7 +204,7 @@ const Navbar: React.FC = () => {
             <div className="text-2xl font-bold text-indigo-600">PostPilot</div>
           </Link>
 
-          <div className="hidden lg:flex items-center space-x-2">
+          <div className="hidden lg:flex items-center space-x-1">
             <Link 
               to="/" 
               className={`px-4 py-2 text-sm font-medium transition-colors hover:text-indigo-600 ${
@@ -157,11 +213,53 @@ const Navbar: React.FC = () => {
             >
               Home
             </Link>
+
+            <DropdownMenu 
+              label="Product" 
+              links={[]} 
+              isActive={location.pathname.startsWith('/product')}
+              customContent={
+                <div className="grid grid-cols-2 gap-0">
+                  <div className="p-2 border-r border-gray-100">
+                    <h3 className="px-4 py-2 text-sm font-semibold text-gray-900">Personal</h3>
+                    <div className="py-1">
+                      {productPersonalLinks.map((link) => (
+                        <Link
+                          key={link.href}
+                          to={link.href}
+                          className="block px-4 py-3 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
+                          onClick={() => setActiveDropdown(null)}
+                        >
+                          {link.label}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="p-2">
+                    <h3 className="px-4 py-2 text-sm font-semibold text-gray-900">Company</h3>
+                    <div className="py-1">
+                      {productCompanyLinks.map((link) => (
+                        <Link
+                          key={link.href}
+                          to={link.href}
+                          className="block px-4 py-3 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
+                          onClick={() => setActiveDropdown(null)}
+                        >
+                          {link.label}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              }
+            />
+
             <DropdownMenu 
               label="Solutions" 
               links={solutionsLinks} 
               isActive={location.pathname.startsWith('/solutions')}
             />
+            
             <Link 
               to="/pricing" 
               className={`px-4 py-2 text-sm font-medium transition-colors hover:text-indigo-600 ${
@@ -170,6 +268,7 @@ const Navbar: React.FC = () => {
             >
               Pricing
             </Link>
+            
             <Link 
               to="/resources" 
               className={`px-4 py-2 text-sm font-medium transition-colors hover:text-indigo-600 ${
@@ -178,19 +277,22 @@ const Navbar: React.FC = () => {
             >
               Resources
             </Link>
+            
             <DropdownMenu 
               label="About" 
               links={aboutLinks} 
               isActive={location.pathname.startsWith('/about') || location.pathname === '/contact'}
             />
+            
             <Link 
               to="/support" 
               className={`px-4 py-2 text-sm font-medium transition-colors hover:text-indigo-600 ${
                 location.pathname === '/support' ? 'text-indigo-600' : 'text-gray-700'
               }`}
             >
-              Customer Support
+              Support
             </Link>
+            
             {isAuthenticated && (
               <DropdownMenu 
                 label={getServiceLabel()} 
@@ -212,7 +314,6 @@ const Navbar: React.FC = () => {
 
             {isAuthenticated ? (
               <div className="flex items-center space-x-4">
-                {/* Notifications */}
                 <button className="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors">
                   <Bell className="w-5 h-5" />
                   {isLowCredits && (
@@ -220,7 +321,6 @@ const Navbar: React.FC = () => {
                   )}
                 </button>
 
-                {/* Profile Dropdown */}
                 <div className="profile-dropdown relative">
                   <button
                     onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
@@ -233,7 +333,6 @@ const Navbar: React.FC = () => {
 
                   {isProfileDropdownOpen && (
                     <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
-                      {/* User Info Section */}
                       <div className="p-4 border-b border-gray-100">
                         <div className="flex items-center justify-between mb-3">
                           <div>
@@ -245,7 +344,6 @@ const Navbar: React.FC = () => {
                           </Link>
                         </div>
                         
-                        {/* Credit Display */}
                         <div className="space-y-3 mt-4">
                           <div className="flex justify-between items-center">
                             <span className="text-sm text-gray-600">Credits</span>
@@ -281,7 +379,7 @@ const Navbar: React.FC = () => {
                       <div className="p-2">
                         <Link
                           to={userType === 'professional' ? '/dashboard/personal' : '/dashboard/company'}
-                          className="w-full flex items-center space-x-3 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md transition-colors"
+                          className="w-full flex items-center space-x-3 px-3 py-2 text-sm text-gray-700 hover:bg-indigo-50 rounded-md transition-colors"
                           onClick={() => setIsProfileDropdownOpen(false)}
                         >
                           <Zap className="w-4 h-4" />
@@ -289,7 +387,7 @@ const Navbar: React.FC = () => {
                         </Link>
                         <Link
                           to={userType === 'professional' ? '/profile/personal' : '/profile/company'}
-                          className="w-full flex items-center space-x-3 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md transition-colors"
+                          className="w-full flex items-center space-x-3 px-3 py-2 text-sm text-gray-700 hover:bg-indigo-50 rounded-md transition-colors"
                           onClick={() => setIsProfileDropdownOpen(false)}
                         >
                           <User className="w-4 h-4" />
@@ -297,7 +395,7 @@ const Navbar: React.FC = () => {
                         </Link>
                         <Link
                           to="/analytics"
-                          className="w-full flex items-center space-x-3 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md transition-colors"
+                          className="w-full flex items-center space-x-3 px-3 py-2 text-sm text-gray-700 hover:bg-indigo-50 rounded-md transition-colors"
                           onClick={() => setIsProfileDropdownOpen(false)}
                         >
                           <TrendingUp className="w-4 h-4" />
@@ -305,7 +403,7 @@ const Navbar: React.FC = () => {
                         </Link>
                         <Link
                           to="/billing"
-                          className="w-full flex items-center space-x-3 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md transition-colors"
+                          className="w-full flex items-center space-x-3 px-3 py-2 text-sm text-gray-700 hover:bg-indigo-50 rounded-md transition-colors"
                           onClick={() => setIsProfileDropdownOpen(false)}
                         >
                           <CreditCard className="w-4 h-4" />
@@ -316,7 +414,7 @@ const Navbar: React.FC = () => {
                             handleLogout();
                             setIsProfileDropdownOpen(false);
                           }}
-                          className="w-full flex items-center space-x-3 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md transition-colors text-left"
+                          className="w-full flex items-center space-x-3 px-3 py-2 text-sm text-gray-700 hover:bg-indigo-50 rounded-md transition-colors text-left"
                         >
                           <LogIn className="w-4 h-4 transform rotate-180" />
                           <span>Logout</span>
@@ -333,21 +431,21 @@ const Navbar: React.FC = () => {
                   className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-4 py-2 rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all text-sm font-medium inline-flex items-center"
                 >
                   Sign Up Free
-                  <ChevronDown className="w-4 h-4 ml-2" />
+                  <ChevronDown className={`w-4 h-4 ml-2 transition-transform ${isSignupDropdownOpen ? 'rotate-180' : ''}`} />
                 </button>
 
                 {isSignupDropdownOpen && (
                   <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50">
                     <Link
                       to="/auth/register/personal"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50"
                       onClick={() => setIsSignupDropdownOpen(false)}
                     >
                       Personal
                     </Link>
                     <Link
                       to="/auth/register/company"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50"
                       onClick={() => setIsSignupDropdownOpen(false)}
                     >
                       Company
@@ -377,31 +475,64 @@ const Navbar: React.FC = () => {
               >
                 Home
               </Link>
+
+              <div className="px-3 py-2">
+                <h3 className="text-sm font-semibold text-gray-900 mb-1">Product - Personal</h3>
+                <div className="space-y-1 pl-2">
+                  {productPersonalLinks.map((link) => (
+                    <Link
+                      key={link.href}
+                      to={link.href}
+                      className="block px-3 py-2 text-sm text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-md transition-colors"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+              <div className="px-3 py-2">
+                <h3 className="text-sm font-semibold text-gray-900 mb-1">Product - Company</h3>
+                <div className="space-y-1 pl-2">
+                  {productCompanyLinks.map((link) => (
+                    <Link
+                      key={link.href}
+                      to={link.href}
+                      className="block px-3 py-2 text-sm text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-md transition-colors"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+
               <Link 
                 to="/pricing" 
-                className="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50 rounded-md transition-colors"
+                className="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-md transition-colors"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Pricing
               </Link>
+              
               <Link 
                 to="/resources" 
-                className="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50 rounded-md transition-colors"
+                className="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-md transition-colors"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Resources
               </Link>
+              
               <Link 
                 to="/support" 
-                className="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50 rounded-md transition-colors"
+                className="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-md transition-colors"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                Customer Support
+                Support
               </Link>
               
               {isAuthenticated && (
                 <>
-                  {/* Mobile Credits Display */}
                   <div className="px-3 py-2 bg-gray-50 rounded-md border mt-4">
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-sm font-medium text-gray-900">Credits</span>
@@ -428,24 +559,26 @@ const Navbar: React.FC = () => {
                   
                   <Link 
                     to={userType === 'professional' ? '/dashboard/personal' : '/dashboard/company'} 
-                    className="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50 rounded-md transition-colors"
+                    className="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-md transition-colors"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     Dashboard
                   </Link>
+                  
                   <Link 
                     to={userType === 'professional' ? '/profile/personal' : '/profile/company'} 
-                    className="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50 rounded-md transition-colors"
+                    className="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-md transition-colors"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     Profile
                   </Link>
+                  
                   <button 
                     onClick={() => {
                       handleLogout();
                       setIsMobileMenuOpen(false);
                     }}
-                    className="block w-full text-left px-3 py-2 text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50 rounded-md transition-colors"
+                    className="block w-full text-left px-3 py-2 text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-md transition-colors"
                   >
                     Logout
                   </button>

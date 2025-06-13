@@ -36,9 +36,9 @@ import CareersPage from "./pages/About/CareersPage";
 import ManagementPage from "./pages/About/ManagementPage";
 import InvestorsPage from "./pages/About/InvestorsPage";
 import ContactPage from "./pages/ContactPage";
-import SupportPage from "./pages/SupportPage";
+import SupportPage from "./pages/Product/SupportPage";
 import ContactSalesPage from "./pages/ContactSalesPage";
-import BlogArticle from "./pages/Blog/BlogArticle";
+
 
 // Auth Pages
 import LoginPage from "./pages/Auth/LoginPage";
@@ -67,9 +67,19 @@ import CookiePolicyPage from "./pages/Legal/CookiePolicyPage";
 import PersonalPostGeneration from "./pages/Product/PersonalPostGeneration";
 import PrivacyPolicyPage from "./pages/Legal/PrivacyPolicyPage";
 import CompanyRegistrationForm from "./pages/Auth/CompanyRegisterPage";
+<<<<<<< HEAD
 
 // New Product Pages
 import ProductSupportPage from "./pages/Product/SupportPage";
+=======
+import AdsGeneratorPage from "./pages/Product/AdsGeneratorPage";
+import AutomationsPage from "./pages/Product/AutomationsPage";
+import VoiceAgentsPage from "./pages/Product/VoiceAgentPage";
+import BlogArticle from "./pages/BlogArticle";
+import Blog from "./pages/Blog";
+import Chatbot from "./ChatBot/Chatbot";
+// import CompanyRegisterPage from "./pages/Auth/CompanyRegisterPage";
+>>>>>>> f6197df ("upadte")
 
 const queryClient = new QueryClient();
 
@@ -107,6 +117,12 @@ const App = () => (
               <Route path="/product/free-job-postings" element={<FreeJobPostingsPage />} />
               <Route path="/product/hiring-outsourcing" element={<HiringOutsourcingPage />} />
               <Route path="/product/personalpostgeneration" element={<PersonalPostGeneration/> }/>
+              <Route path="/product/ads-generator" element={<AdsGeneratorPage />} />
+              <Route path="/product/automation-page" element={<AutomationsPage />} />
+              <Route path="/product/support-page" element={<SupportPage />} />
+              <Route path="/product/voice-agent" element={<VoiceAgentsPage />} />
+             
+              <Route path="/product/support" element={<SupportPage />} />
 
               {/* New Company Product Routes */}
               <Route path="/products/automations" element={<AutomationsPage />} />
@@ -121,7 +137,12 @@ const App = () => (
               {/* Other Routes */}
               <Route path="/pricing" element={<PricingPage />} />
               <Route path="/resources" element={<ResourcesPage />} />
+               <Route path="/blog/${article.id}" element={<BlogArticle />} />
+               <Route path="/blog/${article.id}" element={<Blog/>} />
                <Route path="/blog/:slug" element={<BlogArticle />} />
+               
+
+
 
               {/* About Routes */}
               <Route path="/about" element={<AboutUsPage />} />
@@ -162,6 +183,7 @@ const App = () => (
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Layout>
+          <Chatbot/>
         </BrowserRouter>
       </AuthProvider>
     </TooltipProvider>

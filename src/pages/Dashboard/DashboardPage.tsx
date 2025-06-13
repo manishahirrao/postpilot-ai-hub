@@ -22,7 +22,7 @@ const DashboardPage: React.FC = () => {
 
   const quickActions = [
     {
-      title: 'Create Social Media Post',
+      title: ' AI Social Media Content Creator',
       description: 'Generate engaging content with AI',
       icon: <Zap className="w-6 h-6 text-blue-600" />,
       link: '/dashboard/post-generator',

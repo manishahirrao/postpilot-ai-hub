@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ArrowRight, BookOpen, HelpCircle, MessageCircle, Video, FileText, Users } from 'lucide-react';
+import Blog from './Blog';
 
 const ResourcesPage: React.FC = () => {
  const blogPosts = [
@@ -271,31 +272,7 @@ const navigate = useNavigate();
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {blogPosts.map((post, index) => (
-            <Card key={index} className="hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <div className="flex items-center justify-between mb-2">
-                  <Badge variant="outline">{post.category}</Badge>
-                  <span className="text-sm text-gray-500">{post.readTime}</span>
-                </div>
-                <CardTitle className="text-lg line-clamp-2">{post.title}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-600 mb-4 line-clamp-3">{post.excerpt}</p>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-gray-900">{post.author}</p>
-                    <p className="text-sm text-gray-500">{post.date}</p>
-                  </div>
-                  <Button size="sm" variant="outline">
-                    Read More
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+        <Blog/>
 
         <div className="text-center mt-12">
           <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white">
