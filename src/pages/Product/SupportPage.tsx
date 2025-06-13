@@ -1,215 +1,76 @@
-<<<<<<< HEAD
-
 import React from 'react';
 import { MessageCircle, Brain, ArrowUpDown, BarChart3, Clock, Globe } from 'lucide-react';
 import HeroSection from '@/components/products/HeroSection';
 import FeaturesGrid from '@/components/products/FeaturesGrid';
 import UseCases from '@/components/products/UseCases';
 import QuoteForm from '@/components/products/QuoteForm';
-
-const SupportPage: React.FC = () => {
-=======
-import React from 'react';
+import { Card, CardContent } from '@/components/ui/card';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 
-import HeroSection from '@/components/CompanyProducts/HeroSection';
-import FeaturesGrid from '@/components/CompanyProducts/FeaturesGrid';
-import UseCases from '@/components/CompanyProducts/UseCases';
-import QuoteForm from '@/components/CompanyProducts/QuoteForm';
-import { MessageCircle, Brain, ArrowRight, BarChart, Star } from 'lucide-react';
-
-const SupportPage = () => {
->>>>>>> f6197df ("upadte")
+const SupportPage: React.FC = () => {
   const features = [
     {
       icon: MessageCircle,
-      title: "Multi-Channel Chat",
-<<<<<<< HEAD
-      description: "Deploy AI chatbots across web, email, social media, and messaging platforms. One solution, everywhere."
-=======
-      description: "Provide consistent support across web chat, email, social media, and messaging platforms.",
-      benefits: [
-        "Unified inbox for all channels",
-        "Real-time chat widgets",
-        "Social media integration",
-        "Mobile-responsive design"
-      ],
-      iconColor: "text-indigo-600",
-      titleColor: "text-indigo-600",
-      borderColor: "border-indigo-600"
->>>>>>> f6197df ("upadte")
+      title: "24/7 AI Support",
+      description: "Automatically answer common questions and reduce support ticket volume by 70%."
     },
     {
       icon: Brain,
-      title: "Contextual Understanding",
-<<<<<<< HEAD
-      description: "Advanced NLP that understands customer intent, maintains context, and provides relevant responses."
+      title: "Smart Routing",
+      description: "AI analyzes customer intent and routes complex issues to the right agent."
     },
     {
       icon: ArrowUpDown,
-      title: "Seamless Handover",
-      description: "Smart escalation to human agents when needed, with full conversation context and customer history."
+      title: "Seamless Escalation",
+      description: "Escalates complex issues to human agents when needed, maintaining context."
     },
     {
       icon: BarChart3,
-      title: "Analytics & Reporting",
-      description: "Comprehensive insights into customer interactions, resolution rates, and satisfaction scores."
+      title: "Analytics Dashboard",
+      description: "Track AI performance and customer satisfaction metrics in real-time."
     },
     {
       icon: Clock,
-      title: "24/7 Availability",
-      description: "Never miss a customer inquiry. Your AI assistant works around the clock to support your customers."
+      title: "Instant Responses",
+      description: "AI provides instant answers, reducing average response time by 90%."
     },
     {
       icon: Globe,
-      title: "Multi-Language Support",
-      description: "Communicate with customers in their preferred language with built-in translation capabilities."
-=======
-      description: "AI that understands context, sentiment, and intent to provide accurate, helpful responses.",
-      benefits: [
-        "Natural language processing",
-        "Sentiment analysis",
-        "Intent recognition",
-        "Multi-language support"
-      ],
-      iconColor: "text-purple-600",
-      titleColor: "text-purple-600",
-      borderColor: "border-purple-600"
-    },
-    {
-      icon: ArrowRight,
-      title: "Seamless Handover",
-      description: "Smooth transitions from AI to human agents when complex issues require personal attention.",
-      benefits: [
-        "Smart escalation rules",
-        "Context preservation",
-        "Agent notifications",
-        "Priority routing"
-      ],
-      iconColor: "text-indigo-600",
-      titleColor: "text-indigo-600",
-      borderColor: "border-indigo-600"
-    },
-    {
-      icon: BarChart,
-      title: "Advanced Analytics",
-      description: "Comprehensive insights into customer satisfaction, resolution times, and AI performance.",
-      benefits: [
-        "Customer satisfaction scores",
-        "Resolution time tracking",
-        "AI accuracy metrics",
-        "Custom dashboards"
-      ],
-      iconColor: "text-purple-600",
-      titleColor: "text-purple-600",
-      borderColor: "border-purple-600"
->>>>>>> f6197df ("upadte")
+      title: "Multi-language Support",
+      description: "Supports 20+ languages for global customer service."
     }
   ];
 
   const useCases = [
     {
-      title: "Instant FAQ Resolution",
-<<<<<<< HEAD
-      description: "Automatically answer common questions and reduce support ticket volume by 70%.",
-      example: "Customer asks about return policy, AI instantly provides detailed policy and guides them through the return process."
+      title: "E-commerce Support",
+      description: "AI handles order tracking, returns, and common product inquiries 24/7.",
+      example: "Customer asks about order status, AI provides tracking info and estimated delivery time."
     },
     {
-      title: "Ticket Summarization",
-      description: "AI analyzes long customer conversations and creates concise summaries for agents.",
-      example: "Complex technical issue across 20+ messages gets summarized into key points and suggested solutions."
+      title: "Software Support",
+      description: "AI provides instant answers to common technical questions and guides users through troubleshooting steps.",
+      example: "User asks about software installation, AI provides step-by-step instructions and resolves common issues."
     },
     {
-      title: "Chat-to-Email Handoff",
-      description: "Seamlessly transition conversations from chat to email when detailed responses are needed.",
-      example: "Customer needs detailed technical documentation, AI transfers conversation to email with full context."
+      title: "Financial Services",
+      description: "AI handles account inquiries, transaction history, and provides personalized financial advice.",
+      example: "Customer asks about account balance, AI provides real-time balance and recent transactions."
     },
     {
-      title: "Product Recommendations",
-      description: "Intelligent product suggestions based on customer needs and purchase history.",
-      example: "Customer looking for laptop, AI recommends models based on their budget, usage, and preferences."
-    },
-    {
-      title: "Order Status & Tracking",
-      description: "Instant order updates and shipping information without human intervention.",
-      example: "Customer asks about order status, AI provides real-time tracking info and delivery estimates."
-    },
-    {
-      title: "Lead Qualification",
-      description: "Pre-qualify sales leads through intelligent conversations before routing to sales team.",
-      example: "AI asks qualifying questions about budget, timeline, and needs before scheduling sales call."
+      title: "Healthcare Support",
+      description: "AI provides appointment scheduling, health information, and non-emergency medical guidance.",
+      example: "Patient asks about appointment availability, AI checks schedule and books appointment automatically."
     }
   ];
 
   const handleQuoteSuccess = (message: string) => {
-    alert(message);
+    console.log(message);
   };
 
   return (
-    <div className="min-h-screen pt-16">
-      <HeroSection 
-        title="24/7 AI Customer Support"
-        subtitle="Resolve tickets instantly, escalate intelligently, and delight customers around the clock with AI-powered support."
-        backgroundGradient="from-emerald-600 to-teal-600"
-      />
-      
-      <FeaturesGrid features={features} />
-      
-      <UseCases useCases={useCases} />
-      
-      <QuoteForm 
-        endpoint="/api/contact/support"
-        title="Transform Your Customer Support"
-        onSuccess={handleQuoteSuccess}
-      />
-=======
-      description: "AI chatbot handles 80% of common customer questions instantly, 24/7.",
-      industry: "SaaS",
-      challenge: "Customer support team overwhelmed with repetitive questions, leading to long response times and customer frustration.",
-      solution: "AI chatbot trained on knowledge base to instantly answer common questions with seamless escalation for complex issues.",
-      results: [
-        "80% reduction in support ticket volume",
-        "Average response time under 30 seconds",
-        "95% customer satisfaction rate",
-        "24/7 availability without additional staff"
-      ],
-      icon: "💬",
-      titleColor: "text-indigo-600",
-      borderColor: "border-indigo-600"
-    },
-    {
-      title: "Multilingual Support",
-      description: "Provide customer support in 50+ languages without hiring multilingual staff.",
-      industry: "E-commerce",
-      challenge: "Global expansion limited by language barriers and high cost of multilingual support staff.",
-      solution: "AI-powered support system with real-time translation and culturally-aware responses for global customers.",
-      results: [
-        "50+ languages supported",
-        "90% accuracy in translations",
-        "3x expansion in global markets",
-        "50% reduction in support costs"
-      ],
-      icon: "🌍",
-      titleColor: "text-purple-600",
-      borderColor: "border-purple-600"
-    },
-    {
-      title: "Ticket Summarization",
-      description: "Automatically summarize long customer conversations for faster agent review.",
-      industry: "Enterprise",
-      challenge: "Support agents spend too much time reading through long conversation histories, slowing down resolution times.",
-      solution: "AI summarizes conversation history, highlights key issues, and suggests solutions for faster agent response.",
-      results: [
-        "60% faster ticket resolution",
-        "Improved agent productivity",
-        "Better customer satisfaction",
-        "Reduced average handle time"
-      ],
-      icon: "📄",
-      titleColor: "text-indigo-600",
       borderColor: "border-indigo-600"
     },
     {

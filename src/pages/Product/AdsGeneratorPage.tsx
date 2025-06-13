@@ -105,138 +105,108 @@ const AdsGeneratorPage = () => {
         "Quick iterations"
       ],
       iconColor: "text-indigo-600",
-      titleColor: "text-indigo-600",
-      borderColor: "border-indigo-600"
-    },
-    {
-      icon: Target,
-      title: "Audience-Focused Personalization",
-      description: "AI analyzes your audience data to create perfectly targeted messaging and visuals.",
-      benefits: [
-        "Audience analysis",
-        "Targeted messaging",
-        "Demographic optimization",
-        "Behavioral insights"
-      ],
-      iconColor: "text-purple-600",
-      titleColor: "text-purple-600",
-      borderColor: "border-purple-600"
->>>>>>> f6197df ("upadte")
-    }
-  ];
-
-  const useCases = [
-    {
-<<<<<<< HEAD
       title: "E-commerce Flash Sale Campaign",
       description: "Generate urgent, compelling copy and vibrant banners for limited-time offers across all social platforms.",
       example: "Create '24-Hour Flash Sale!' banners with countdown timers and product showcases for maximum conversion."
     },
     {
-      title: "Event Promotion Videos", 
-      description: "Automated video creation for conferences, webinars, and product launches with professional templates.",
-      example: "Generate 30-second teaser videos with speaker highlights, agenda previews, and registration CTAs."
+      title: "Video Ad Script Generator",
+      description: "Create engaging video scripts with storyboards and voiceover text for YouTube and TikTok ads.",
+      example: "Generate a 30-second script for a product demo video with call-to-action and brand messaging."
     },
     {
-      title: "Retargeting Carousel Ads",
-      description: "Dynamic product carousels that automatically update based on user behavior and browsing history.",
-      example: "Show personalized product recommendations with 'Complete Your Purchase' messaging for cart abandoners."
+      title: "Social Media Post Generator",
+      description: "Automatically create engaging posts for Instagram, Facebook, and Twitter with optimized hashtags.",
+      example: "Generate a carousel post for Instagram showcasing product features with relevant hashtags and CTA."
     },
     {
-      title: "B2B Lead Generation",
-      description: "Professional LinkedIn ads with industry-specific messaging and thought leadership positioning.", 
-      example: "Create 'Download Our White Paper' campaigns with compelling statistics and professional imagery."
+      title: "Email Marketing Templates",
+      description: "Generate professional email templates with personalized subject lines and compelling copy.",
+      example: "Create a welcome series email template with product recommendations and special offers."
+    },
+    {
+    }
+  ];
+
+  const useCases = [
+    {
+      title: "E-commerce Success",
+      description: "Increased conversion rates by 45% using AI-generated ad copy and visuals",
+      industry: "E-commerce",
+      challenge: "Marketing team struggled with creating engaging ad copy and visuals",
+      solution: "AI-powered ad generator created personalized, high-converting ads",
+      results: [
+        "45% increase in conversion rate",
+        "30% lower CPC",
+        "95% customer satisfaction rate"
+      ]
+    },
+    {
+      title: "Social Media Growth",
+      description: "Automated content generation for 5 platforms",
+      industry: "Marketing",
+      challenge: "Content team overwhelmed with daily social media posting",
+      solution: "AI generated consistent, engaging content across platforms",
+      results: [
+        "50% increase in followers",
+        "75% engagement rate improvement",
+        "2x content creation speed"
+      ]
+    },
+    {
+      title: "Email Marketing",
+      description: "Created personalized email campaigns",
+      industry: "SaaS",
+      challenge: "Low email open and conversion rates",
+      solution: "AI generated personalized, compelling email content",
+      results: [
+        "40% open rate",
+        "20% conversion rate",
+        "90% customer satisfaction"
+      ]
     }
   ];
 
   const handleQuoteSuccess = (message: string) => {
-    toast({
-      title: "Quote Request Sent!",
-      description: message,
-    });
+    console.log(message);
   };
 
   return (
     <div className="min-h-screen">
-      <HeroSection
-        title="AI-Powered Ads & Creative Generator"
-        subtitle="Automate copywriting, banners, and videos—tailored to every audience. Generate unlimited variants in minutes, not days."
-        backgroundGradient="from-purple-600 to-pink-600"
-      />
-      
-      <FeaturesGrid features={features} />
-      
-      <UseCases useCases={useCases} />
-      
-      <QuoteForm
-        endpoint="/api/contact/ads-generator"
-        title="Get Your Custom Ad Package"
-        onSuccess={handleQuoteSuccess}
-      />
-=======
-      title: "E-commerce Success",
-      description: "Increased conversion rates by 45% using AI-generated ad copy and visuals",
-      icon: "zap",
-      industry: "E-commerce",
-      challenge: "Low conversion rates and high ad spend",
-      solution: "AI-generated ad copy and visuals that resonate with target audience",
-      results: [
-        "45% increase in conversion rates",
-        "30% reduction in CPC"
-      ],
-      image: "/ecommerce-case-study.jpg",
-      titleColor: "text-indigo-600",
-      borderColor: "border-indigo-600"
-    }
-  ];
+      <div className="w-full px-4 pt-20 pb-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+        >
+          <HeroSection 
+            title="AI-Powered Ads & Creative Generator"
+            subtitle="Transform your marketing with intelligent content generation"
+          />
+        </motion.div>
+      </div>
 
-  const reviews = [
-    {
-      name: "Sarah Johnson",
-      role: "Digital Marketing Director",
-      company: "EcomGrowth Inc.",
-      content: "This tool cut our ad creation time by 70% while improving our CTR by 45%. The AI-generated copy outperforms our manual versions consistently.",
-      rating: 5,
-      icon: "🌟"
-    },
-    {
-      name: "Michael Chen",
-      role: "PPC Specialist",
-      company: "TechScale Marketing",
-      content: "The dynamic banner generation saved us countless hours. Now we can test 5x more creatives without additional design resources.",
-      rating: 5,
-      icon: "🚀"
-    },
-    {
-      name: "Emily Rodriguez",
-      role: "Social Media Manager",
-      company: "BrandLift Agency",
-      content: "Our Meta Ads performance improved dramatically after switching to AI-generated creatives. The platform's audience insights are incredibly accurate.",
-      rating: 4,
-      icon: "💡"
-    },
-    {
-      name: "David Wilson",
-      role: "Head of Growth",
-      company: "SaaSForward",
-      content: "For LinkedIn Ads, this platform is unmatched. We've seen a 60% increase in lead quality since using their AI-generated content.",
-      rating: 5,
-      icon: "🎯"
-    }
-  ];
+      <div className="container mx-auto px-4 py-12">
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          <FeaturesGrid
+            features={features}
+          />
+        </motion.div>
 
-  return (
-    <div className="min-h-screen bg-gray-50">
-      <HeroSection
-        title={
-          <>
-            <span className="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-              Ad Copy AI
-            </span>
-          </>
-        }
-        subtitle="Create high-performing ads for multiple platforms"
-        description="Generate optimized ads for Google Ads, Meta Ads, LinkedIn Ads, and YouTube Ads. Our AI-powered platform helps you create compelling ad copy and creative assets that convert."
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          className="mt-16"
+        >
+          <UseCases
+            useCases={useCases}
+          />
+        </motion.div>
       />
 
       <main className="container mx-auto px-4 py-8">
