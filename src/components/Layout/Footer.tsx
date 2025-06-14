@@ -41,14 +41,11 @@ const Footer: React.FC = () => {
     { name: 'Careers', href: '/about/careers' },
     { name: 'Management Team', href: '/about/management' },
     { name: 'Investor Relations', href: '/about/investors' },
-    { name: 'Press & Media', href: '/about/press' },
-    { name: 'Brand Assets', href: '/about/brand' },
   ];
 
   const supportLinks = [
-    { name: 'Help Center', href: '/support' },
+    { name: 'Learning Center', href: '/resources' },
     { name: 'Contact Support', href: '/contact' },
-    { name: 'API Documentation', href: '/docs/api' },
     { name: 'Status Page', href: '/status' },
     { name: 'Community Forum', href: '/community' },
     { name: 'Feature Requests', href: '/feedback' },
@@ -57,7 +54,7 @@ const Footer: React.FC = () => {
   const legalLinks = [
     { name: 'Terms of Service', href: '/terms' },
     { name: 'Privacy Policy', href: '/privacy' },
-    { name: 'Cookie Policy', href: '/cookies' },
+    { name: 'Cookie Policy', href: '/cookie-policy' },
     { name: 'GDPR Compliance', href: '/gdpr' },
     { name: 'Security', href: '/security' },
     { name: 'Acceptable Use', href: '/acceptable-use' },
@@ -250,7 +247,7 @@ const Footer: React.FC = () => {
               <MapPin className="w-5 h-5 mr-3 text-green-400" />
               <div>
                 <p className="font-medium text-white">Visit Us</p>
-                <p>San Francisco, CA</p>
+                <p>Delhi,India</p>
               </div>
             </div>
           </div>
@@ -272,7 +269,7 @@ const Footer: React.FC = () => {
               <Link to="/terms" className="text-gray-400 hover:text-white transition-colors">
                 Terms
               </Link>
-              <Link to="/cookies" className="text-gray-400 hover:text-white transition-colors">
+              <Link to="/cookie-policy" className="text-gray-400 hover:text-white transition-colors">
                 Cookies
               </Link>
               <div className="flex items-center text-gray-400">

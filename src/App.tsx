@@ -100,13 +100,13 @@ const App = () => (
 
               {/* Product Routes */}
               <Route path="/product/linkedin-posts" element={<LinkedInPostsPage />} />
-              <Route path="/product/LinkedInPostsPage" element={<LinkedInPostsPage />} />
+              {/* <Route path="/product/LinkedInPostsPage" element={<LinkedInPostsPage />} /> */}
               <Route path="/product/resume-builder" element={<ResumeBuilderPage />} />
-              <Route path="/product/ResumeBuilderPage" element={<ResumeBuilderPage />} />
+              {/* <Route path="/product/ResumeBuilderPage" element={<ResumeBuilderPage />} /> */}
               <Route path="/product/job-matcher" element={<JobMatcherPage />} />
-              <Route path="/product/JobMatcherPage" element={<JobMatcherPage />} />
+              {/* <Route path="/product/JobMatcherPage" element={<JobMatcherPage />} /> */}
               <Route path="/product/career-analytics" element={<CareerAnalyticsPage />} />
-              <Route path="/product/CareerAnalyticsPage" element={<CareerAnalyticsPage />} />
+              {/* <Route path="/product/CareerAnalyticsPage" element={<CareerAnalyticsPage />} /> */}
               <Route path="/product/free-job-postings" element={<FreeJobPostingsPage />} />
               <Route path="/product/hiring-outsourcing" element={<HiringOutsourcingPage />} />
               <Route path="/product/personalpostgeneration" element={<PersonalPostGeneration />} />

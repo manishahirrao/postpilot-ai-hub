@@ -3,13 +3,12 @@ import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { 
   Workflow, Zap, Shield, BarChart, Star, ArrowRight, Play, CheckCircle, 
-  Users, Clock, TrendingUp, Sparkles, Target, Lightbulb, Rocket 
+  Users, Clock, TrendingUp, Sparkles
 } from 'lucide-react';
 
 const AutomationsPage = () => {
   const [activeFeature, setActiveFeature] = useState(0);
   const [activeUseCase, setActiveUseCase] = useState(0);
-  const [hoveredFeature, setHoveredFeature] = useState(null);
 
   const features = [
     {
@@ -264,8 +263,6 @@ const AutomationsPage = () => {
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: feature.delay }}
-                onHoverStart={() => setHoveredFeature(index)}
-                onHoverEnd={() => setHoveredFeature(null)}
                 className="group"
               >
                 <div className="relative bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100 hover:border-gray-200 overflow-hidden">

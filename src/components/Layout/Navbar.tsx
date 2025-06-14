@@ -68,33 +68,33 @@ const Navbar = () => {
   }, []);
 
   const productPersonalLinks: LinkItem[] = [
-    { href: '#', label: 'LinkedIn Post Builder', icon: Sparkles, desc: 'Create engaging posts' },
-    { href: '#', label: 'Resume Enhancer', icon: Award, desc: 'Boost your profile' },
-    { href: '#', label: 'Career Match', icon: TrendingUp, desc: 'Find perfect jobs' },
-    { href: '#', label: 'Career Insights & Tips', icon: Shield, desc: 'Get expert advice' },
+    { href: '/product/personalpostgeneration', label: 'LinkedIn Post Builder', icon: Sparkles, desc: 'Create engaging posts' },
+    { href: '/product/resume-builder', label: 'Resume Enhancer', icon: Award, desc: 'Boost your profile' },
+    { href: '/product/job-matcher', label: 'Career Match', icon: TrendingUp, desc: 'Find perfect jobs' },
+    { href: '/product/career-analytics', label: 'Career Insights & Tips', icon: Shield, desc: 'Get expert advice' },
   ];
 
   const productCompanyLinks: LinkItem[] = [
-    { href: '#', label: 'Post a Job', icon: Sparkles, desc: 'Find top talent' },
-    { href: '#', label: 'Hire Assist', icon: Award, desc: 'AI-powered hiring' },
-    { href: '#', label: 'AI Post Builder', icon: TrendingUp, desc: 'Create job posts' },
-    { href: '#', label: 'AI Workflow', icon: Shield, desc: 'Automate processes' },
-    { href: '#', label: 'Voice Agent', icon: Zap, desc: 'Voice interviews' },
-    { href: '#', label: 'Ad Copy AI', icon: Settings, desc: 'Generate copy' },
-    { href: '#', label: 'AI Customer Support', icon: User, desc: '24/7 assistance' },
+    { href: '/product/free-job-postings', label: 'Post a Job', icon: Sparkles, desc: 'Find top talent' },
+    { href: '/product/hiring-outsourcing', label: 'Hire Assist', icon: Award, desc: 'AI-powered hiring' },
+    { href: '/product/linkedin-posts', label: 'AI Post Builder', icon: TrendingUp, desc: 'Create job posts' },
+    { href: '/product/automation-page', label: 'AI Workflow', icon: Shield, desc: 'Automate processes' },
+    { href: '/product/voice-agent', label: 'Voice Agent', icon: Zap, desc: 'Voice interviews' },
+    { href: '/product/ads-generator', label: 'Ad Copy AI', icon: Settings, desc: 'Generate copy' },
+    { href: '/product/support-page', label: 'AI Customer Support', icon: User, desc: '24/7 assistance' },
   ];
 
   const solutionsLinks: LinkItem[] = [
-    { href: '#', label: 'Why Us?', desc: 'See our advantages' },
-    { href: '#', label: 'By Use Case', desc: 'Industry solutions' },
+    { href: '/solutions/why-us', label: 'Why Us?', desc: 'See our advantages' },
+    { href: '/solutions/use-cases', label: 'By Use Case', desc: 'Industry solutions' },
   ];
 
   const aboutLinks: LinkItem[] = [
-    { href: '#', label: 'About Us', desc: 'Our story' },
-    { href: '#', label: 'Careers', desc: 'Join our team' },
-    { href: '#', label: 'Management Team', desc: 'Meet the leaders' },
-    { href: '#', label: 'Investor Relations', desc: 'For investors' },
-    { href: '#', label: 'Contact Us', desc: 'Get in touch' },
+    { href: '/about', label: 'About Us', desc: 'Our story' },
+    { href: '/about/careers', label: 'Careers', desc: 'Join our team' },
+    { href: '/about/management', label: 'Management Team', desc: 'Meet the leaders' },
+    { href: '/about/investors', label: 'Investor Relations', desc: 'For investors' },
+    { href: '/contact', label: 'Contact Us', desc: 'Get in touch' },
   ];
 
   const handleLogout = () => {
@@ -188,7 +188,7 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <a href="#" className="flex items-center group">
+          <a href="/" className="flex items-center group">
             <div className="relative">
               <div className="text-2xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-800 bg-clip-text text-transparent">
                 PostPilot
@@ -200,7 +200,7 @@ const Navbar = () => {
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center space-x-1">
             <a 
-              href="#" 
+              href="/" 
               className="px-4 py-2 text-sm font-medium transition-all duration-200 rounded-lg text-gray-700 hover:text-indigo-600 hover:bg-gray-50"
             >
               Home
@@ -281,14 +281,14 @@ const Navbar = () => {
             />
             
             <a 
-              href="#" 
+              href="/pricing" 
               className="px-4 py-2 text-sm font-medium transition-all duration-200 rounded-lg text-gray-700 hover:text-indigo-600 hover:bg-gray-50"
             >
               Pricing
             </a>
             
             <a 
-              href="#" 
+              href="/resources" 
               className="px-4 py-2 text-sm font-medium transition-all duration-200 rounded-lg text-gray-700 hover:text-indigo-600 hover:bg-gray-50"
             >
               Resources
@@ -301,7 +301,7 @@ const Navbar = () => {
             />
             
             <a 
-              href="#" 
+              href="contact" 
               className="px-4 py-2 text-sm font-medium transition-all duration-200 rounded-lg text-gray-700 hover:text-indigo-600 hover:bg-gray-50"
             >
               Support
@@ -312,7 +312,7 @@ const Navbar = () => {
           <div className="hidden lg:flex items-center space-x-3">
             {!isAuthenticated && (
               <a 
-                href="#" 
+                href="contact-sales" 
                 className="bg-white text-gray-700 px-4 py-2 rounded-lg border border-gray-200 hover:border-gray-300 hover:bg-gray-50 transition-all duration-200 text-sm font-medium"
               >
                 Contact Sales
