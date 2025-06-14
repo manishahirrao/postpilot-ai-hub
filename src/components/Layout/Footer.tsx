@@ -21,19 +21,20 @@ const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
 
   const personalProducts = [
-    { name: 'LinkedIn Post Generator', href: '/product/linkedin-posts', icon: <Zap className="w-4 h-4" /> },
-    { name: 'Resume Builder', href: '/product/resume-builder', icon: <Users className="w-4 h-4" /> },
-    { name: 'Job Matcher', href: '/product/job-matcher', icon: <TrendingUp className="w-4 h-4" /> },
-    { name: 'Career Analytics', href: '/product/career-analytics', icon: <Globe className="w-4 h-4" /> },
+    { name: 'LinkedIn Post Builder', href: '/product/linkedin-posts', icon: <Zap className="w-4 h-4" /> },
+    { name: 'Resume Enhancer', href: '/product/resume-builder', icon: <Users className="w-4 h-4" /> },
+    { name: 'Career Match', href: '/product/job-matcher', icon: <TrendingUp className="w-4 h-4" /> },
+    { name: 'Career Insights & Tips', href: '/product/career-analytics', icon: <Globe className="w-4 h-4" /> },
   ];
 
   const companyProducts = [
-    { name: 'Free Job Postings', href: '/product/free-job-postings' },
-    { name: 'Hiring Outsourcing', href: '/product/hiring-outsourcing' },
-    { name: 'Workflow Automation', href: '/products/automations' },
+    { name: 'Post a Job', href: '/product/free-job-postings' },
+    { name: 'Hire Assist', href: '/product/hiring-outsourcing' },
+    { name: 'AI Workflow', href: '/products/automations' },
     { name: 'AI Customer Support', href: '/products/support' },
-    { name: 'AI Voice Agents', href: '/products/voice-agents' },
-    { name: 'Ads Generator', href: '/products/ads-generator' },
+    { name: 'Voice Agents', href: '/products/voice-agents' },
+    { name: 'Ads Copy AI', href: '/products/ads-generator' },
+    { name: 'AI Post Builder', href: '/products/linkedin-posts' },
   ];
 
   const companyInfo = [
