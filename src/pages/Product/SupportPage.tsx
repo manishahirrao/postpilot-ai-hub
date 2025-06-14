@@ -1,5 +1,5 @@
 import React from 'react';
-import { MessageCircle, Brain, ArrowUpDown, BarChart3, Clock, Globe } from 'lucide-react';
+import { MessageCircle, Brain, ArrowUpDown, BarChart3, Clock, Globe, Star } from 'lucide-react';
 import HeroSection from '@/components/products/HeroSection';
 import FeaturesGrid from '@/components/products/FeaturesGrid';
 import UseCases from '@/components/products/UseCases';
@@ -66,13 +66,7 @@ const SupportPage: React.FC = () => {
     }
   ];
 
-  const handleQuoteSuccess = (message: string) => {
-    console.log(message);
-  };
-
-  return (
-      borderColor: "border-indigo-600"
-    },
+  const caseStudies = [
     {
       title: "Proactive Support",
       description: "Identify potential issues before customers report them and reach out proactively.",
@@ -246,13 +240,8 @@ const SupportPage: React.FC = () => {
           </Card>
         </motion.div>
       </div>
->>>>>>> f6197df ("upadte")
     </div>
   );
 };
 
-<<<<<<< HEAD
 export default SupportPage;
-=======
-export default SupportPage;
->>>>>>> f6197df ("upadte")

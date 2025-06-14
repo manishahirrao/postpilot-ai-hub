@@ -8,42 +8,16 @@ const Footer: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
-<<<<<<< HEAD
             <h3 className="text-lg font-semibold mb-4">Products</h3>
             <ul className="space-y-2">
               <li><Link to="/product/linkedin-posts" className="text-gray-300 hover:text-white">LinkedIn Posts</Link></li>
               <li><Link to="/product/resume-builder" className="text-gray-300 hover:text-white">Resume Builder</Link></li>
               <li><Link to="/product/job-matcher" className="text-gray-300 hover:text-white">Job Matcher</Link></li>
               <li><Link to="/product/career-analytics" className="text-gray-300 hover:text-white">Career Analytics</Link></li>
-=======
-            <h3 className="text-lg font-semibold mb-4">Personal Tools</h3>
-            <ul className="space-y-3">
-              <li>
-                <Link to="/product/linkedin-posts" className="text-gray-300 hover:text-white transition-colors">
-               LinkedIn Post Builder
-                </Link>
-              </li>
-              <li>
-                <Link to="/product/resume-builder" className="text-gray-300 hover:text-white transition-colors">
-                  Resume Enhancer
-                </Link>
-              </li>
-              <li>
-                <Link to="/product/job-matcher" className="text-gray-300 hover:text-white transition-colors">
-                  Career Match
-                </Link>
-              </li>
-              <li>
-                <Link to="/product/career-analytics" className="text-gray-300 hover:text-white transition-colors">
-                  Career Insights & Tips
-                </Link>
-              </li>
->>>>>>> f6197df ("upadte")
             </ul>
           </div>
           
           <div>
-<<<<<<< HEAD
             <h3 className="text-lg font-semibold mb-4">Company Solutions</h3>
             <ul className="space-y-2">
               <li><Link to="/products/automations" className="text-gray-300 hover:text-white">Workflow Automation</Link></li>
@@ -52,46 +26,6 @@ const Footer: React.FC = () => {
               <li><Link to="/products/ads-generator" className="text-gray-300 hover:text-white">Ads Generator</Link></li>
               <li><Link to="/product/free-job-postings" className="text-gray-300 hover:text-white">Free Job Postings</Link></li>
               <li><Link to="/product/hiring-outsourcing" className="text-gray-300 hover:text-white">Hiring Outsourcing</Link></li>
-=======
-            <h3 className="text-lg font-semibold mb-4">Business Tools</h3>
-            <ul className="space-y-3">
-              <li>
-                <Link to="/product/free-job-postings" className="text-gray-300 hover:text-white transition-colors">
-                  Post a Job
-                </Link>
-              </li>
-              <li>
-                <Link to="/product/hiring-outsourcing" className="text-gray-300 hover:text-white transition-colors">
-                  Hire Assist
-                </Link>
-              </li>
-              <li>
-                <Link to="/product/linkedin-posts" className="text-gray-300 hover:text-white transition-colors">
-                  AI Post Builder
-                </Link>
-              </li>
-               <li>
-                <Link to="/product/automation-page" className="text-gray-300 hover:text-white transition-colors">
-                 AI Workflow
-                </Link>
-              </li>
-               <li>
-                <Link to="/product/voice-agent" className="text-gray-300 hover:text-white transition-colors">
-                  Voice Agent
-                </Link>
-              </li>
-               <li>
-                <Link to="/product/ads-generator" className="text-gray-300 hover:text-white transition-colors">
-                  Ad Copy AI
-                </Link>
-              </li>
-               <li>
-                <Link to="/product/support" className="text-gray-300 hover:text-white transition-colors">
-                  AI Customer Support Page
-                  </Link>
-                
-              </li>
->>>>>>> f6197df ("upadte")
             </ul>
           </div>
           

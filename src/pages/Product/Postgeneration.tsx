@@ -21,19 +21,11 @@ const FieldWithControls = ({ label, value, setValue }: { label: string; value: s
     />
     <div className="absolute right-2 top-8 flex gap-2 items-center">
       {value ? (
-<<<<<<< HEAD
         <Button size="icon" variant="ghost" onClick={() => setValue('')}>
           <RefreshCwIcon className="w-4 h-4" />
         </Button>
       ) : (
         <LightbulbIcon className="w-6 h-6 cursor-pointer text-yellow-400" />
-=======
-        <Button size="icon" variant="ghost" onClick={() => setValue('')} title={`Retry ${label}`}>
-          <RefreshCwIcon className="h-4 w-4 mr-2" />
-        </Button>
-      ) : (
-        <LightbulbIcon className="h-4 w-4 mr-2 cursor-pointer text-yellow-400" />
->>>>>>> f6197df ("upadte")
       )}
       {value && (
         <Button 
