@@ -72,6 +72,7 @@ import Blog from "./pages/Blog";
 
 // Chatbot
 import Chatbot from "./ChatBot/Chatbot";
+import ChatWidget from "./components/Layout/ChatWidget";
 
 const queryClient = new QueryClient();
 
@@ -171,7 +172,7 @@ const App = () => (
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Layout>
-          <Chatbot />
+          <Chatbot/>
         </BrowserRouter>
       </AuthProvider>
     </TooltipProvider>

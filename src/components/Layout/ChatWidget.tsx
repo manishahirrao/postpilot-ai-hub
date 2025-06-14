@@ -1,6 +1,5 @@
-
 import React, { useState, useRef, useEffect } from 'react';
-import { MessageCircle, X, Send, Loader2 } from 'lucide-react';
+import { MessageCircle, X, Send, Loader2, Sparkles, Bot, User as UserIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -24,6 +23,7 @@ const ChatWidget: React.FC = () => {
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -35,8 +35,11 @@ const ChatWidget: React.FC = () => {
   }, [messages]);
 
   const simulateAIResponse = async (userMessage: string): Promise<string> => {
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 2000));
+    // Simulate typing delay
+    await new Promise(resolve => setTimeout(resolve, 800));
+    setIsTyping(true);
+    await new Promise(resolve => setTimeout(resolve, 1200));
+    setIsTyping(false);
     
     const lowerMessage = userMessage.toLowerCase();
     
@@ -106,7 +109,7 @@ const ChatWidget: React.FC = () => {
     }
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSendMessage();
@@ -122,80 +125,158 @@ const ChatWidget: React.FC = () => {
 
   return (
     <>
-      {/* Chat Toggle Button */}
+      {/* Chat Toggle Button with enhanced styling */}
       <div className="fixed bottom-6 right-6 z-50">
         <Button
           onClick={() => setIsOpen(!isOpen)}
-          className="w-14 h-14 rounded-full bg-indigo-600 hover:bg-indigo-700 shadow-lg transition-all duration-300 hover:scale-110"
+          className={`
+            w-16 h-16 rounded-full shadow-2xl transition-all duration-500 hover:scale-110 
+            relative overflow-hidden group
+            ${isOpen 
+              ? 'bg-gradient-to-br from-red-500 to-red-600 hover:from-red-600 hover:to-red-700' 
+              : 'bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-700 hover:via-purple-700 hover:to-pink-700'
+            }
+          `}
           size="sm"
         >
-          {isOpen ? <X className="w-6 h-6" /> : <MessageCircle className="w-6 h-6" />}
+          {/* Animated background */}
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
+          
+          {/* Icon with animation */}
+          <div className="relative z-10">
+            {isOpen ? (
+              <X className="w-7 h-7 transition-transform duration-300" />
+            ) : (
+              <div className="relative">
+                <MessageCircle className="w-7 h-7 transition-transform duration-300" />
+                {/* Pulse animation for new messages */}
+                <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full animate-pulse"></div>
+              </div>
+            )}
+          </div>
         </Button>
       </div>
 
-      {/* Chat Window */}
+      {/* Chat Window with enhanced design */}
       {isOpen && (
-        <div className="fixed bottom-24 right-6 w-96 h-[500px] bg-white rounded-lg shadow-2xl border border-gray-200 z-50 flex flex-col">
-          {/* Header */}
-          <div className="bg-indigo-600 text-white p-4 rounded-t-lg">
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="font-semibold">PostPilot Assistant</h3>
-                <p className="text-sm text-indigo-100">How can I help you today?</p>
+        <div className="fixed bottom-24 right-6 w-96 h-[600px] bg-white rounded-2xl shadow-2xl border border-gray-200 z-50 flex flex-col overflow-hidden transition-all duration-300 animate-in slide-in-from-bottom-8">
+          {/* Header with gradient */}
+          <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white p-6 relative overflow-hidden">
+            {/* Animated background pattern */}
+            <div className="absolute inset-0 opacity-10">
+              <div className="absolute inset-0 bg-[url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIj48Y2lyY2xlIGN4PSIzMCIgY3k9IjMwIiByPSI0Ii8+PC9nPjwvZz48L3N2Zz4=)]"></div>
+            </div>
+            
+            <div className="flex items-center justify-between relative z-10">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
+                  <Bot className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-lg">PostPilot Assistant</h3>
+                  <p className="text-sm text-white/80 flex items-center">
+                    <span className="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></span>
+                    Online & ready to help
+                  </p>
+                </div>
               </div>
               <Button
                 onClick={() => setIsOpen(false)}
                 variant="ghost"
                 size="sm"
-                className="text-white hover:bg-indigo-700"
+                className="text-white hover:bg-white/20 rounded-full w-8 h-8 p-0 transition-all duration-200"
               >
                 <X className="w-4 h-4" />
               </Button>
             </div>
           </div>
 
-          {/* Messages */}
-          <ScrollArea className="flex-1 p-4">
-            <div className="space-y-4">
-              {messages.map((message) => (
+          {/* Messages with improved styling */}
+          <ScrollArea className="flex-1 p-4 bg-gradient-to-b from-gray-50/50 to-white">
+            <div className="space-y-6">
+              {messages.map((message, index) => (
                 <div
                   key={message.id}
-                  className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
+                  className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'} animate-in fade-in-0 slide-in-from-bottom-4`}
+                  style={{ animationDelay: `${index * 100}ms` }}
                 >
-                  <div
-                    className={`max-w-[80%] p-3 rounded-lg ${
-                      message.type === 'user'
-                        ? 'bg-indigo-600 text-white'
-                        : 'bg-gray-100 text-gray-900'
-                    }`}
-                  >
-                    <p className="text-sm">{message.content}</p>
-                    <p className={`text-xs mt-1 ${
-                      message.type === 'user' ? 'text-indigo-100' : 'text-gray-500'
+                  <div className={`flex max-w-[85%] ${message.type === 'user' ? 'flex-row-reverse' : 'flex-row'} items-end space-x-2`}>
+                    {/* Avatar */}
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
+                      message.type === 'user' 
+                        ? 'bg-gradient-to-br from-indigo-500 to-purple-600 ml-2' 
+                        : 'bg-gradient-to-br from-gray-100 to-gray-200 mr-2'
                     }`}>
-                      {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                    </p>
+                      {message.type === 'user' ? (
+                        <UserIcon className="w-4 h-4 text-white" />
+                      ) : (
+                        <Bot className="w-4 h-4 text-gray-600" />
+                      )}
+                    </div>
+                    
+                    {/* Message bubble */}
+                    <div className={`relative group ${
+                      message.type === 'user' 
+                        ? 'bg-gradient-to-br from-indigo-600 to-purple-600 text-white' 
+                        : 'bg-white border border-gray-200 text-gray-900 shadow-sm'
+                    } rounded-2xl px-4 py-3 transition-all duration-200 hover:shadow-md`}>
+                      {/* Message content */}
+                      <p className="text-sm leading-relaxed">{message.content}</p>
+                      
+                      {/* Timestamp */}
+                      <p className={`text-xs mt-2 ${
+                        message.type === 'user' ? 'text-white/70' : 'text-gray-500'
+                      } opacity-0 group-hover:opacity-100 transition-opacity duration-200`}>
+                        {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      </p>
+                      
+                      {/* Message tail */}
+                      <div className={`absolute bottom-2 ${
+                        message.type === 'user' 
+                          ? 'right-0 translate-x-1/2' 
+                          : 'left-0 -translate-x-1/2'
+                      } w-3 h-3 ${
+                        message.type === 'user' 
+                          ? 'bg-gradient-to-br from-indigo-600 to-purple-600' 
+                          : 'bg-white border-l border-b border-gray-200'
+                      } rotate-45`}></div>
+                    </div>
                   </div>
                 </div>
               ))}
               
-              {isLoading && (
-                <div className="flex justify-start">
-                  <div className="bg-gray-100 text-gray-900 p-3 rounded-lg flex items-center space-x-2">
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    <span className="text-sm">AI is typing...</span>
+              {/* Typing indicator */}
+              {(isLoading || isTyping) && (
+                <div className="flex justify-start animate-in fade-in-0 slide-in-from-bottom-4">
+                  <div className="flex items-end space-x-2">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                      <Bot className="w-4 h-4 text-gray-600" />
+                    </div>
+                    <div className="bg-white border border-gray-200 rounded-2xl px-4 py-3 flex items-center space-x-2 shadow-sm">
+                      <div className="flex space-x-1">
+                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                      </div>
+                      <span className="text-sm text-gray-500">AI is thinking...</span>
+                    </div>
                   </div>
                 </div>
               )}
               
+              {/* Suggested questions */}
               {messages.length === 1 && (
-                <div className="space-y-2">
-                  <p className="text-sm text-gray-500 font-medium">Suggested questions:</p>
+                <div className="space-y-3 animate-in fade-in-0 slide-in-from-bottom-4" style={{ animationDelay: '500ms' }}>
+                  <div className="flex items-center space-x-2">
+                    <Sparkles className="w-4 h-4 text-indigo-500" />
+                    <p className="text-sm text-gray-600 font-medium">Quick questions to get started:</p>
+                  </div>
                   {suggestedQuestions.map((question, index) => (
                     <button
                       key={index}
                       onClick={() => setInputValue(question)}
-                      className="block w-full text-left p-2 text-sm text-indigo-600 hover:bg-indigo-50 rounded border border-indigo-200 transition-colors"
+                      className="block w-full text-left p-3 text-sm text-indigo-600 hover:text-indigo-700 bg-gradient-to-r from-indigo-50 to-purple-50 hover:from-indigo-100 hover:to-purple-100 rounded-xl border border-indigo-200 hover:border-indigo-300 transition-all duration-200 hover:shadow-sm hover:scale-[1.02]"
+                      style={{ animationDelay: `${600 + index * 100}ms` }}
                     >
                       {question}
                     </button>
@@ -206,25 +287,47 @@ const ChatWidget: React.FC = () => {
             <div ref={messagesEndRef} />
           </ScrollArea>
 
-          {/* Input */}
-          <div className="p-4 border-t border-gray-200">
-            <div className="flex space-x-2">
-              <Input
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                onKeyPress={handleKeyPress}
-                placeholder="Type your message..."
-                disabled={isLoading}
-                className="flex-1"
-              />
+          {/* Input area with enhanced design */}
+          <div className="p-4 border-t border-gray-100 bg-white">
+            <div className="flex space-x-3 items-end">
+              <div className="flex-1 relative">
+                <Input
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                  placeholder="Type your message..."
+                  disabled={isLoading}
+                  className="resize-none border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all duration-200 pr-12"
+                />
+                {inputValue && (
+                  <button
+                    onClick={() => setInputValue('')}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
               <Button
                 onClick={handleSendMessage}
                 disabled={!inputValue.trim() || isLoading}
                 size="sm"
-                className="bg-indigo-600 hover:bg-indigo-700"
+                className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 disabled:from-gray-300 disabled:to-gray-400 rounded-xl px-4 py-2 h-auto transition-all duration-200 hover:scale-105 disabled:scale-100"
               >
-                <Send className="w-4 h-4" />
+                {isLoading ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <Send className="w-4 h-4" />
+                )}
               </Button>
+            </div>
+            
+            {/* Powered by indicator */}
+            <div className="mt-2 text-center">
+              <p className="text-xs text-gray-400 flex items-center justify-center space-x-1">
+                <Sparkles className="w-3 h-3" />
+                <span>Powered by PostPilot AI</span>
+              </p>
             </div>
           </div>
         </div>

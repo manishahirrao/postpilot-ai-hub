@@ -1,11 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { MessageCircle, X, Send, User, Bot, LifeBuoy, ThumbsDown } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+import { MessageCircle, X, Send, User, Bot, LifeBuoy, CheckCircle, Sparkles, Zap, Clock } from 'lucide-react';
 
 interface Message {
   id: string;
@@ -34,8 +28,9 @@ const Chatbot = () => {
     subject: '',
     description: ''
   });
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const { toast } = useToast();
 
   const websiteKnowledge = {
     platform: {
@@ -112,25 +107,25 @@ const Chatbot = () => {
     // Product-specific responses
     if (message.includes('automation') || message.includes('workflow')) {
       return {
-        response: websiteKnowledge.products.automations.description + " Common issues include workflow triggers and integration setup. Are you experiencing any specific problems?",
+        response: `${websiteKnowledge.products.automations.description} Common issues include workflow triggers and integration setup. Are you experiencing any specific problems?`,
         needsTicket: false
       };
     }
     if (message.includes('support') || message.includes('customer service')) {
       return {
-        response: websiteKnowledge.products.support.description + " If you're having issues with the chat widget or need to speak with a human agent, I can help escalate that for you.",
+        response: `${websiteKnowledge.products.support.description} If you're having issues with the chat widget or need to speak with a human agent, I can help escalate that for you.`,
         needsTicket: false
       };
     }
     if (message.includes('voice') || message.includes('agent') || message.includes('call')) {
       return {
-        response: websiteKnowledge.products.voiceAgents.description + " Are you experiencing any call quality or routing issues?",
+        response: `${websiteKnowledge.products.voiceAgents.description} Are you experiencing any call quality or routing issues?`,
         needsTicket: false
       };
     }
     if (message.includes('ads') || message.includes('marketing') || message.includes('creative')) {
       return {
-        response: websiteKnowledge.products.adsGenerator.description + " If your ads aren't generating or you're not satisfied with the output quality, I can help troubleshoot or escalate to our team.",
+        response: `${websiteKnowledge.products.adsGenerator.description} If your ads aren't generating or you're not satisfied with the output quality, I can help troubleshoot or escalate to our team.`,
         needsTicket: false
       };
     }
@@ -167,19 +162,17 @@ const Chatbot = () => {
       };
     }
     
-    // General dissatisfaction or need for escalation
-    if (message.includes('not satisfied') || message.includes('doesn\'t help') || message.includes('not working') || message.includes('frustrated')) {
-      return {
-        response: "I'm sorry to hear that you're experiencing difficulties. I want to make sure you get the help you need. Let me create a support ticket so our specialized team can assist you directly.",
-        needsTicket: true
-      };
-    }
-    
     // Default response for unmatched queries
     return {
       response: "I'm here to help! Since this issue might need a human agent, would you like me to create a support ticket for you? Please provide more details about what you're trying to do or what problem you're experiencing.",
       needsTicket: true
     };
+  };
+
+  const showToastMessage = (message: string) => {
+    setToastMessage(message);
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 3000);
   };
 
   const scrollToBottom = () => {
@@ -192,8 +185,6 @@ const Chatbot = () => {
 
   const handleSendMessage = async () => {
     if (!inputMessage.trim()) return;
-
-    console.log('Sending message:', inputMessage);
 
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -229,207 +220,291 @@ const Chatbot = () => {
     }
   };
 
-  const handleNotSatisfied = (messageId: string) => {
+  const handleNotSatisfied = () => {
     setShowTicketForm(true);
   };
 
   const handleTicketSubmit = async () => {
     if (!ticketForm.name || !ticketForm.email || !ticketForm.subject || !ticketForm.description) {
-      toast({
-        title: "Error",
-        description: "Please fill in all fields",
-        variant: "destructive"
-      });
+      showToastMessage("Please fill in all fields");
       return;
     }
 
-    // Here you would typically send to your backend
-    console.log('Support ticket submitted:', ticketForm);
-    
-    toast({
-      title: "Support Ticket Created",
-      description: "Your support ticket has been submitted. Our team will get back to you within 24 hours."
-    });
-
-    setShowTicketForm(false);
-    setTicketForm({ name: '', email: '', subject: '', description: '' });
-    
-    // Add confirmation message to chat
-    const confirmationMessage: Message = {
-      id: Date.now().toString(),
-      content: "Perfect! I've created a support ticket for you. Our human support team will reach out within 24 hours to provide specialized assistance. Is there anything else I can help you with in the meantime?",
-      isBot: true,
-      timestamp: new Date()
-    };
-    
-    setMessages(prev => [...prev, confirmationMessage]);
+    // Simulate API call delay
+    setTimeout(() => {
+      showToastMessage("Support ticket created successfully! Our team will contact you within 24 hours.");
+      setShowTicketForm(false);
+      setTicketForm({ name: '', email: '', subject: '', description: '' });
+      
+      // Add confirmation message to chat
+      const confirmationMessage: Message = {
+        id: Date.now().toString(),
+        content: "Perfect! I've created a support ticket for you. Our human support team will reach out within 24 hours to provide specialized assistance. Is there anything else I can help you with in the meantime?",
+        isBot: true,
+        timestamp: new Date()
+      };
+      
+      setMessages(prev => [...prev, confirmationMessage]);
+    }, 500);
   };
 
   return (
-    <>
-      {/* Floating Chat Button */}
-      <div className="fixed bottom-6 right-6 z-50">
-        <Button
-          onClick={() => setIsOpen(!isOpen)}
-          className="rounded-full w-14 h-14 shadow-lg gradient-primary text-white border-0 hover:scale-110 transition-transform"
+    <div className="font-sans">
+      {/* Toast Notification */}
+      {showToast && (
+        <div 
+          className="fixed top-4 right-4 z-50 transition-all duration-300 transform"
+          style={{ 
+            opacity: showToast ? 1 : 0,
+            transform: showToast ? 'translateY(0)' : 'translateY(-20px)'
+          }}
         >
-          {isOpen ? <X className="h-6 w-6" /> : <MessageCircle className="h-6 w-6" />}
-        </Button>
+          <div className="bg-white border border-gray-200 rounded-lg shadow-lg p-4 flex items-center gap-3 max-w-md">
+            <CheckCircle className="h-5 w-5 text-green-500" />
+            <p className="text-sm text-gray-700">{toastMessage}</p>
+          </div>
+        </div>
+      )}
+
+      {/* Floating Chat Button */}
+      <div className="fixed bottom-6 right-6 z-40">
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="relative rounded-full w-16 h-16 shadow-2xl bg-gradient-to-r from-purple-600 via-blue-600 to-indigo-600 text-white border-0 hover:scale-110 transition-all duration-300 hover:shadow-purple-500/25"
+        >
+          {/* Pulse animation ring */}
+          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 animate-ping opacity-20"></div>
+          
+          {/* Icon with smooth transition */}
+          <div className="relative z-10 transition-transform duration-200">
+            {isOpen ? <X className="h-6 w-6" /> : <MessageCircle className="h-6 w-6" />}
+          </div>
+          
+          {/* Sparkle effect */}
+          <Sparkles className="absolute top-1 right-1 h-3 w-3 text-yellow-300 animate-pulse" />
+        </button>
       </div>
 
       {/* Chat Window */}
       {isOpen && (
-        <Card className="fixed bottom-24 right-6 w-96 h-[500px] z-40 shadow-xl border-0 overflow-hidden flex flex-col">
-          <CardHeader className="gradient-primary text-white p-4 flex-shrink-0">
-            <CardTitle className="flex items-center gap-2 text-lg">
-              <Bot className="h-5 w-5" />
-              PostPilot Support Assistant
-            </CardTitle>
-          </CardHeader>
-          
-          <CardContent className="p-0 flex-1 flex flex-col min-h-0">
-            {/* Messages Area */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4 min-h-0">
-              {messages.map((message) => (
-                <div key={message.id} className={`flex ${message.isBot ? 'justify-start' : 'justify-end'}`}>
-                  <div className={`flex items-start gap-2 max-w-[80%] ${message.isBot ? '' : 'flex-row-reverse'}`}>
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-                      message.isBot ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-600'
-                    }`}>
-                      {message.isBot ? <Bot className="h-4 w-4" /> : <User className="h-4 w-4" />}
-                    </div>
-                    <div className={`rounded-lg p-3 ${
-                      message.isBot ? 'bg-gray-100 text-gray-900' : 'gradient-primary text-white'
-                    }`}>
-                      <p className="text-sm">{message.content}</p>
-                      {message.showTicketOption && (
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="mt-2 h-8 text-xs"
-                          onClick={() => handleNotSatisfied(message.id)}
-                        >
-                          <LifeBuoy className="h-3 w-3 mr-1" />
-                          Create Support Ticket
-                        </Button>
-                      )}
+        <div 
+          className="fixed bottom-24 right-6 w-96 h-96 z-30 transition-all duration-300 transform"
+          style={{
+            height: '600px',
+            opacity: isOpen ? 1 : 0,
+            transform: isOpen ? 'translateY(0)' : 'translateY(20px)'
+          }}
+        >
+          <div className="h-full shadow-2xl border-0 overflow-hidden flex flex-col bg-white/95 backdrop-blur-xl rounded-lg">
+            {/* Header with gradient */}
+            <div className="bg-gradient-to-r from-purple-600 via-blue-600 to-indigo-600 text-white p-6 flex-shrink-0 relative overflow-hidden rounded-t-lg">
+              {/* Background pattern */}
+              <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent"></div>
+              
+              <div className="relative flex items-center gap-3 text-lg font-semibold">
+                <div className="w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                  <Bot className="h-5 w-5" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    PostPilot AI Assistant
+                    <div className="flex items-center gap-1 text-xs bg-white/20 px-2 py-1 rounded-full">
+                      <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                      Online
                     </div>
                   </div>
+                  <div className="text-xs font-normal text-white/80 flex items-center gap-1">
+                    <Zap className="h-3 w-3" />
+                    Powered by AI • Responds in seconds
+                  </div>
                 </div>
-              ))}
-              
-              {isLoading && (
-                <div className="flex justify-start">
-                  <div className="flex items-start gap-2">
-                    <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center">
-                      <Bot className="h-4 w-4" />
-                    </div>
-                    <div className="bg-gray-100 rounded-lg p-3">
-                      <div className="flex space-x-1">
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+              </div>
+            </div>
+            
+            <div className="p-0 flex-1 flex flex-col min-h-0">
+              {/* Messages Area */}
+              <div className="flex-1 overflow-y-auto p-6 space-y-4 min-h-0 bg-gradient-to-b from-gray-50/50 to-white">
+                {messages.map((message, index) => (
+                  <div 
+                    key={message.id} 
+                    className={`flex ${message.isBot ? 'justify-start' : 'justify-end'} transition-all duration-300`}
+                    style={{ 
+                      opacity: 1,
+                      transform: 'translateY(0)',
+                      animationDelay: `${index * 50}ms`
+                    }}
+                  >
+                    <div className={`flex items-start gap-3 max-w-[85%] ${message.isBot ? '' : 'flex-row-reverse'}`}>
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg ${
+                        message.isBot 
+                          ? 'bg-gradient-to-br from-purple-500 to-blue-500 text-white' 
+                          : 'bg-gradient-to-br from-gray-700 to-gray-800 text-white'
+                      }`}>
+                        {message.isBot ? <Bot className="h-5 w-5" /> : <User className="h-5 w-5" />}
+                      </div>
+                      <div className={`rounded-2xl p-4 shadow-md backdrop-blur-sm ${
+                        message.isBot 
+                          ? 'bg-white border border-gray-100 text-gray-800' 
+                          : 'bg-gradient-to-br from-purple-600 to-blue-600 text-white'
+                      }`}>
+                        <p className="text-sm leading-relaxed">{message.content}</p>
+                        <div className="flex items-center gap-1 mt-2 text-xs opacity-70">
+                          <Clock className="h-3 w-3" />
+                          {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        </div>
+                        {message.showTicketOption && (
+                          <button
+                            className="mt-3 h-8 text-xs bg-white/10 border border-white/20 text-purple-700 hover:bg-purple-50 transition-all duration-200 px-3 py-1 rounded-md flex items-center gap-2"
+                            onClick={handleNotSatisfied}
+                          >
+                            <LifeBuoy className="h-3 w-3" />
+                            Create Support Ticket
+                          </button>
+                        )}
                       </div>
                     </div>
                   </div>
-                </div>
-              )}
-              <div ref={messagesEndRef} />
-            </div>
+                ))}
+                
+                {/* Loading animation */}
+                {isLoading && (
+                  <div className="flex justify-start transition-all duration-300">
+                    <div className="flex items-start gap-3">
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 text-white flex items-center justify-center shadow-lg">
+                        <Bot className="h-5 w-5" />
+                      </div>
+                      <div className="bg-white border border-gray-100 rounded-2xl p-4 shadow-md">
+                        <div className="flex items-center space-x-2">
+                          <div className="flex space-x-1">
+                            <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce"></div>
+                            <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                            <div className="w-2 h-2 bg-indigo-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                          </div>
+                          <span className="text-xs text-gray-500">AI is thinking...</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                <div ref={messagesEndRef} />
+              </div>
 
-            {/* Input Area - Fixed at bottom */}
-            <div className="border-t p-4 flex-shrink-0 bg-white">
-              <div className="flex gap-2 items-center">
-                <Input
-                  value={inputMessage}
-                  onChange={(e) => setInputMessage(e.target.value)}
-                  onKeyPress={handleKeyPress}
-                  placeholder="Type your message..."
-                  disabled={isLoading}
-                  className="flex-1"
-                />
-                <Button 
-                  onClick={handleSendMessage}
-                  disabled={isLoading || !inputMessage.trim()}
-                  size="sm"
-                  className="gradient-primary text-white border-0 flex-shrink-0"
-                >
-                  <Send className="h-4 w-4" />
-                </Button>
+              {/* Input Area */}
+              <div className="border-t border-gray-100 p-4 flex-shrink-0 bg-white/80 backdrop-blur-sm rounded-b-lg">
+                <div className="flex gap-3 items-end">
+                  <div className="flex-1 relative">
+                    <input
+                      type="text"
+                      value={inputMessage}
+                      onChange={(e) => setInputMessage(e.target.value)}
+                      onKeyDown={handleKeyPress}
+                      placeholder="Type your message..."
+                      disabled={isLoading}
+                      maxLength={500}
+                      className="w-full pr-12 border-2 border-gray-200 focus:border-purple-400 rounded-xl bg-white/70 backdrop-blur-sm transition-all duration-200 px-3 py-2 text-sm focus:outline-none"
+                    />
+                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-xs text-gray-400">
+                      {inputMessage.length}/500
+                    </div>
+                  </div>
+                  <button 
+                    onClick={handleSendMessage}
+                    disabled={isLoading || !inputMessage.trim()}
+                    className="h-10 w-10 rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 text-white border-0 flex-shrink-0 hover:scale-105 transition-all duration-200 shadow-lg disabled:opacity-50 flex items-center justify-center"
+                  >
+                    <Send className="h-4 w-4" />
+                  </button>
+                </div>
+                <div className="mt-2 text-xs text-gray-500 flex items-center justify-center gap-1">
+                  <div className="w-1 h-1 bg-green-400 rounded-full animate-pulse"></div>
+                  Powered by AI • Press Enter to send
+                </div>
               </div>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       )}
 
       {/* Support Ticket Modal */}
-      <Dialog open={showTicketForm} onOpenChange={setShowTicketForm}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <LifeBuoy className="h-5 w-5" />
-              Create Support Ticket
-            </DialogTitle>
-          </DialogHeader>
-          
-          <div className="space-y-4">
-            <div>
-              <label className="text-sm font-medium">Name</label>
-              <Input
-                value={ticketForm.name}
-                onChange={(e) => setTicketForm(prev => ({ ...prev, name: e.target.value }))}
-                placeholder="Your full name"
-              />
-            </div>
-            
-            <div>
-              <label className="text-sm font-medium">Email</label>
-              <Input
-                type="email"
-                value={ticketForm.email}
-                onChange={(e) => setTicketForm(prev => ({ ...prev, email: e.target.value }))}
-                placeholder="your.email@company.com"
-              />
-            </div>
-            
-            <div>
-              <label className="text-sm font-medium">Subject</label>
-              <Input
-                value={ticketForm.subject}
-                onChange={(e) => setTicketForm(prev => ({ ...prev, subject: e.target.value }))}
-                placeholder="Brief description of your issue"
-              />
-            </div>
-            
-            <div>
-              <label className="text-sm font-medium">Description</label>
-              <Textarea
-                value={ticketForm.description}
-                onChange={(e) => setTicketForm(prev => ({ ...prev, description: e.target.value }))}
-                placeholder="Please provide detailed information about your inquiry or issue..."
-                rows={4}
-              />
-            </div>
-            
-            <div className="flex gap-2 pt-4">
-              <Button 
-                variant="outline" 
-                onClick={() => setShowTicketForm(false)}
-                className="flex-1"
-              >
-                Cancel
-              </Button>
-              <Button 
-                onClick={handleTicketSubmit}
-                className="flex-1 gradient-primary text-white border-0"
-              >
-                Submit Ticket
-              </Button>
+      {showTicketForm && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white/95 backdrop-blur-xl border-0 shadow-2xl rounded-lg max-w-md w-full mx-4">
+            <div className="p-6">
+              <div className="pb-4">
+                <div className="flex items-center gap-3 text-xl font-semibold mb-2">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center">
+                    <LifeBuoy className="h-4 w-4 text-white" />
+                  </div>
+                  Create Support Ticket
+                </div>
+                <p className="text-sm text-gray-600">Our support team will get back to you within 24 hours</p>
+              </div>
+              
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700">Name</label>
+                  <input
+                    type="text"
+                    value={ticketForm.name}
+                    onChange={(e) => setTicketForm(prev => ({ ...prev, name: e.target.value }))}
+                    placeholder="Your full name"
+                    className="w-full border-2 border-gray-200 focus:border-purple-400 rounded-lg transition-all duration-200 px-3 py-2 text-sm focus:outline-none"
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700">Email</label>
+                  <input
+                    type="email"
+                    value={ticketForm.email}
+                    onChange={(e) => setTicketForm(prev => ({ ...prev, email: e.target.value }))}
+                    placeholder="your.email@company.com"
+                    className="w-full border-2 border-gray-200 focus:border-purple-400 rounded-lg transition-all duration-200 px-3 py-2 text-sm focus:outline-none"
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700">Subject</label>
+                  <input
+                    type="text"
+                    value={ticketForm.subject}
+                    onChange={(e) => setTicketForm(prev => ({ ...prev, subject: e.target.value }))}
+                    placeholder="Brief description of your issue"
+                    className="w-full border-2 border-gray-200 focus:border-purple-400 rounded-lg transition-all duration-200 px-3 py-2 text-sm focus:outline-none"
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700">Description</label>
+                  <textarea
+                    value={ticketForm.description}
+                    onChange={(e) => setTicketForm(prev => ({ ...prev, description: e.target.value }))}
+                    placeholder="Please provide detailed information about your inquiry or issue..."
+                    rows={4}
+                    className="w-full border-2 border-gray-200 focus:border-purple-400 rounded-lg transition-all duration-200 resize-none px-3 py-2 text-sm focus:outline-none"
+                  />
+                </div>
+                
+                <div className="flex gap-3 pt-4">
+                  <button 
+                    onClick={() => setShowTicketForm(false)}
+                    className="flex-1 border-2 border-gray-200 hover:bg-gray-50 transition-all duration-200 px-4 py-2 rounded-lg text-sm font-medium"
+                  >
+                    Cancel
+                  </button>
+                  <button 
+                    onClick={handleTicketSubmit}
+                    className="flex-1 bg-gradient-to-r from-purple-600 to-blue-600 text-white border-0 hover:scale-105 transition-all duration-200 shadow-lg px-4 py-2 rounded-lg text-sm font-medium"
+                  >
+                    Submit Ticket
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
-        </DialogContent>
-      </Dialog>
-    </>
+        </div>
+      )}
+    </div>
   );
 };
 
