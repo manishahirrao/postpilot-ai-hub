@@ -467,7 +467,7 @@ const Navbar = () => {
                     <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-2xl border border-gray-100 z-50 animate-in slide-in-from-top-2 duration-200">
                       <div className="p-2">
                         <a
-                          href="#"
+                          href="/auth/login/personal"
                           className="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 hover:text-indigo-600 rounded-lg transition-all duration-200"
                           onClick={() => setIsSignupDropdownOpen(false)}
                         >
@@ -475,7 +475,7 @@ const Navbar = () => {
                           Personal
                         </a>
                         <a
-                          href="#"
+                          href="/auth/login/company"
                           className="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 hover:text-indigo-600 rounded-lg transition-all duration-200"
                           onClick={() => setIsSignupDropdownOpen(false)}
                         >

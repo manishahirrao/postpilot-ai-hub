@@ -3,10 +3,11 @@ import React from "react";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import Layout from "@/components/Layout/Layout";
 import NotFound from "./pages/NotFound";
+import ProtectedRoute from './components/ProtectedRoute';
 
 // Main Landing Page
 import CombinedHome from "./pages/Home/CombinedHome";
@@ -47,6 +48,10 @@ import RegisterPage from "./pages/Auth/RegisterPage";
 import RegisterPersonalPage from "./pages/Auth/LoginPersonalPage";
 import RegisterCompanyPage from "./pages/Auth/LoginCompanyPage";
 import CompanyRegistrationForm from "./pages/Auth/CompanyRegisterPage";
+import Login from './pages/Auth/Login';
+import Register from './pages/Auth/Register';
+import ForgotPassword from './pages/Auth/ForgotPassword';
+import ResetPassword from './pages/Auth/ResetPassword';
 
 // Dashboard Pages
 import DashboardPage from "./pages/Dashboard/DashboardPage";
@@ -79,34 +84,72 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
+      <BrowserRouter>
       <AuthProvider>
         <Toaster />
         <Sonner />
-        <BrowserRouter>
           <Layout>
             <Routes>
-              {/* Main Landing Page */}
+              {/* Main Landing Page - Default Route */}
               <Route path="/" element={<CombinedHome />} />
 
-              {/* Specific Home Routes */}
-              <Route path="/home/personal" element={<PersonalHome />} />
-              <Route path="/home/company" element={<CompanyHome />} />
-              <Route path="/home/login-personal" element={<LoginPersonalPage />} />
-              <Route path="/home/login-company" element={<LoginCompanyPage />} />
-              <Route path="/Home/PersonalHome" element={<PersonalHome />} />
-              <Route path="/Home/CompanyHome" element={<CompanyHome />} />
-              <Route path="/Home/LoginPersonalPage" element={<LoginPersonalPage />} />
-              <Route path="/Home/LoginCompanyPage" element={<LoginCompanyPage />} />
+              {/* Auth Routes */}
+              <Route path="/auth/login/personal" element={<LoginPersonalPage />} />
+              <Route path="/auth/login/company" element={<LoginCompanyPage />} />
+              <Route path="/auth/register/personal" element={<RegisterPersonalPage />} />
+              <Route path="/auth/register/company" element={<RegisterCompanyPage />} />
+              <Route path="/auth/forgot-password" element={<ForgotPassword />} />
+              <Route path="/auth/reset-password" element={<ResetPassword />} />
 
-              {/* Product Routes */}
+              {/* Protected Dashboard Routes */}
+              <Route
+                path="/dashboard"
+                element={
+                  <ProtectedRoute>
+                    <DashboardPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/dashboard/personal"
+                element={
+                  <ProtectedRoute>
+                    <PersonalDashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/dashboard/company"
+                element={
+                  <ProtectedRoute>
+                    <CompanyDashboard />
+                  </ProtectedRoute>
+                }
+              />
+
+              {/* Protected Profile Routes */}
+              <Route
+                path="/profile/personal"
+                element={
+                  <ProtectedRoute>
+                    <PersonalProfile />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/profile/company"
+                element={
+                  <ProtectedRoute>
+                    <CompanyProfile />
+                  </ProtectedRoute>
+                }
+              />
+
+              {/* Public Product Routes */}
               <Route path="/product/linkedin-posts" element={<LinkedInPostsPage />} />
-              {/* <Route path="/product/LinkedInPostsPage" element={<LinkedInPostsPage />} /> */}
               <Route path="/product/resume-builder" element={<ResumeBuilderPage />} />
-              {/* <Route path="/product/ResumeBuilderPage" element={<ResumeBuilderPage />} /> */}
               <Route path="/product/job-matcher" element={<JobMatcherPage />} />
-              {/* <Route path="/product/JobMatcherPage" element={<JobMatcherPage />} /> */}
               <Route path="/product/career-analytics" element={<CareerAnalyticsPage />} />
-              {/* <Route path="/product/CareerAnalyticsPage" element={<CareerAnalyticsPage />} /> */}
               <Route path="/product/free-job-postings" element={<FreeJobPostingsPage />} />
               <Route path="/product/hiring-outsourcing" element={<HiringOutsourcingPage />} />
               <Route path="/product/personalpostgeneration" element={<PersonalPostGeneration />} />
@@ -114,56 +157,20 @@ const App = () => (
               <Route path="/product/automation-page" element={<AutomationsPage />} />
               <Route path="/product/support-page" element={<SupportPage />} />
               <Route path="/product/voice-agent" element={<VoiceAgentsPage />} />
-              <Route path="/product/support" element={<SupportPage />} />
 
-              {/* New Company Product Routes */}
-              <Route path="/products/automations" element={<AutomationsPage/>}/>
-              <Route path="/products/support" element={<ProductSupportPage />} />
-              <Route path="/products/voice-agents" element={<VoiceAgentsPage />} />
-              <Route path="/products/ads-generator" element={<AdsGeneratorPage />} />
-
-              {/* Solutions Routes */}
+              {/* Other Public Routes */}
               <Route path="/solutions/why-us" element={<WhyUsPage />} />
               <Route path="/solutions/use-cases" element={<UseCasesPage />} />
-
-              {/* Other Routes */}
               <Route path="/pricing" element={<PricingPage />} />
               <Route path="/resources" element={<ResourcesPage />} />
               <Route path="/blog/:slug" element={<BlogArticle />} />
               <Route path="/blog" element={<Blog />} />
-
-              {/* About Routes */}
               <Route path="/about" element={<AboutUsPage />} />
               <Route path="/about/careers" element={<CareersPage />} />
               <Route path="/about/management" element={<ManagementPage />} />
               <Route path="/about/investors" element={<InvestorsPage />} />
-
-              {/* Contact and Support */}
               <Route path="/contact" element={<ContactPage />} />
-              <Route path="/support" element={<SupportPage />} />
               <Route path="/contact-sales" element={<ContactSalesPage />} />
-
-              {/* Auth Routes */}
-              <Route path="/login/personal" element={<LoginPersonalPage />} />
-              <Route path="/login/company" element={<LoginCompanyPage />} />
-              <Route path="/auth/login" element={<LoginPage />} />
-              <Route path="/auth/LoginPersonalPage" element={<LoginPersonalPage />} />
-              <Route path="/auth/LoginCompanyPage" element={<LoginCompanyPage />} />
-              <Route path="/auth/register" element={<RegisterPage />} />
-              <Route path="/auth/register/personal" element={<RegisterPersonalPage />} />
-              <Route path="/auth/register/company" element={<RegisterCompanyPage />} />
-              <Route path="/auth/company/register" element={<CompanyRegistrationForm />} />
-
-              {/* Profile Routes */}
-              <Route path="/profile/personal" element={<PersonalProfile />} />
-              <Route path="/profile/company" element={<CompanyProfile />} />
-
-              {/* Dashboard Routes */}
-              <Route path="/dashboard" element={<DashboardPage />} />
-              <Route path="/dashboard/personal" element={<PersonalDashboard />} />
-              <Route path="/dashboard/company" element={<CompanyDashboard />} />
-
-              {/* Legal Routes */}
               <Route path="/terms" element={<TermsPage />} />
               <Route path="/cookie-policy" element={<CookiePolicyPage />} />
               <Route path="/privacy" element={<PrivacyPolicyPage />} />
@@ -173,8 +180,8 @@ const App = () => (
             </Routes>
           </Layout>
           <Chatbot/>
+        </AuthProvider>
         </BrowserRouter>
-      </AuthProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );

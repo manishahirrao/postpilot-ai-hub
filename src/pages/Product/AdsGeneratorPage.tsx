@@ -1,14 +1,27 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  Palette, Video, FileText, Zap, Target, Star, BarChart3, Sparkles, 
-  ArrowRight, CheckCircle, TrendingUp, Users, Clock, Shield,
-  Play, ChevronDown, Rocket, Lightbulb
+import {
+  Sparkles, ArrowRight, Play, CheckCircle, Rocket,
+  TrendingUp, Users, Clock, Lightbulb, Palette,
+  Video, Target, BarChart3,Shield
 } from 'lucide-react';
 
+// Import your existing form components
+import GoogleAdsForm from '../Ads/GoogleAds';
+import MetaAdsGenerator from '../Ads/MetaAds';
+import LinkedInAdsForm from '../Ads/LinkedInAds';
+import YouTubeAdsForm from '../Ads/YouTubeAds';
 const AdsGeneratorPage = () => {
   const [activeTab, setActiveTab] = useState('Google Ads');
   const [hoveredFeature, setHoveredFeature] = useState(null);
+
+  // Tab configuration with your form components
+  const tabs = [
+    { name: 'Google Ads', component: <GoogleAdsForm /> },
+    { name: 'Meta Ads', component: <MetaAdsGenerator/> },
+    { name: 'LinkedIn Ads', component: <LinkedInAdsForm /> },
+    { name: 'YouTube Ads', component: <YouTubeAdsForm /> },
+  ];
 
   const features = [
     {
@@ -20,7 +33,7 @@ const AdsGeneratorPage = () => {
     },
     {
       icon: Palette,
-      title: "Dynamic Banner Generation", 
+      title: "Dynamic Banner Generation",
       description: "Auto-layout designs for Facebook, Instagram, LinkedIn with brand overlay. Social-media specs automatically optimized for each platform.",
       color: "from-blue-500 to-cyan-500",
       delay: 0.2
@@ -55,76 +68,19 @@ const AdsGeneratorPage = () => {
     { label: "Time Saved Weekly", value: "15hrs", icon: Clock },
   ];
 
-  const useCases = [
-    {
-      title: "E-commerce Success",
-      description: "Increased conversion rates by 45% using AI-generated ad copy and visuals",
-      industry: "E-commerce",
-      challenge: "Marketing team struggled with creating engaging ad copy and visuals",
-      solution: "AI-powered ad generator created personalized, high-converting ads",
-      results: ["45% increase in conversion rate", "30% lower CPC", "95% customer satisfaction rate"],
-      gradient: "from-purple-600 to-blue-600"
-    },
-    {
-      title: "Social Media Growth",
-      description: "Automated content generation for 5 platforms",
-      industry: "Marketing",
-      challenge: "Content team overwhelmed with daily social media posting",
-      solution: "AI generated consistent, engaging content across platforms",
-      results: ["50% increase in followers", "75% engagement rate improvement", "2x content creation speed"],
-      gradient: "from-pink-600 to-purple-600"
-    },
-    {
-      title: "Email Marketing",
-      description: "Created personalized email campaigns",
-      industry: "SaaS",
-      challenge: "Low email open and conversion rates",
-      solution: "AI generated personalized, compelling email content",
-      results: ["40% open rate", "20% conversion rate", "90% customer satisfaction"],
-      gradient: "from-blue-600 to-indigo-600"
-    },
-  ];
-
-  const reviews = [
-    {
-      name: "Amit S.",
-      role: "Marketing Manager",
-      company: "SwiftCommerce",
-      content: "We cut ad production time by 80% and saw a 30% boost in conversions. Incredible tool!",
-      rating: 5,
-      avatar: "AS",
-      color: "bg-purple-500"
-    },
-    {
-      name: "Priya K.",
-      role: "Social Media Lead",
-      company: "BrandBuzz",
-      content: "AI-generated banners and captions are better than our old manual process.",
-      rating: 5,
-      avatar: "PK",
-      color: "bg-pink-500"
-    },
-    {
-      name: "Rahul D.",
-      role: "Founder",
-      company: "StartupSnap",
-      content: "It's like having a full ad team in one tool. Totally recommend it to early-stage founders.",
-      rating: 5,
-      avatar: "RD",
-      color: "bg-blue-500"
-    },
-    {
-      name: "Sara T.",
-      role: "Performance Marketer",
-      company: "AdMagic",
-      content: "The A/B testing and analytics features are my favorite. Saved us weeks of testing.",
-      rating: 5,
-      avatar: "ST",
-      color: "bg-green-500"
-    },
-  ];
-
-  const tabs = ['Google Ads', 'Meta Ads', 'LinkedIn Ads', 'YouTube Ads'];
+  // Function to render active tab content
+  const renderActiveTab = () => {
+    const activeTabData = tabs.find(tab => tab.name === activeTab);
+    return activeTabData ? activeTabData.component : (
+      <div className="text-center py-12">
+        <div className="w-16 h-16 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-4">
+          <Lightbulb className="w-8 h-8 text-white" />
+        </div>
+        <h3 className="text-2xl font-bold text-gray-900 mb-2">Select a Platform</h3>
+        <p className="text-gray-600">Choose an advertising platform to generate optimized ads</p>
+      </div>
+    );
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100">
@@ -149,7 +105,7 @@ const AdsGeneratorPage = () => {
               AI-Powered Marketing Revolution
             </div>
             
-            <h1 className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-purple-600 via-pink-600 to-indigo-600 bg-clip-text text-transparent mb-6 leading-tight">
+            <h1 className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-blue-600 to-purple-600  bg-clip-text text-transparent mb-6 leading-tight">
               Create Stunning Ads
               <br />
               <span className="text-4xl md:text-6xl">in Minutes, Not Hours</span>
@@ -163,7 +119,7 @@ const AdsGeneratorPage = () => {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center group"
+                className="px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600  text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center group"
               >
                 Start Creating Now
                 <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -188,7 +144,7 @@ const AdsGeneratorPage = () => {
           >
             {stats.map((stat, index) => (
               <div key={index} className="text-center">
-                <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl mb-3">
+                <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-r from-blue-600 to-purple-600  rounded-xl mb-3">
                   <stat.icon className="w-6 h-6 text-white" />
                 </div>
                 <div className="text-3xl font-bold text-gray-900 mb-1">{stat.value}</div>
@@ -210,13 +166,13 @@ const AdsGeneratorPage = () => {
           >
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
               Powerful Features for
-              <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent"> Modern Marketers</span>
-            </h2>
+              <span className="bg-gradient-to-r from-blue-600 to-purple-600  bg-clip-text text-transparent"> Modern Marketers</span>
+          </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Everything you need to create, test, and optimize high-performing ads across all major platforms
-            </p>
+          </p>
           </motion.div>
-
+          
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {features.map((feature, index) => (
               <motion.div
@@ -248,7 +204,7 @@ const AdsGeneratorPage = () => {
                       Learn more <ArrowRight className="ml-2 w-4 h-4" />
                     </div>
                   </div>
-                </div>
+                  </div>
               </motion.div>
             ))}
           </div>
@@ -273,151 +229,33 @@ const AdsGeneratorPage = () => {
           </motion.div>
 
           <div className="bg-gray-50 rounded-2xl p-8">
-            {/* Custom Tab Navigation */}
+            {/* Tab Navigation */}
             <div className="flex flex-wrap justify-center gap-2 mb-8">
               {tabs.map((tab) => (
                 <button
-                  key={tab}
-                  onClick={() => setActiveTab(tab)}
+                  key={tab.name}
+                  onClick={() => setActiveTab(tab.name)}
                   className={`px-6 py-3 rounded-xl font-medium transition-all duration-300 ${
-                    activeTab === tab
+                    activeTab === tab.name
                       ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg'
                       : 'bg-white text-gray-600 hover:text-purple-600 hover:bg-purple-50'
                   }`}
                 >
-                  {tab}
+                  {tab.name}
                 </button>
               ))}
             </div>
 
-            {/* Tab Content Placeholder */}
-            <div className="bg-white rounded-xl p-8 min-h-96 flex items-center justify-center">
-              <div className="text-center">
-                <div className="w-16 h-16 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Lightbulb className="w-8 h-8 text-white" />
-                </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">{activeTab} Generator</h3>
-                <p className="text-gray-600">Create optimized ads for {activeTab} with AI-powered copy and visuals</p>
-              </div>
+            {/* Active Tab Content */}
+            <div className="bg-white rounded-xl p-8 min-h-96">
+              {renderActiveTab()}
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Use Cases Section */}
-      <section className="py-20 px-4 bg-gradient-to-br from-gray-50 to-white">
-        <div className="container mx-auto max-w-6xl">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Success Stories Across Industries
-            </h2>
-            <p className="text-xl text-gray-600">
-              See how businesses like yours are achieving remarkable results
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {useCases.map((useCase, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden"
-              >
-                <div className={`h-2 bg-gradient-to-r ${useCase.gradient}`}></div>
-                <div className="p-8">
-                  <div className="inline-block px-3 py-1 bg-gray-100 text-gray-700 text-sm font-medium rounded-full mb-4">
-                    {useCase.industry}
-                  </div>
-                  
-                  <h3 className="text-xl font-bold text-gray-900 mb-3">
-                    {useCase.title}
-                  </h3>
-                  
-                  <p className="text-gray-600 mb-6 leading-relaxed">
-                    {useCase.description}
-                  </p>
-                  
-                  <div className="space-y-3">
-                    {useCase.results.map((result, idx) => (
-                      <div key={idx} className="flex items-center">
-                        <CheckCircle className="w-5 h-5 text-green-500 mr-3" />
-                        <span className="text-gray-700">{result}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Reviews Section */}
-      <section className="py-20 px-4 bg-white">
-        <div className="container mx-auto max-w-6xl">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Loved by Marketing Teams Worldwide
-            </h2>
-            <p className="text-xl text-gray-600">
-              Join thousands of marketers who've transformed their advertising workflow
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {reviews.map((review, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100"
-              >
-                <div className="flex items-center mb-4">
-                  <div className={`w-12 h-12 ${review.color} rounded-full flex items-center justify-center text-white font-bold mr-4`}>
-                    {review.avatar}
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-900">{review.name}</h4>
-                    <p className="text-sm text-gray-600">{review.role}</p>
-                    <p className="text-xs text-gray-500">{review.company}</p>
-                  </div>
-                </div>
-                
-                <p className="text-gray-700 mb-4 leading-relaxed">
-                  "{review.content}"
-                </p>
-                
-                <div className="flex">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className={`w-4 h-4 ${
-                        i < review.rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'
-                      }`}
-                    />
-                  ))}
-                </div>
-              </motion.div>
-            ))}
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-4 bg-gradient-to-br from-purple-900 via-purple-800 to-indigo-900 relative overflow-hidden">
+      <section className="py-20 px-4 bg-gradient-to-r from-blue-600 to-purple-600  relative overflow-hidden">
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-pink-600/20"></div>
         </div>
@@ -458,8 +296,8 @@ const AdsGeneratorPage = () => {
                 <Shield className="mr-2 w-5 h-5" />
                 No Credit Card Required
               </motion.button>
-            </div>
-            
+        </div>
+
             <div className="mt-8 flex items-center justify-center text-purple-200 text-sm">
               <CheckCircle className="w-4 h-4 mr-2" />
               Free 14-day trial • Cancel anytime • Setup in under 5 minutes

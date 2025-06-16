@@ -262,6 +262,17 @@ const SupportPage = () => {
         </div>
       </section>
 
+
+      <video
+        controls
+        autoPlay
+        muted
+        loop
+        className="w-full rounded-lg shadow-lg"
+      >
+        <source src="/chat.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
       {/* Support Channels Section */}
       <section className="py-20 px-4 bg-white">
         <div className="container mx-auto max-w-6xl">

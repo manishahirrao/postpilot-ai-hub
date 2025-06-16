@@ -5,6 +5,7 @@ import {
   Play, ChevronDown, Rocket, Lightbulb, ArrowRight, CheckCircle, TrendingUp,
   Calendar, MessageSquare, Headphones, Bot, Sparkles, Award
 } from 'lucide-react';
+import VoiceAgentInterface from '../Images/AIVoiceAgent';
 
 const VoiceAgentPage = () => {
   const [activeTab, setActiveTab] = useState('Sales Calls');
@@ -273,21 +274,7 @@ const VoiceAgentPage = () => {
           </motion.div>
 
           <div className="bg-gray-50 rounded-2xl p-8">
-            <div className="flex flex-wrap justify-center gap-2 mb-8">
-              {tabs.map((tab) => (
-                <button
-                  key={tab}
-                  onClick={() => setActiveTab(tab)}
-                  className={`px-6 py-3 rounded-xl font-medium transition-all duration-300 ${
-                    activeTab === tab
-                      ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg'
-                      : 'bg-white text-gray-600 hover:text-blue-600 hover:bg-blue-50'
-                  }`}
-                >
-                  {tab}
-                </button>
-              ))}
-            </div>
+            <VoiceAgentInterface/>
 
             <div className="bg-white rounded-xl p-8 min-h-96 flex items-center justify-center">
               <div className="text-center">

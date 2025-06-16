@@ -1,122 +1,130 @@
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { authApi } from '../lib/api';
+import { useNavigate } from 'react-router-dom';
 
 interface User {
   id: string;
-  name: string;
   email: string;
-  role: 'professional' | 'company' | 'guest';
-  profilePicUrl?: string;
-  headline?: string;
-  plan?: string;
-  credits?: number;
-  maxCredits?: number;
-  renewalDate?: string;
+  fullName: string;
 }
 
 interface AuthContextType {
   user: User | null;
-  token: string | null;
-  userType: 'professional' | 'company' | null;
-  login: (email: string, password: string, userType?: 'professional' | 'company') => Promise<void>;
-  logout: () => void;
-  isAuthenticated: boolean;
-  signup: (email: string, password: string) => Promise<void>;
+  loading: boolean;
+  error: string | null;
+  login: (email: string, password: string) => Promise<void>;
+  register: (email: string, password: string, fullName: string) => Promise<void>;
+  logout: () => Promise<void>;
+  clearError: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [token, setToken] = useState<string | null>(null);
-  const [userType, setUserType] = useState<'professional' | 'company' | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
+  // Check if user is already logged in
   useEffect(() => {
-    const storedToken = localStorage.getItem('token');
-    const storedUserType = localStorage.getItem('userType') as 'professional' | 'company' | null;
-    
-    if (storedToken && storedUserType) {
-      setToken(storedToken);
-      setUserType(storedUserType);
-      // Fetch user data from backend
-      fetchUserData().catch(error => {
-        console.error('Error fetching user data on mount:', error);
-      });
+    const checkAuth = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (token) {
+          const response = await fetch('http://localhost:5000/auth/me', {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          });
+          if (response.ok) {
+            const userData = await response.json();
+            setUser(userData.user);
+          } else {
+            localStorage.removeItem('token');
+          }
+        }
+      } catch (err) {
+        console.error('Auth check failed:', err);
+      } finally {
+        setLoading(false);
     }
+    };
+
+    checkAuth();
   }, []);
 
-  const fetchUserData = async () => {
+  const login = async (email: string, password: string) => {
     try {
-      // TODO: Implement profile fetching from backend
-      // For now, using mock data
-      if (userType === 'professional') {
-        setUser({
-          id: '1',
-          name: 'John Doe',
-          email: 'john@example.com',
-          role: 'professional',
-          headline: 'Software Engineer at TechCorp'
-        });
-      } else {
-        setUser({
-          id: '2',
-          name: 'TechCorp Admin',
-          email: 'admin@techcorp.com',
-          role: 'company',
-          headline: 'Company Administrator'
-        });
+      setError(null);
+      const response = await fetch('http://localhost:5000/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Login failed');
       }
-    } catch (error) {
-      console.error('Error fetching user data:', error);
-      throw error;
+
+      localStorage.setItem('token', data.token);
+      setUser(data.user);
+      navigate('/dashboard');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Login failed');
+      throw err;
     }
   };
 
-  const login = async (email: string, password: string, userType?: 'professional' | 'company') => {
+  const register = async (email: string, password: string, fullName: string) => {
     try {
-      const response = await authApi.login(email, password);
-      const token = response.token;
-      setToken(token);
-      setUserType(userType || 'professional');
-      localStorage.setItem('token', token);
-      localStorage.setItem('userType', userType || 'professional');
-      
-      // Fetch user data from backend
-      await fetchUserData();
-    } catch (error) {
-      console.error('Login error:', error);
-      throw error;
+      setError(null);
+      const response = await fetch('http://localhost:5000/auth/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password, fullName }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Registration failed');
+      }
+
+      // After successful registration, log the user in
+      await login(email, password);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Registration failed');
+      throw err;
     }
   };
 
-  const signup = async (email: string, password: string) => {
+  const logout = async () => {
     try {
-      await authApi.signup(email, password);
-      // After signup, you might want to redirect to login page
-    } catch (error) {
-      console.error('Signup error:', error);
-      throw error;
+      localStorage.removeItem('token');
+      setUser(null);
+      navigate('/login');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Logout failed');
     }
   };
 
-  const logout = () => {
-    setUser(null);
-    setToken(null);
-    setUserType(null);
-    localStorage.removeItem('token');
-    localStorage.removeItem('userType');
-  };
+  const clearError = () => setError(null);
 
   return (
     <AuthContext.Provider value={{
       user,
-      token,
-      userType,
+      loading,
+      error,
       login,
+      register,
       logout,
-      signup,
-      isAuthenticated: !!token
+      clearError,
     }}>
       {children}
     </AuthContext.Provider>

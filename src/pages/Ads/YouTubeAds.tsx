@@ -1,5 +1,30 @@
 import React, { useState } from 'react';
-import { ChevronDown, Upload, Play, Image, Type, MousePointer, FileText, Zap, Eye, Target, Download, Copy } from 'lucide-react';
+import { 
+  ChevronDown, 
+  Upload, 
+  Play, 
+  Image as ImageIcon, 
+  Type, 
+  FileText, 
+  Zap, 
+  Eye, 
+  Target, 
+  Download, 
+  Copy,
+  Sparkles,
+  Wand2,
+  X,
+  Check,
+  MousePointer
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { useToast } from '@/components/ui/use-toast';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 interface FormData {
   campaignName: string;
@@ -9,14 +34,10 @@ interface FormData {
   callToAction: string;
   productService: string;
   keyMessage: string;
-  video?: File;
-  companionBanner?: File;
-  thumbnail?: File;
   customHeadline: string;
   customDescription: string;
-  descriptionLine1: string;
-  descriptionLine2: string;
-  selectedCTA: string;
+  landingPageUrl: string;
+  additionalNotes: string;
 }
 
 interface GeneratedContent {
@@ -28,9 +49,16 @@ interface GeneratedContent {
   companionBannerSpecs?: string;
   thumbnailSpecs?: string;
   videoSpecs?: string;
+  bumperAdScript?: string;
+  discoveryAdContent?: {
+    headline: string;
+    descriptionLine1: string;
+    descriptionLine2: string;
+  };
 }
 
 const YouTubeAdsForm: React.FC = () => {
+  const { toast } = useToast();
   const [formData, setFormData] = useState<FormData>({
     campaignName: '',
     adType: '',
@@ -41,17 +69,17 @@ const YouTubeAdsForm: React.FC = () => {
     keyMessage: '',
     customHeadline: '',
     customDescription: '',
-    descriptionLine1: '',
-    descriptionLine2: '',
-    selectedCTA: ''
+    landingPageUrl: '',
+    additionalNotes: ''
   });
 
   const [generatedContent, setGeneratedContent] = useState<GeneratedContent>({});
   const [showGenerated, setShowGenerated] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [copiedField, setCopiedField] = useState<string>('');
+  const [isGenerating, setIsGenerating] = useState(false);
 
   const adTypes = [
-    { value: '', label: 'Select Ad Type' },
     { value: 'trueview-instream', label: 'TrueView In-Stream' },
     { value: 'bumper-ads', label: 'Bumper Ads' },
     { value: 'discovery-ads', label: 'Discovery Ads' },
@@ -75,11 +103,68 @@ const YouTubeAdsForm: React.FC = () => {
     }
   };
 
+  const generateWithAI = async (field: 'customHeadline' | 'customDescription') => {
+    setIsGenerating(true);
+    try {
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      const generatedText = field === 'customHeadline' 
+        ? `AI-Generated Headline for ${formData.productService || 'your product'}` 
+        : `This is an AI-generated description for your YouTube ad about ${formData.productService || 'your product/service'}.`;
+      
+      handleInputChange(field, generatedText);
+      toast({
+        title: "Success",
+        description: `${field === 'customHeadline' ? 'Headline' : 'Description'} generated!`
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to generate content",
+        variant: "destructive"
+      });
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const enhanceWithAI = async (field: 'customHeadline' | 'customDescription') => {
+    setIsGenerating(true);
+    try {
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      const currentText = field === 'customHeadline' ? formData.customHeadline : formData.customDescription;
+      const enhancedText = `${currentText} [Enhanced for YouTube performance]`;
+      
+      handleInputChange(field, enhancedText);
+      toast({
+        title: "Success",
+        description: `${field === 'customHeadline' ? 'Headline' : 'Description'} enhanced!`
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to enhance content",
+        variant: "destructive"
+      });
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const removeFieldContent = (field: 'customHeadline' | 'customDescription') => {
+    handleInputChange(field, '');
+  };
+
   const generateContent = () => {
     const { adType, businessType, targetAudience, productService, keyMessage, callToAction } = formData;
     
     if (!adType || !businessType || !productService) {
-      alert('Please fill in basic campaign information first');
+      toast({
+        title: "Error",
+        description: "Please fill in basic campaign information first",
+        variant: "destructive"
+      });
       return;
     }
 
@@ -106,13 +191,25 @@ SCRIPT NOTES:
 • File size: Under 150KB recommended
 • Include: Logo, key message, CTA button
 • Colors: Match video branding
-• Text: Large, readable font (min 12px)`
+• Text: Large, readable font (min 12px)`,
+          
+          videoSpecs: `TRUEVIEW VIDEO SPECIFICATIONS:
+• Resolution: 1920×1080 pixels (Full HD)
+• Format: MP4 or MOV
+• File size: Maximum 4 GB
+• Frame rate: 24, 25, or 30 fps
+• Aspect ratio: 16:9
+• Duration: 15-60 seconds recommended
+• Audio: Clear, balanced levels
+• Branding: Include logo in first 3 seconds
+• Captions: Include for accessibility
+• Safe area: Keep important content in center 80%`
         };
         break;
 
       case 'bumper-ads':
         generated = {
-          videoScript: `6-SECOND SCRIPT:
+          bumperAdScript: `6-SECOND SCRIPT:
 "${getBumperScript(businessType, productService, callToAction)}"
 
 TIMING BREAKDOWN:
@@ -126,14 +223,16 @@ PRODUCTION NOTES:
 • No complex messaging - one clear point
 • Test readability on mobile devices`,
           
-          videoSpecs: `VIDEO SPECIFICATIONS:
+          videoSpecs: `BUMPER AD SPECIFICATIONS:
 • Resolution: 1920×1080 pixels (Full HD)
 • Format: MP4 or MOV
 • File size: Maximum 4 GB
 • Frame rate: 24, 25, or 30 fps
 • Aspect ratio: 16:9
-• Duration: Maximum 6 seconds
-• Audio: Clear, balanced levels`
+• Duration: Exactly 6 seconds
+• Audio: Clear, balanced levels
+• Branding: Include throughout video
+• Text: Minimal, large and readable`
         };
         break;
 
@@ -143,17 +242,20 @@ PRODUCTION NOTES:
         const desc2 = generateDescriptionLine(businessType, productService, 2);
         
         generated = {
-          headline: headline,
-          descriptionLine1: desc1,
-          descriptionLine2: desc2,
-          thumbnailSpecs: `THUMBNAIL SPECIFICATIONS:
+          discoveryAdContent: {
+            headline,
+            descriptionLine1: desc1,
+            descriptionLine2: desc2
+          },
+          thumbnailSpecs: `DISCOVERY AD THUMBNAIL SPECS:
 • Dimensions: 1280×720 pixels (16:9)
 • Format: JPG or PNG
 • File size: Maximum 2 MB
 • Quality: High resolution, crisp details
 • Content: Eye-catching visuals of product/service
-• Text overlay: Minimal, readable
-• Branding: Include subtle logo placement`
+• Text overlay: Minimal, readable (max 20% of image)
+• Branding: Include subtle logo placement
+• Safe area: Keep key content in center 80%`
         };
         break;
 
@@ -161,19 +263,24 @@ PRODUCTION NOTES:
         generated = {
           headline: generateActionHeadline(businessType, productService),
           description: generateActionDescription(businessType, productService),
-          videoSpecs: `VIDEO & THUMBNAIL SPECS:
-Same requirements as TrueView In-Stream:
-• Video: MP4/MOV, up to 4GB, 16:9 or 4:3
-• Thumbnail: 1280×720px, JPG/PNG, ≤2MB
+          videoSpecs: `VIDEO ACTION AD SPECS:
+• Video: Same as TrueView specs
+• Thumbnail: Same as Discovery specs
 • Recommended length: 15-30 seconds
 • Strong visual call-to-action overlay
-• Mobile-optimized design`,
+• Mobile-optimized design
+• Clear value proposition in first 5 seconds
+• End with strong CTA and branding`
         };
         break;
     }
 
     setGeneratedContent(generated);
     setShowGenerated(true);
+    toast({
+      title: "Success",
+      description: "YouTube ad content generated successfully!"
+    });
   };
 
   const getHook = (businessType: string, product: string): string => {
@@ -245,21 +352,39 @@ Same requirements as TrueView In-Stream:
     return `Best ${product} deals`.substring(0, 25);
   };
 
-  const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text);
-    alert('Copied to clipboard!');
+  const copyToClipboard = async (text: string, field: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedField(field);
+      toast({
+        title: "Success",
+        description: "Content copied to clipboard!"
+      });
+      setTimeout(() => setCopiedField(''), 2000);
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to copy content",
+        variant: "destructive"
+      });
+    }
   };
 
   const downloadSpecs = () => {
     const specs = Object.entries(generatedContent)
-      .map(([key, value]) => `${key.toUpperCase()}:\n${value}`)
+      .map(([key, value]) => {
+        if (key === 'discoveryAdContent' && typeof value === 'object') {
+          return `DISCOVERY AD CONTENT:\nHeadline: ${value.headline}\nDescription 1: ${value.descriptionLine1}\nDescription 2: ${value.descriptionLine2}`;
+        }
+        return `${key.toUpperCase()}:\n${value}`;
+      })
       .join('\n\n');
     
     const blob = new Blob([specs], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `${formData.adType}-specs.txt`;
+    a.download = `${formData.adType}-youtube-specs.txt`;
     a.click();
   };
 
@@ -277,9 +402,10 @@ Same requirements as TrueView In-Stream:
 
   const handleSubmit = () => {
     if (validateForm()) {
-      console.log('Form submitted:', formData);
-      console.log('Generated content:', generatedContent);
-      alert('Campaign specs generated successfully!');
+      toast({
+        title: "Success",
+        description: "YouTube campaign setup completed!"
+      });
     }
   };
 
@@ -293,75 +419,233 @@ Same requirements as TrueView In-Stream:
       <div className="grid md:grid-cols-2 gap-6">
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-2">Campaign Name *</label>
-          <input
-            type="text"
+          <Input
             value={formData.campaignName}
             onChange={(e) => handleInputChange('campaignName', e.target.value)}
             placeholder="e.g., Summer Sale 2024"
-            className="w-full p-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
+            className="w-full"
           />
           {errors.campaignName && <p className="text-red-500 text-sm mt-1">{errors.campaignName}</p>}
         </div>
 
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-2">Business Type *</label>
-          <select
+          <Select
             value={formData.businessType}
-            onChange={(e) => handleInputChange('businessType', e.target.value)}
-            className="w-full p-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
+            onValueChange={(value) => handleInputChange('businessType', value)}
           >
-            <option value="">Select business type</option>
-            {businessTypes.map(type => (
-              <option key={type} value={type}>{type}</option>
-            ))}
-          </select>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select business type" />
+            </SelectTrigger>
+            <SelectContent>
+              {businessTypes.map(type => (
+                <SelectItem key={type} value={type}>{type}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
           {errors.businessType && <p className="text-red-500 text-sm mt-1">{errors.businessType}</p>}
         </div>
 
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-2">Product/Service *</label>
-          <input
-            type="text"
+          <Input
             value={formData.productService}
             onChange={(e) => handleInputChange('productService', e.target.value)}
-            placeholder="e.g., running shoes, CRM software"
-            className="w-full p-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
+            placeholder="e.g., wireless headphones, marketing software"
+            className="w-full"
           />
           {errors.productService && <p className="text-red-500 text-sm mt-1">{errors.productService}</p>}
         </div>
 
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-2">Target Audience</label>
-          <input
-            type="text"
+          <Input
             value={formData.targetAudience}
             onChange={(e) => handleInputChange('targetAudience', e.target.value)}
-            placeholder="e.g., fitness enthusiasts, small business owners"
-            className="w-full p-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
-          />
-        </div>
-
-        <div className="md:col-span-2">
-          <label className="block text-sm font-semibold text-gray-700 mb-2">Key Message/Benefit</label>
-          <textarea
-            value={formData.keyMessage}
-            onChange={(e) => handleInputChange('keyMessage', e.target.value)}
-            placeholder="What's the main benefit or message you want to communicate?"
-            rows={3}
-            className="w-full p-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
+            placeholder="e.g., tech enthusiasts, busy professionals"
+            className="w-full"
           />
         </div>
 
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-2">Call to Action</label>
-          <input
-            type="text"
+          <Select
             value={formData.callToAction}
-            onChange={(e) => handleInputChange('callToAction', e.target.value)}
-            placeholder="e.g., Shop now, Learn more, Sign up"
-            className="w-full p-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
+            onValueChange={(value) => handleInputChange('callToAction', value)}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select CTA" />
+            </SelectTrigger>
+            <SelectContent>
+              {ctaOptions.map(option => (
+                <SelectItem key={option} value={option}>{option}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="md:col-span-2">
+          <label className="block text-sm font-semibold text-gray-700 mb-2">Persona</label>
+          <Textarea
+            value={formData.keyMessage}
+            onChange={(e) => handleInputChange('keyMessage', e.target.value)}
+            placeholder="What's the main benefit or message you want to communicate?"
+            rows={3}
+            className="w-full"
           />
         </div>
+
+        <div className="md:col-span-2">
+          <div className="flex justify-between items-center mb-2">
+            <label className="block text-sm font-semibold text-gray-700">Headline</label>
+            <div className="flex gap-2">
+              {formData.customHeadline ? (
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => enhanceWithAI('customHeadline')}
+                  disabled={isGenerating}
+                  className="flex items-center gap-1"
+                >
+                  <Wand2 className="w-4 h-4" />
+                  {isGenerating ? 'Enhancing...' : 'Enhance'}
+                </Button>
+              ) : (
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => generateWithAI('customHeadline')}
+                  disabled={isGenerating}
+                  className="flex items-center gap-1"
+                >
+                  <Wand2 className="w-4 h-4" />
+                  {isGenerating ? 'Generating...' : 'Generate'}
+                </Button>
+              )}
+              {formData.customHeadline && (
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => removeFieldContent('customHeadline')}
+                  className="text-red-500 hover:text-red-600"
+                >
+                  <X className="w-4 h-4" />
+                </Button>
+              )}
+            </div>
+          </div>
+          <Input
+            value={formData.customHeadline}
+            onChange={(e) => handleInputChange('customHeadline', e.target.value)}
+            placeholder="Enter custom headline or generate with AI"
+            className="w-full"
+          />
+        </div>
+
+        <div className="md:col-span-2">
+          <div className="flex justify-between items-center mb-2">
+            <label className="block text-sm font-semibold text-gray-700">Description</label>
+            <div className="flex gap-2">
+              {formData.customDescription ? (
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => enhanceWithAI('customDescription')}
+                  disabled={isGenerating}
+                  className="flex items-center gap-1"
+                >
+                  <Wand2 className="w-4 h-4" />
+                  {isGenerating ? 'Enhancing...' : 'Enhance'}
+                </Button>
+              ) : (
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => generateWithAI('customDescription')}
+                  disabled={isGenerating}
+                  className="flex items-center gap-1"
+                >
+                  <Wand2 className="w-4 h-4" />
+                  {isGenerating ? 'Generating...' : 'Generate'}
+                </Button>
+              )}
+              {formData.customDescription && (
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => removeFieldContent('customDescription')}
+                  className="text-red-500 hover:text-red-600"
+                >
+                  <X className="w-4 h-4" />
+                </Button>
+              )}
+            </div>
+          </div>
+          <Textarea
+            value={formData.customDescription}
+            onChange={(e) => handleInputChange('customDescription', e.target.value)}
+            placeholder="Enter custom description or generate with AI"
+            rows={3}
+            className="w-full"
+          />
+        </div>
+
+        <div className="md:col-span-2">
+          <label className="block text-sm font-semibold text-gray-700 mb-2">Landing Page URL</label>
+          <Input
+            value={formData.landingPageUrl}
+            onChange={(e) => handleInputChange('landingPageUrl', e.target.value)}
+            placeholder="https://your-landing-page.com"
+            type="url"
+            className="w-full"
+          />
+        </div>
+
+        <div className="md:col-span-2">
+          <label className="block text-sm font-semibold text-gray-700 mb-2">Additional Notes</label>
+          <Textarea
+            value={formData.additionalNotes}
+            onChange={(e) => handleInputChange('additionalNotes', e.target.value)}
+            placeholder="Any additional notes or requirements"
+            rows={2}
+            className="w-full"
+          />
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderAdTypeSelection = () => (
+    <div className="space-y-6">
+      <h2 className="text-2xl font-bold text-gray-800 border-b-2 border-gray-200 pb-2">
+        Select YouTube Ad Type
+      </h2>
+      
+      <div className="bg-white rounded-lg p-6 shadow-sm">
+        <Tabs
+          value={formData.adType}
+          onValueChange={(value) => handleInputChange('adType', value)}
+          className="w-full"
+        >
+          <TabsList className="grid w-full grid-cols-2 md:grid-cols-4">
+            <TabsTrigger value="trueview-instream" className="flex items-center gap-2">
+              <Play className="w-4 h-4" />
+              TrueView
+            </TabsTrigger>
+            <TabsTrigger value="bumper-ads" className="flex items-center gap-2">
+              <MousePointer className="w-4 h-4" />
+              Bumper Ads
+            </TabsTrigger>
+            <TabsTrigger value="discovery-ads" className="flex items-center gap-2">
+              <ImageIcon className="w-4 h-4" />
+              Discovery
+            </TabsTrigger>
+            <TabsTrigger value="video-action-ads" className="flex items-center gap-2">
+              <Target className="w-4 h-4" />
+              Video Action
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
       </div>
     </div>
   );
@@ -370,45 +654,239 @@ Same requirements as TrueView In-Stream:
     if (!showGenerated) return null;
 
     return (
-      <div className="space-y-6 p-6 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl border-l-4 border-green-500">
-        <div className="flex items-center justify-between">
-          <h3 className="text-xl font-bold text-gray-800 flex items-center">
-            <Zap className="mr-2 text-green-600" size={24} />
-            Generated Content & Specifications
-          </h3>
-          <div className="flex gap-2">
-            <button
-              onClick={downloadSpecs}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all"
-            >
-              <Download size={16} />
-              Download
-            </button>
-          </div>
-        </div>
-
-        <div className="grid gap-6">
-          {Object.entries(generatedContent).map(([key, value]) => (
-            <div key={key} className="bg-white p-4 rounded-lg border border-gray-200">
-              <div className="flex items-center justify-between mb-2">
-                <h4 className="font-semibold text-gray-800 capitalize">
-                  {key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
-                </h4>
-                <button
-                  onClick={() => copyToClipboard(value || '')}
-                  className="flex items-center gap-1 px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 rounded transition-all"
-                >
-                  <Copy size={14} />
-                  Copy
-                </button>
+      <Card className="mb-6">
+        <CardHeader>
+          <CardTitle className="flex items-center">
+            <Sparkles className="w-5 h-5 mr-2" />
+            Generated YouTube Ad Content
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          {formData.adType === 'trueview-instream' && generatedContent.videoScript && (
+            <div className="space-y-6">
+              <div>
+                <h3 className="font-semibold mb-3">TrueView In-Stream Ad</h3>
+                <div className="space-y-4">
+                  <div>
+                    <h4 className="text-sm font-medium mb-2">Video Script</h4>
+                    <div className="flex items-center justify-between bg-gray-50 p-2 rounded mb-2">
+                      <div className="flex-1">
+                        <pre className="text-sm whitespace-pre-wrap">{generatedContent.videoScript}</pre>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => copyToClipboard(generatedContent.videoScript || '', 'video-script')}
+                      >
+                        {copiedField === 'video-script' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                      </Button>
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-medium mb-2">Companion Banner Specifications</h4>
+                    <div className="flex items-center justify-between bg-gray-50 p-2 rounded mb-2">
+                      <div className="flex-1">
+                        <pre className="text-sm whitespace-pre-wrap">{generatedContent.companionBannerSpecs}</pre>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => copyToClipboard(generatedContent.companionBannerSpecs || '', 'banner-specs')}
+                      >
+                        {copiedField === 'banner-specs' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                      </Button>
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-medium mb-2">Video Specifications</h4>
+                    <div className="flex items-center justify-between bg-gray-50 p-2 rounded">
+                      <div className="flex-1">
+                        <pre className="text-sm whitespace-pre-wrap">{generatedContent.videoSpecs}</pre>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => copyToClipboard(generatedContent.videoSpecs || '', 'video-specs')}
+                      >
+                        {copiedField === 'video-specs' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                      </Button>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <pre className="text-sm text-gray-700 whitespace-pre-wrap font-mono bg-gray-50 p-3 rounded">
-                {value}
-              </pre>
             </div>
-          ))}
-        </div>
-      </div>
+          )}
+
+          {formData.adType === 'bumper-ads' && generatedContent.bumperAdScript && (
+            <div className="space-y-6">
+              <div>
+                <h3 className="font-semibold mb-3">Bumper Ad Content</h3>
+                <div className="space-y-4">
+                  <div>
+                    <h4 className="text-sm font-medium mb-2">6-Second Script</h4>
+                    <div className="flex items-center justify-between bg-gray-50 p-2 rounded mb-2">
+                      <div className="flex-1">
+                        <pre className="text-sm whitespace-pre-wrap">{generatedContent.bumperAdScript}</pre>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => copyToClipboard(generatedContent.bumperAdScript || '', 'bumper-script')}
+                      >
+                        {copiedField === 'bumper-script' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                      </Button>
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-medium mb-2">Video Specifications</h4>
+                    <div className="flex items-center justify-between bg-gray-50 p-2 rounded">
+                      <div className="flex-1">
+                        <pre className="text-sm whitespace-pre-wrap">{generatedContent.videoSpecs}</pre>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => copyToClipboard(generatedContent.videoSpecs || '', 'bumper-specs')}
+                      >
+                        {copiedField === 'bumper-specs' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {formData.adType === 'discovery-ads' && generatedContent.discoveryAdContent && (
+            <div className="space-y-6">
+              <div>
+                <h3 className="font-semibold mb-3">Discovery Ad Content</h3>
+                <div className="space-y-4">
+                  <div>
+                    <h4 className="text-sm font-medium mb-2">Headline (100 characters max)</h4>
+                    <div className="flex items-center justify-between bg-gray-50 p-2 rounded mb-2">
+                      <div className="flex-1">
+                        <span className="text-sm">{generatedContent.discoveryAdContent.headline}</span>
+                        <span className="text-xs text-gray-500 ml-2">({generatedContent.discoveryAdContent.headline.length}/100)</span>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => copyToClipboard(generatedContent.discoveryAdContent?.headline || '', 'discovery-headline')}
+                      >
+                        {copiedField === 'discovery-headline' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                      </Button>
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-medium mb-2">Description Line 1 (35 characters max)</h4>
+                    <div className="flex items-center justify-between bg-gray-50 p-2 rounded mb-2">
+                      <div className="flex-1">
+                        <span className="text-sm">{generatedContent.discoveryAdContent.descriptionLine1}</span>
+                        <span className="text-xs text-gray-500 ml-2">({generatedContent.discoveryAdContent.descriptionLine1.length}/35)</span>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => copyToClipboard(generatedContent.discoveryAdContent?.descriptionLine1 || '', 'discovery-desc1')}
+                      >
+                        {copiedField === 'discovery-desc1' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                      </Button>
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-medium mb-2">Description Line 2 (35 characters max)</h4>
+                    <div className="flex items-center justify-between bg-gray-50 p-2 rounded mb-2">
+                      <div className="flex-1">
+                        <span className="text-sm">{generatedContent.discoveryAdContent.descriptionLine2}</span>
+                        <span className="text-xs text-gray-500 ml-2">({generatedContent.discoveryAdContent.descriptionLine2.length}/35)</span>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => copyToClipboard(generatedContent.discoveryAdContent?.descriptionLine2 || '', 'discovery-desc2')}
+                      >
+                        {copiedField === 'discovery-desc2' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                      </Button>
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-medium mb-2">Thumbnail Specifications</h4>
+                    <div className="flex items-center justify-between bg-gray-50 p-2 rounded">
+                      <div className="flex-1">
+                        <pre className="text-sm whitespace-pre-wrap">{generatedContent.thumbnailSpecs}</pre>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => copyToClipboard(generatedContent.thumbnailSpecs || '', 'thumbnail-specs')}
+                      >
+                        {copiedField === 'thumbnail-specs' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {formData.adType === 'video-action-ads' && generatedContent.headline && (
+            <div className="space-y-6">
+              <div>
+                <h3 className="font-semibold mb-3">Video Action Ad Content</h3>
+                <div className="space-y-4">
+                  <div>
+                    <h4 className="text-sm font-medium mb-2">Headline</h4>
+                    <div className="flex items-center justify-between bg-gray-50 p-2 rounded mb-2">
+                      <div className="flex-1">
+                        <span className="text-sm">{generatedContent.headline}</span>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => copyToClipboard(generatedContent.headline || '', 'action-headline')}
+                      >
+                        {copiedField === 'action-headline' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                      </Button>
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-medium mb-2">Description (25 characters max)</h4>
+                    <div className="flex items-center justify-between bg-gray-50 p-2 rounded mb-2">
+                      <div className="flex-1">
+                        <span className="text-sm">{generatedContent.description}</span>
+                        <span className="text-xs text-gray-500 ml-2">({generatedContent.description?.length || 0}/25)</span>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => copyToClipboard(generatedContent.description || '', 'action-description')}
+                      >
+                        {copiedField === 'action-description' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                      </Button>
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-medium mb-2">Video Specifications</h4>
+                    <div className="flex items-center justify-between bg-gray-50 p-2 rounded">
+                      <div className="flex-1">
+                        <pre className="text-sm whitespace-pre-wrap">{generatedContent.videoSpecs}</pre>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => copyToClipboard(generatedContent.videoSpecs || '', 'action-specs')}
+                      >
+                        {copiedField === 'action-specs' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
     );
   };
 
@@ -423,59 +901,42 @@ Same requirements as TrueView In-Stream:
           </div>
 
           <div className="p-8 space-y-8">
-            {/* Basic Campaign Info */}
-            {renderBasicInputs()}
-
             {/* Ad Type Selection */}
-            <div className="space-y-6">
-              <h2 className="text-2xl font-bold text-gray-800 border-b-2 border-gray-200 pb-2">
-                Select Ad Type
-              </h2>
-              
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Ad Type *</label>
-                <div className="relative">
-                  <select
-                    value={formData.adType}
-                    onChange={(e) => handleInputChange('adType', e.target.value)}
-                    className="w-full p-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all appearance-none"
-                  >
-                    {adTypes.map(type => (
-                      <option key={type.value} value={type.value}>{type.label}</option>
-                    ))}
-                  </select>
-                  <ChevronDown className="absolute right-3 top-3 text-gray-400" size={20} />
-                </div>
-                {errors.adType && <p className="text-red-500 text-sm mt-1">{errors.adType}</p>}
-              </div>
-            </div>
+            {renderAdTypeSelection()}
 
-            {/* Generate Content Button */}
-            {formData.adType && formData.businessType && formData.productService && (
-              <div className="text-center">
-                <button
-                  onClick={generateContent}
-                  className="bg-gradient-to-r from-green-600 to-green-700 text-white py-4 px-8 rounded-lg font-bold text-lg hover:from-green-700 hover:to-green-800 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center gap-2 mx-auto"
-                >
-                  <Zap size={24} />
-                  Generate Content & Specifications
-                </button>
-              </div>
-            )}
+            {/* Basic Campaign Info - Only show if ad type is selected */}
+            {formData.adType && (
+              <>
+                {renderBasicInputs()}
 
-            {/* Generated Content */}
-            {renderGeneratedContent()}
+                {/* Generate Content Button */}
+                {formData.businessType && formData.productService && (
+                  <div className="text-center">
+                    <Button
+                      onClick={generateContent}
+                      className="bg-gradient-to-r from-red-600 to-red-700 text-white py-4 px-8 rounded-lg font-bold text-lg hover:from-red-700 hover:to-red-800 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center gap-2 mx-auto"
+                    >
+                      <Sparkles className="w-5 h-5" />
+                      Generate Content & Specifications
+                    </Button>
+                  </div>
+                )}
 
-            {/* Submit Button */}
-            {showGenerated && (
-              <div className="pt-6 border-t border-gray-200">
-                <button
-                  onClick={handleSubmit}
-                  className="w-full bg-gradient-to-r from-red-600 to-red-700 text-white py-4 px-8 rounded-lg font-bold text-lg hover:from-red-700 hover:to-red-800 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl"
-                >
-                  Complete Campaign Setup
-                </button>
-              </div>
+                {/* Generated Content */}
+                {renderGeneratedContent()}
+
+                {/* Submit Button */}
+                {showGenerated && (
+                  <div className="pt-6 border-t border-gray-200">
+                    <Button
+                      onClick={handleSubmit}
+                      className="w-full bg-gradient-to-r from-red-600 to-red-700 text-white py-4 px-8 rounded-lg font-bold text-lg hover:from-red-700 hover:to-red-800 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl"
+                    >
+                      Complete Campaign Setup
+                    </Button>
+                  </div>
+                )}
+              </>
             )}
           </div>
         </div>

@@ -21,7 +21,7 @@ const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
 
   const personalProducts = [
-    { name: 'LinkedIn Post Builder', href: '/product/linkedin-posts', icon: <Zap className="w-4 h-4" /> },
+    { name: 'LinkedIn Post Builder', href: '/product/personalpostgeneration', icon: <Zap className="w-4 h-4" /> },
     { name: 'Resume Enhancer', href: '/product/resume-builder', icon: <Users className="w-4 h-4" /> },
     { name: 'Career Match', href: '/product/job-matcher', icon: <TrendingUp className="w-4 h-4" /> },
     { name: 'Career Insights & Tips', href: '/product/career-analytics', icon: <Globe className="w-4 h-4" /> },
@@ -34,7 +34,7 @@ const Footer: React.FC = () => {
     { name: 'AI Customer Support', href: '/products/support' },
     { name: 'Voice Agents', href: '/products/voice-agents' },
     { name: 'Ads Copy AI', href: '/products/ads-generator' },
-    { name: 'AI Post Builder', href: '/products/linkedin-posts' },
+    { name: 'AI Post Builder', href: '/product/linkedin-posts' },
   ];
 
   const companyInfo = [
@@ -47,9 +47,6 @@ const Footer: React.FC = () => {
   const supportLinks = [
     { name: 'Learning Center', href: '/resources' },
     { name: 'Contact Support', href: '/contact' },
-    { name: 'Status Page', href: '/status' },
-    { name: 'Community Forum', href: '/community' },
-    { name: 'Feature Requests', href: '/feedback' },
   ];
 
   const legalLinks = [

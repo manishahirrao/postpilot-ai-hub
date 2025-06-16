@@ -5,6 +5,7 @@ import {
   Workflow, Zap, Shield, BarChart, Star, ArrowRight, Play, CheckCircle, 
   Users, Clock, TrendingUp, Sparkles
 } from 'lucide-react';
+import OperationsPage from '../Images/Workflowimage';
 
 const AutomationsPage = () => {
   const [activeFeature, setActiveFeature] = useState(0);
@@ -184,7 +185,7 @@ const AutomationsPage = () => {
               Trusted by 2,500+ companies worldwide
             </div>
             
-            <h1 className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-purple-600 via-pink-600 to-indigo-600 bg-clip-text text-transparent mb-6 leading-tight">
+            <h1 className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-6 leading-tight">
               Automate Every
               <br />
               <span className="text-4xl md:text-6xl">Workflow</span>
@@ -202,7 +203,7 @@ const AutomationsPage = () => {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center group"
+                className="px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600  text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center group"
               >
                 Start Free Trial
                 <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -227,7 +228,7 @@ const AutomationsPage = () => {
           >
             {stats.map((stat, index) => (
               <div key={index} className="text-center">
-                <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl mb-3">
+                <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-r from-blue-600 to-purple-600  rounded-xl mb-3">
                   <stat.icon className="w-6 h-6 text-white" />
                 </div>
                 <div className="text-3xl font-bold text-gray-900 mb-1">{stat.value}</div>
@@ -249,7 +250,7 @@ const AutomationsPage = () => {
           >
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
               Everything You Need to
-              <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent"> Automate</span>
+              <span className="bg-gradient-to-r from-blue-600 to-purple-600  bg-clip-text text-transparent"> Automate</span>
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Build sophisticated workflows without writing a single line of code. Our platform handles the complexity so you can focus on results.
@@ -309,17 +310,7 @@ const AutomationsPage = () => {
             </p>
           </motion.div>
 
-          <div className="bg-gray-50 rounded-2xl p-8">
-            <div className="bg-white rounded-xl p-8 min-h-96 flex items-center justify-center">
-              <div className="text-center">
-                <div className="w-16 h-16 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Workflow className="w-8 h-8 text-white" />
-                </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">Visual Workflow Builder</h3>
-                <p className="text-gray-600">Drag, drop, and connect your favorite tools with our intuitive interface</p>
-              </div>
-            </div>
-          </div>
+        <OperationsPage/>
         </div>
       </section>
 
@@ -453,7 +444,7 @@ const AutomationsPage = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-4 bg-gradient-to-br from-purple-900 via-purple-800 to-indigo-900 relative overflow-hidden">
+      <section className="py-20 px-4 bg-gradient-to-r from-blue-600 to-purple-600  relative overflow-hidden">
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-pink-600/20"></div>
         </div>
