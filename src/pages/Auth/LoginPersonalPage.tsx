@@ -74,26 +74,55 @@ const LoginPersonalPage: React.FC = () => {
     setLocalError(null);
     
     try {
-      // Use the login function from AuthContext
-      await login(email.trim(), password, 'personal');
-      // Navigation is handled in the AuthContext after successful login
+      const success = await login(email.trim(), password, 'personal');
+      if (success) {
+        // Navigate to personal dashboard after successful login
+        navigate('/dashboard/personal');
+      }
     } catch (error: any) {
-      setLocalError(error.message || 'Login failed. Please check your credentials and try again.');
+      const errorMessage = error.message || 'Login failed. Please check your credentials and try again.';
+      setLocalError(errorMessage);
+      toast.error('Login Failed', {
+        description: errorMessage,
+        duration: 5000,
+      });
     } finally {
       setLoading(false);
     }
   };
 
-  const handleLinkedInLogin = () => {
-    // Simulate LinkedIn OAuth for personal account
-    login('demo-linkedin-personal-token', 'password', 'personal');
-    navigate('/dashboard/personal');
+  const handleLinkedInLogin = async () => {
+    try {
+      setLoading(true);
+      const success = await login('demo-linkedin-personal-token', 'password', 'personal');
+      if (success) {
+        navigate('/dashboard/personal');
+      }
+    } catch (error: any) {
+      toast.error('LinkedIn Login Failed', {
+        description: error.message || 'Failed to login with LinkedIn',
+        duration: 5000,
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleGoogleLogin = () => {
-    // Simulate Google OAuth for personal account
-    login('demo-google-personal-token', 'password', 'personal');
-    navigate('/dashboard/personal');
+  const handleGoogleLogin = async () => {
+    try {
+      setLoading(true);
+      const success = await login('demo-google-personal-token', 'password', 'personal');
+      if (success) {
+        navigate('/dashboard/personal');
+      }
+    } catch (error: any) {
+      toast.error('Google Login Failed', {
+        description: error.message || 'Failed to login with Google',
+        duration: 5000,
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
