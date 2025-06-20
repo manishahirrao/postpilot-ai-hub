@@ -25,6 +25,7 @@ import AdsGeneratorPage from "./pages/Product/AdsGeneratorPage";
 import PersonalPostGeneration from "./pages/Product/PersonalPostGeneration";
 import SupportPage from "./pages/Product/SupportPage";
 import ProductSupportPage from "./pages/Product/SupportPage";
+import LinkedInPostGenerator from "./pages/Dashboard/LinkedInPostGenerator";
 
 // Solutions Pages
 import WhyUsPage from "./pages/Solutions/WhyUsPage";
@@ -41,17 +42,14 @@ import ContactPage from "./pages/ContactPage";
 import ContactSalesPage from "./pages/ContactSalesPage";
 
 // Auth Pages
-import LoginPage from "./pages/Auth/LoginPage";
 import LoginPersonalPage from "./pages/Auth/LoginPersonalPage";
 import LoginCompanyPage from "./pages/Auth/LoginCompanyPage";
-import RegisterPage from "./pages/Auth/RegisterPage";
-import RegisterPersonalPage from "./pages/Auth/LoginPersonalPage";
-import RegisterCompanyPage from "./pages/Auth/LoginCompanyPage";
-import CompanyRegistrationForm from "./pages/Auth/CompanyRegisterPage";
-import Login from './pages/Auth/Login';
-import Register from './pages/Auth/Register';
+import PersonalRegisterPage from "./pages/Auth/PersonalRegisterPage";
+import CompanyRegisterPage from "./pages/Auth/CompanyRegisterPage";
+import PasswordResetPage from "./pages/Auth/PasswordResetPage";
+import UpdatePasswordPage from "./pages/Auth/UpdatePasswordPage";
+import VerifyEmailPage from './pages/Auth/VerifyEmailPage';
 import ForgotPassword from './pages/Auth/ForgotPassword';
-import ResetPassword from './pages/Auth/ResetPassword';
 
 // Dashboard Pages
 import DashboardPage from "./pages/Dashboard/DashboardPage";
@@ -86,20 +84,21 @@ const App = () => (
     <TooltipProvider>
       <BrowserRouter>
       <AuthProvider>
-        <Toaster />
-        <Sonner />
-          <Layout>
+        <Sonner position="top-center" richColors />
+        <Layout>
             <Routes>
               {/* Main Landing Page - Default Route */}
               <Route path="/" element={<CombinedHome />} />
 
-              {/* Auth Routes */}
-              <Route path="/auth/login/personal" element={<LoginPersonalPage />} />
-              <Route path="/auth/login/company" element={<LoginCompanyPage />} />
-              <Route path="/auth/register/personal" element={<RegisterPersonalPage />} />
-              <Route path="/auth/register/company" element={<RegisterCompanyPage />} />
-              <Route path="/auth/forgot-password" element={<ForgotPassword />} />
-              <Route path="/auth/reset-password" element={<ResetPassword />} />
+               {/* Auth Routes */}
+               <Route path="/auth/login/personal" element={<LoginPersonalPage />} />
+               <Route path="/auth/login/company" element={<LoginCompanyPage />} />
+               <Route path="/auth/register/personal" element={<PersonalRegisterPage />} />
+               <Route path="/auth/register/company" element={<CompanyRegisterPage />} />
+               <Route path="/auth/forgot-password" element={<ForgotPassword />} />
+               <Route path="/auth/verify-email" element={<VerifyEmailPage />} />
+               <Route path="/auth/reset-password" element={<PasswordResetPage />} />
+               <Route path="/auth/update-password" element={<UpdatePasswordPage />} />
 
               {/* Protected Dashboard Routes */}
               <Route

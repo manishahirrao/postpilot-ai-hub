@@ -7,7 +7,14 @@ export default defineConfig(({ mode }) => ({
   base: './', // ✅ important for Vercel/static hosting
   server: {
     host: "::",
-    port: 8080,
+    port: 3000,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:5000',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, '')
+      }
+    }
   },
   plugins: [
     react(),

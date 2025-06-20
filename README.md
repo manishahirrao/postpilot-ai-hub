@@ -1,73 +1,89 @@
-# Welcome to your Lovable project
+# PostPilot AI Hub
 
-## Project info
+A production-ready AI-powered social media management platform.
 
-**URL**: https://lovable.dev/projects/b3a439dc-a692-437a-8d7a-b48fa0228707
+## 🚀 Tech Stack
+- Next.js 14 (App Router, TypeScript)
+- Supabase (Database + Auth + Storage)
+- OpenAI / Anthropic integration
+- Stripe for payments
+- Social media APIs (Twitter, Facebook, Instagram, LinkedIn)
+- Tailwind CSS, shadcn/ui, Radix UI
+- Vercel deployment
 
-## How can I edit this code?
+## 📦 Setup
 
-There are several ways of editing your application.
+1. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+2. **Configure environment variables:**
+   Copy `.env.local.example` to `.env.local` and fill in your secrets.
+3. **Run the development server:**
+   ```bash
+   npm run dev
+   ```
 
-**Use Lovable**
+## 📁 Project Structure
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/b3a439dc-a692-437a-8d7a-b48fa0228707) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+```
+src/
+├── app/
+│   ├── (auth)/
+│   │   ├── login/
+│   │   └── signup/
+│   ├── (dashboard)/
+│   │   ├── dashboard/
+│   │   ├── content/
+│   │   ├── schedule/
+│   │   ├── analytics/
+│   │   └── settings/
+│   ├── api/
+│   │   ├── auth/
+│   │   ├── posts/
+│   │   ├── ai/
+│   │   ├── social/
+│   │   ├── webhooks/
+│   │   └── cron/
+│   ├── globals.css
+│   ├── layout.tsx
+│   └── page.tsx
+├── components/
+│   ├── ui/
+│   ├── auth/
+│   ├── dashboard/
+│   ├── content/
+│   └── common/
+├── lib/
+│   ├── supabase.ts
+│   ├── database.ts
+│   ├── ai-services.ts
+│   ├── social-media.ts
+│   ├── stripe.ts
+│   ├── utils.ts
+│   └── validations.ts
+├── hooks/
+├── types/
+└── middleware.ts
 ```
 
-**Edit a file directly in GitHub**
+## 🗺️ Development Phases
+- Phase 1: Project Initialization and Core Setup
+- Phase 2: Database Schema and Authentication
+- Phase 3: Core Infrastructure
+- Phase 4: Feature Implementation
+- Phase 5: Advanced Features
+- Phase 6: API & Integrations
+- Phase 7: Testing and Deployment
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## 🛠️ Local Development
 
-**Use GitHub Codespaces**
+To work locally:
+1. Clone the repository
+2. Install dependencies
+3. Copy `.env.local.example` to `.env.local` and fill in your keys
+4. Run `npm run dev` to start the development server
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+---
 
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/b3a439dc-a692-437a-8d7a-b48fa0228707) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+See the full project spec in this file for details.

@@ -7,6 +7,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { useAuth } from '@/contexts/AuthContext';
 import { ArrowRight, Building2, Eye, EyeOff, Mail, Lock, Loader2 } from 'lucide-react';
+import { toast } from 'react-toastify';
+import { AuthService, AuthCredentials } from '@/services/authService';
 
 const LoginCompanyPage: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -16,6 +18,7 @@ const LoginCompanyPage: React.FC = () => {
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
   const { login } = useAuth();
   const navigate = useNavigate();
+  const authService = new AuthService();
 
   const validateForm = () => {
     const newErrors: { email?: string; password?: string } = {};
@@ -44,24 +47,40 @@ const LoginCompanyPage: React.FC = () => {
     setLoading(true);
     setErrors({});
     
-    // Simulate API call
-    setTimeout(() => {
-      // Set user type as company for company login
-      login('demo-company-token', 'company');
-      navigate('/dashboard/company');
+    try {
+      const credentials: AuthCredentials = {
+        email,
+        password,
+        account_type: 'company' as const
+      };
+
+      const response = await authService.login(credentials);
+
+      if (response.status === 'success' && response.data) {
+        login(response.data.token, 'company' as const, response.data.user.email);
+        navigate('/dashboard/company');
+      } else if (response.status === 'error') {
+        toast.error(response.message);
+      } else if (response.status === 'registered') {
+        navigate(response.redirect || '/auth/register/company');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      toast.error('An error occurred during login. Please try again.');
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
   };
 
   const handleLinkedInLogin = () => {
     // Simulate LinkedIn OAuth for company account
-    login('demo-linkedin-company-token', 'company');
+    login('demo-linkedin-company-token', 'demo-password', 'company');
     navigate('/dashboard/company');
   };
 
   const handleGoogleLogin = () => {
     // Simulate Google OAuth for company account
-    login('demo-google-company-token', 'company');
+    login('demo-google-company-token', 'demo-password', 'company');
     navigate('/dashboard/company');
   };
 
@@ -246,7 +265,7 @@ const LoginCompanyPage: React.FC = () => {
             <div className="text-center space-y-3 pt-4 border-t border-gray-100">
               <p className="text-sm text-gray-600">
                 Don't have a company account?{' '}
-                <Link to="/auth/company/register" className="text-indigo-600 hover:text-indigo-500 font-semibold transition-colors">
+                <Link to="/auth/register/company" className="text-indigo-600 hover:text-indigo-500 font-semibold transition-colors">
                   Sign up for free
                 </Link>
               </p>

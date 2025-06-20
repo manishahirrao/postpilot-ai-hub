@@ -1,21 +1,49 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState,useEffect } from 'react';
+import { Link, useNavigate,useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { useAuth } from '@/contexts/AuthContext';
-import { ArrowRight, User, Eye, EyeOff, Mail, Lock, Loader2, Star } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, Loader2, User, Star, ArrowRight } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
+import { toast } from 'sonner';
 
 const LoginPersonalPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [localError, setLocalError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
   const { login } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Check for registration success and show welcome message
+  useEffect(() => {
+    // Check if we were redirected from registration
+    const searchParams = new URLSearchParams(location.search);
+    const fromRegistration = location.state?.from === 'registration' || searchParams.get('from') === 'registration';
+    const registrationEmail = location.state?.email || searchParams.get('email');
+
+    if (fromRegistration) {
+      // Set the email in the form if provided
+      if (registrationEmail) {
+        setEmail(registrationEmail);
+      }
+
+      // Show success message
+      toast.success('Registration successful!', {
+        description: 'Please log in to continue with your credentials.'
+      });
+      
+      // Clear the state and URL params to prevent showing the message again on refresh
+      const cleanUrl = window.location.pathname;
+      window.history.replaceState({}, document.title, cleanUrl);
+    }
+  }, [location.state, location.search]);
 
   const validateForm = () => {
     const newErrors: { email?: string; password?: string } = {};
@@ -43,25 +71,28 @@ const LoginPersonalPage: React.FC = () => {
     
     setLoading(true);
     setErrors({});
+    setLocalError(null);
     
-    // Simulate API call
-    setTimeout(() => {
-      // Set user type as professional for personal login
-      login('demo-personal-token', 'professional');
-      navigate('/dashboard/personal');
+    try {
+      // Use the login function from AuthContext
+      await login(email.trim(), password, 'personal');
+      // Navigation is handled in the AuthContext after successful login
+    } catch (error: any) {
+      setLocalError(error.message || 'Login failed. Please check your credentials and try again.');
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
   };
 
   const handleLinkedInLogin = () => {
     // Simulate LinkedIn OAuth for personal account
-    login('demo-linkedin-personal-token', 'professional');
+    login('demo-linkedin-personal-token', 'password', 'personal');
     navigate('/dashboard/personal');
   };
 
   const handleGoogleLogin = () => {
     // Simulate Google OAuth for personal account
-    login('demo-google-personal-token', 'professional');
+    login('demo-google-personal-token', 'password', 'personal');
     navigate('/dashboard/personal');
   };
 

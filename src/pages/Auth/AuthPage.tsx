@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowRight } from 'lucide-react';
+import axios from 'axios';
 
 const AuthPage = () => {
   const navigate = useNavigate();
@@ -16,6 +17,37 @@ const AuthPage = () => {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+
+  const login = async (email: string, password: string, accountType: string = 'personal') => {
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/login/${accountType}`,
+        { email, password }
+      );
+
+      if (response.status === 200) {
+        const { user, token } = response.data;
+        localStorage.setItem('user', JSON.stringify(user));
+        localStorage.setItem('token', token);
+        return true;
+      }
+
+      return false;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 401) {
+          if (error.response?.data?.error === 'Email not confirmed') {
+            throw new Error('Email not confirmed');
+          }
+          throw new Error('Invalid credentials');
+        }
+        if (error.response?.status === 404) {
+          throw new Error('Account not found');
+        }
+      }
+      throw new Error('Login failed');
+    }
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData(prev => ({
@@ -31,7 +63,7 @@ const AuthPage = () => {
 
     try {
       const response = await fetch(
-        mode === 'login' ? '/auth/login' : '/auth/signup',
+        mode === 'login' ? 'http://localhost:5000/auth/login/personal' : 'http://localhost:5000/auth/signup',
         {
           method: 'POST',
           headers: {
