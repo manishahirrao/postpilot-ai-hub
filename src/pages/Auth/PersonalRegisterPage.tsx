@@ -1,899 +1,749 @@
-import { useState, useEffect, useRef } from "react";
-import { Eye, EyeOff, User, Mail, Lock, Briefcase, MapPin, Globe, Search, ChevronDown } from "lucide-react";
-import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
-import { AuthService, type AuthCredentials } from '@/services/authService';
+import React, { useState, ChangeEvent } from 'react';
+import { motion } from 'framer-motion';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { ArrowRight, Check, ArrowLeft, User, Briefcase, Target, Upload, FileText, X, Rocket, Heart, Users, Award } from 'lucide-react';
+import { ComplexOrbitalSystem } from '@/components/OrbitalSystem';
 
-interface FormData {
-  fullName: string;
+type FormData = {
+  name: string;
+  displayName: string;
   email: string;
   password: string;
   confirmPassword: string;
-  linkedinUrl: string;
-  profession: string;
+  role: string;
+  jobTitle: string;
+  company: string;
   industry: string;
-  experienceLevel: string;
-  location: string;
-}
+  keySkills: string[];
+  resume: File | null;
+  mainObjectives: string[];
+  postFrequency: string;
+  coreTopics: string;
+  topPerformingPost: string;
+};
 
-interface FormErrors {
-  [key: string]: string;
-}
-
-interface LocationSuggestion {
-  display_name: string;
-  lat: string;
-  lon: string;
-  place_id: number;
-}
-
-interface JobTitle {
-  title: string;
-  category: string;
-}
-
-const jobTitles: JobTitle[] = [
-  // Technology
-  { title: "Software Engineer", category: "Technology" },
-  { title: "Frontend Developer", category: "Technology" },
-  { title: "Backend Developer", category: "Technology" },
-  { title: "Full Stack Developer", category: "Technology" },
-  { title: "DevOps Engineer", category: "Technology" },
-  { title: "Data Scientist", category: "Technology" },
-  { title: "Data Analyst", category: "Technology" },
-  { title: "Machine Learning Engineer", category: "Technology" },
-  { title: "AI Engineer", category: "Technology" },
-  { title: "Mobile App Developer", category: "Technology" },
-  { title: "iOS Developer", category: "Technology" },
-  { title: "Android Developer", category: "Technology" },
-  { title: "UI/UX Designer", category: "Technology" },
-  { title: "Product Manager", category: "Technology" },
-  { title: "Technical Lead", category: "Technology" },
-  { title: "System Administrator", category: "Technology" },
-  { title: "Database Administrator", category: "Technology" },
-  { title: "Cybersecurity Specialist", category: "Technology" },
-  { title: "Cloud Architect", category: "Technology" },
-  { title: "QA Engineer", category: "Technology" },
-  
-  // Business & Management
-  { title: "Business Analyst", category: "Business" },
-  { title: "Project Manager", category: "Business" },
-  { title: "Operations Manager", category: "Business" },
-  { title: "General Manager", category: "Business" },
-  { title: "CEO", category: "Business" },
-  { title: "CTO", category: "Business" },
-  { title: "CFO", category: "Business" },
-  { title: "COO", category: "Business" },
-  { title: "Business Development Manager", category: "Business" },
-  { title: "Strategy Consultant", category: "Business" },
-  { title: "Management Consultant", category: "Business" },
-  
-  // Marketing & Sales
-  { title: "Marketing Manager", category: "Marketing" },
-  { title: "Digital Marketing Specialist", category: "Marketing" },
-  { title: "Content Marketing Manager", category: "Marketing" },
-  { title: "Social Media Manager", category: "Marketing" },
-  { title: "SEO Specialist", category: "Marketing" },
-  { title: "Brand Manager", category: "Marketing" },
-  { title: "Sales Manager", category: "Sales" },
-  { title: "Sales Representative", category: "Sales" },
-  { title: "Account Manager", category: "Sales" },
-  { title: "Business Development Representative", category: "Sales" },
-  { title: "Customer Success Manager", category: "Sales" },
-  
-  // Finance & Accounting
-  { title: "Financial Analyst", category: "Finance" },
-  { title: "Accountant", category: "Finance" },
-  { title: "Investment Banker", category: "Finance" },
-  { title: "Financial Advisor", category: "Finance" },
-  { title: "Auditor", category: "Finance" },
-  { title: "Tax Consultant", category: "Finance" },
-  { title: "Risk Analyst", category: "Finance" },
-  { title: "Credit Analyst", category: "Finance" },
-  
-  // Healthcare
-  { title: "Doctor", category: "Healthcare" },
-  { title: "Nurse", category: "Healthcare" },
-  { title: "Pharmacist", category: "Healthcare" },
-  { title: "Physical Therapist", category: "Healthcare" },
-  { title: "Medical Technician", category: "Healthcare" },
-  { title: "Healthcare Administrator", category: "Healthcare" },
-  { title: "Dentist", category: "Healthcare" },
-  { title: "Veterinarian", category: "Healthcare" },
-  
-  // Education
-  { title: "Teacher", category: "Education" },
-  { title: "Professor", category: "Education" },
-  { title: "Training Specialist", category: "Education" },
-  { title: "Academic Advisor", category: "Education" },
-  { title: "Curriculum Developer", category: "Education" },
-  { title: "Educational Consultant", category: "Education" },
-  
-  // Human Resources
-  { title: "HR Manager", category: "Human Resources" },
-  { title: "HR Generalist", category: "Human Resources" },
-  { title: "Recruiter", category: "Human Resources" },
-  { title: "Talent Acquisition Specialist", category: "Human Resources" },
-  { title: "HR Business Partner", category: "Human Resources" },
-  { title: "Compensation Analyst", category: "Human Resources" },
-  
-  // Engineering
-  { title: "Mechanical Engineer", category: "Engineering" },
-  { title: "Civil Engineer", category: "Engineering" },
-  { title: "Electrical Engineer", category: "Engineering" },
-  { title: "Chemical Engineer", category: "Engineering" },
-  { title: "Aerospace Engineer", category: "Engineering" },
-  { title: "Environmental Engineer", category: "Engineering" },
-  { title: "Industrial Engineer", category: "Engineering" },
-  
-  // Creative & Design
-  { title: "Graphic Designer", category: "Creative" },
-  { title: "Web Designer", category: "Creative" },
-  { title: "Art Director", category: "Creative" },
-  { title: "Creative Director", category: "Creative" },
-  { title: "Video Editor", category: "Creative" },
-  { title: "Photographer", category: "Creative" },
-  { title: "Copywriter", category: "Creative" },
-  { title: "Content Writer", category: "Creative" },
-  
-  // Legal
-  { title: "Lawyer", category: "Legal" },
-  { title: "Legal Counsel", category: "Legal" },
-  { title: "Paralegal", category: "Legal" },
-  { title: "Legal Assistant", category: "Legal" },
-  { title: "Compliance Officer", category: "Legal" },
-  
-  // Operations & Logistics
-  { title: "Supply Chain Manager", category: "Operations" },
-  { title: "Logistics Coordinator", category: "Operations" },
-  { title: "Warehouse Manager", category: "Operations" },
-  { title: "Operations Analyst", category: "Operations" },
-  { title: "Process Improvement Specialist", category: "Operations" },
-  
-  // Customer Service
-  { title: "Customer Service Representative", category: "Customer Service" },
-  { title: "Customer Support Specialist", category: "Customer Service" },
-  { title: "Call Center Agent", category: "Customer Service" },
-  { title: "Technical Support Specialist", category: "Customer Service" },
-  
-  // Real Estate
-  { title: "Real Estate Agent", category: "Real Estate" },
-  { title: "Property Manager", category: "Real Estate" },
-  { title: "Real Estate Analyst", category: "Real Estate" },
-  { title: "Mortgage Broker", category: "Real Estate" }
-];
-
-const industries = [
-  "Technology",
-  "Healthcare",
-  "Finance",
-  "Education",
-  "Marketing",
-  "Sales",
-  "Engineering",
-  "Design",
-  "Human Resources",
-  "Consulting",
-  "Real Estate",
-  "Manufacturing",
-  "Retail",
-  "Media & Communications",
-  "Legal",
-  "Non-profit",
-  "Government",
-  "Other"
-];
-
-const experienceLevels = [
-  "Fresher",
-  "Mid",
-  "Senior"
-];
-
-const PersonalRegisterPage: React.FC = () => {
+const PersonalRegisterPage = () => {
+  const [step, setStep] = useState(1);
   const [formData, setFormData] = useState<FormData>({
-    fullName: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    linkedinUrl: "",
-    profession: "",
-    industry: "",
-    experienceLevel: "",
-    location: ""
+    name: '',
+    displayName: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    role: '',
+    jobTitle: '',
+    company: '',
+    industry: '',
+    keySkills: [],
+    resume: null,
+    mainObjectives: [],
+    postFrequency: '',
+    coreTopics: '',
+    topPerformingPost: ''
   });
-
-  const [errors, setErrors] = useState<FormErrors>({});
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   
-  // Location autocomplete states
-  const [locationSuggestions, setLocationSuggestions] = useState<LocationSuggestion[]>([]);
-  const [showLocationSuggestions, setShowLocationSuggestions] = useState(false);
-  const [locationLoading, setLocationLoading] = useState(false);
-  
-  // Job title dropdown states
-  const [filteredJobTitles, setFilteredJobTitles] = useState<JobTitle[]>(jobTitles);
-  const [showJobTitles, setShowJobTitles] = useState(false);
-  const [jobSearchTerm, setJobSearchTerm] = useState("");
-  
-  // Refs for click outside detection
-  const locationRef = useRef<HTMLDivElement>(null);
-  const jobTitleRef = useRef<HTMLDivElement>(null);
+  const [currentSkill, setCurrentSkill] = useState('');
+  const [currentObjective, setCurrentObjective] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [resumeFileName, setResumeFileName] = useState('');
 
-  // Handle click outside to close dropdowns
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (locationRef.current && !locationRef.current.contains(event.target as Node)) {
-        setShowLocationSuggestions(false);
-      }
-      if (jobTitleRef.current && !jobTitleRef.current.contains(event.target as Node)) {
-        setShowJobTitles(false);
-      }
-    };
+  const handleInputChange = (field: keyof FormData, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  // Fetch location suggestions from OpenStreetMap Nominatim API
-  const fetchLocationSuggestions = async (query: string) => {
-    if (query.length < 3) {
-      setLocationSuggestions([]);
+  const handleResumeUpload = (e: ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || e.target.files.length === 0) {
+      return; // Exit early if no files are selected
+    }
+    
+    const file = e.target.files[0];
+    const allowedTypes = ['.pdf', '.doc', '.docx'];
+    const fileExtension = '.' + file.name.split('.').pop()?.toLowerCase();
+    
+    if (!fileExtension || !allowedTypes.includes(fileExtension)) {
+      alert('Please upload a PDF, DOC, or DOCX file');
       return;
     }
 
-    setLocationLoading(true);
-    try {
-      const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5&addressdetails=1`
-      );
-      const data = await response.json();
-      setLocationSuggestions(data);
-    } catch (error) {
-      console.error('Error fetching location suggestions:', error);
-      setLocationSuggestions([]);
-    } finally {
-      setLocationLoading(false);
+    // Check file size (5MB limit)
+    if (file.size > 5 * 1024 * 1024) {
+      alert('File size must be less than 5MB');
+      return;
+    }
+
+    setFormData(prev => ({ ...prev, resume: file }));
+    setResumeFileName(file.name);
+  };
+
+  const removeResume = () => {
+    setFormData(prev => ({ ...prev, resume: null }));
+    setResumeFileName('');
+  };
+
+  const addSkill = () => {
+    if (currentSkill.trim() && formData.keySkills.length < 5) {
+      setFormData(prev => ({
+        ...prev,
+        keySkills: [...prev.keySkills, currentSkill.trim()]
+      }));
+      setCurrentSkill('');
     }
   };
 
-  // Debounced location search
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (formData.location) {
-        fetchLocationSuggestions(formData.location);
-      }
-    }, 300);
-
-    return () => clearTimeout(timer);
-  }, [formData.location]);
-
-  // Filter job titles based on search
-  useEffect(() => {
-    if (jobSearchTerm) {
-      const filtered = jobTitles.filter(job =>
-        job.title.toLowerCase().includes(jobSearchTerm.toLowerCase()) ||
-        job.category.toLowerCase().includes(jobSearchTerm.toLowerCase())
-      );
-      setFilteredJobTitles(filtered);
-    } else {
-      setFilteredJobTitles(jobTitles);
-    }
-  }, [jobSearchTerm]);
-
-  const validateForm = () => {
-    const newErrors: FormErrors = {};
-
-    // Full Name validation
-    if (!formData.fullName.trim()) {
-      newErrors.fullName = "Full name is required";
-    } else if (formData.fullName.trim().length < 2) {
-      newErrors.fullName = "Full name must be at least 2 characters";
-    }
-
-    // Email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!formData.email) {
-      newErrors.email = "Email is required";
-    } else if (!emailRegex.test(formData.email)) {
-      newErrors.email = "Please enter a valid email address";
-    }
-
-    // Password validation
-    if (!formData.password) {
-      newErrors.password = "Password is required";
-    } else if (formData.password.length < 8) {
-      newErrors.password = "Password must be at least 8 characters";
-    }
-
-    // Confirm Password validation
-    if (!formData.confirmPassword) {
-      newErrors.confirmPassword = "Please confirm your password";
-    } else if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = "Passwords do not match";
-    }
-
-    // LinkedIn URL validation
-    const linkedinRegex = /^https:\/\/(www\.)?linkedin\.com\/in\/[a-zA-Z0-9-]+\/?$/;
-    if (!formData.linkedinUrl) {
-      newErrors.linkedinUrl = "LinkedIn profile URL is required";
-    } else if (!linkedinRegex.test(formData.linkedinUrl)) {
-      newErrors.linkedinUrl = "Please enter a valid LinkedIn profile URL";
-    }
-
-    // Profession validation
-    if (!formData.profession.trim()) {
-      newErrors.profession = "Profession/Job title is required";
-    }
-
-    // Industry validation
-    if (!formData.industry) {
-      newErrors.industry = "Please select an industry";
-    }
-
-    // Experience Level validation
-    if (!formData.experienceLevel) {
-      newErrors.experienceLevel = "Please select your experience level";
-    }
-
-    // Location validation
-    if (!formData.location.trim()) {
-      newErrors.location = "Location is required";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleLocationSelect = (location: LocationSuggestion) => {
+  const removeSkill = (index: number) => {
     setFormData(prev => ({
       ...prev,
-      location: location.display_name
+      keySkills: prev.keySkills.filter((_, i) => i !== index)
     }));
-    setShowLocationSuggestions(false);
-    
-    // Clear location error if exists
-    if (errors.location) {
-      setErrors(prev => ({
+  };
+
+  const addObjective = () => {
+    if (currentObjective.trim() && formData.mainObjectives.length < 3) {
+      setFormData(prev => ({
         ...prev,
-        location: ""
+        mainObjectives: [...prev.mainObjectives, currentObjective.trim()]
       }));
+      setCurrentObjective('');
     }
   };
 
-  const handleJobTitleSelect = (jobTitle: string) => {
+  const removeObjective = (index: number) => {
     setFormData(prev => ({
       ...prev,
-      profession: jobTitle
+      mainObjectives: prev.mainObjectives.filter((_, i) => i !== index)
     }));
-    setJobSearchTerm("");
-    setShowJobTitles(false);
-    
-    // Clear profession error if exists
-    if (errors.profession) {
-      setErrors(prev => ({
-        ...prev,
-        profession: ""
-      }));
-    }
   };
 
-  const handleLocationInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setFormData(prev => ({
-      ...prev,
-      location: value
-    }));
-    setShowLocationSuggestions(true);
-    
-    // Clear error when user starts typing
-    if (errors.location) {
-      setErrors(prev => ({
-        ...prev,
-        location: ""
-      }));
+  const validateStep = (stepNumber: number) => {
+    switch (stepNumber) {
+      case 1:
+        return formData.name && formData.email && formData.password && 
+               formData.confirmPassword && formData.role;
+      case 2:
+        return formData.jobTitle && formData.company && formData.industry && 
+               formData.keySkills.length > 0;
+      case 3:
+        return formData.mainObjectives.length > 0 && formData.postFrequency && 
+               formData.coreTopics;
+      default:
+        return false;
     }
   };
-
-  const handleJobTitleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setFormData(prev => ({
-      ...prev,
-      profession: value
-    }));
-    setJobSearchTerm(value);
-    setShowJobTitles(true);
-    
-    // Clear error when user starts typing
-    if (errors.profession) {
-      setErrors(prev => ({
-        ...prev,
-        profession: ""
-      }));
-    }
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-
-    // Clear error when user starts typing
-    if (errors[name]) {
-      setErrors(prev => ({
-        ...prev,
-        [name]: ""
-      }));
-    }
-  };
-
-  const authService = new AuthService();
-  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!validateForm()) return;
+    if (formData.password !== formData.confirmPassword) {
+      alert('Passwords do not match');
+      return;
+    }
 
-    setIsSubmitting(true);
+    if (!validateStep(3)) {
+      alert('Please fill in all required fields');
+      return;
+    }
+
+    setLoading(true);
     
-    try {
-      const response = await authService.register({
-        email: formData.email,
-        password: formData.password,
-        account_type: 'personal' as const,
-        profile: {
-          full_name: formData.fullName,
-          headline: formData.profession,
-          industry: formData.industry,
-          location: formData.location,
-          profile_picture: null,
-          linkedin_url: formData.linkedinUrl
-        }
-      });
+    // Simulate API call
+    setTimeout(() => {
+      console.log('Registration data:', formData);
+      alert('Account created successfully!');
+      setLoading(false);
+    }, 2000);
+  };
 
-      // Handle different response statuses
-      if (response.status === 'success') {
-        // Show verification email sent popup
-        toast.success(
-          <div className="flex flex-col gap-2 p-2">
-            <div className="font-bold text-lg">🎉 Registration Successful!</div>
-            <div>We've sent a verification email to <span className="font-semibold">{formData.email}</span></div>
-            <div>Please check your inbox and verify your email to continue.</div>
-            <button 
-              className="mt-2 text-blue-600 hover:text-blue-800 font-medium text-left"
-              onClick={() => {
-                // Open email client in a new tab
-                window.open('https://mail.google.com', '_blank');
-              }}
-            >
-              Open Email
-            </button>
-          </div>,
-          {
-            position: 'top-center',
-            autoClose: 10000, // Auto close after 10 seconds
-            closeOnClick: false,
-            draggable: true,
-            closeButton: true,
-            className: 'w-full max-w-md',
-          }
-        );
-        
-        // Navigate to verify email page with the email as a query parameter
-        const verifyUrl = `/auth/verify-email?email=${encodeURIComponent(formData.email)}`;
-        navigate(verifyUrl, { 
-          state: { 
-            email: formData.email,
-            from: 'registration',
-            resendEmail: formData.email
-          },
-          replace: true
-        });
-      } else if (response.status === 'error') {
-        // Show error message
-        toast.error(response.message || 'Registration failed. Please try again.');
-      } else if (response.status === 'registered') {
-        // User is already registered but not verified
-        if (response.redirect) {
-          // If there's a redirect URL (e.g., to login page with email prefilled)
-          navigate(response.redirect, { 
-            state: { 
-              email: formData.email,
-              from: 'registration',
-              message: response.message
-            },
-            replace: true
-          });
-        } else {
-          // If no redirect URL but user is registered, show message and redirect to login
-          toast.info(response.message || 'Please check your email for the verification link.');
-          navigate('/auth/login/personal', { 
-            state: { 
-              email: formData.email,
-              from: 'registration',
-              message: response.message
-            },
-            replace: true
-          });
-        }
-      } else {
-        // Fallback for any other response status
-        toast.error('An unexpected response was received. Please try again.');
-      }
-    } catch (error) {
-      console.error('Registration error:', error);
-      toast.error('An error occurred during registration. Please try again.');
-    } finally {
-      setIsSubmitting(false);
+  const handleLinkedInSignup = () => {
+    console.log('LinkedIn OAuth would start here');
+    alert('LinkedIn signup initiated!');
+  };
+
+  const nextStep = () => {
+    if (validateStep(step)) {
+      setStep(step + 1);
+    } else {
+      alert('Please fill in all required fields before continuing');
     }
   };
 
+  const prevStep = () => setStep(step - 1);
+
+  const benefits = [
+    'Generate unlimited LinkedIn posts',
+    'AI-powered resume enhancement',
+    'Smart job matching',
+    'Career analytics and insights',
+    'Priority support'
+  ];
+
+  const industryOptions = [
+    'Technology', 'Healthcare', 'Finance', 'FinTech', 'Health Tech',
+    'Education', 'Marketing', 'Sales', 'Consulting', 'Manufacturing',
+    'Retail', 'Real Estate', 'Legal', 'Non-profit', 'Government', 'Other'
+  ];
+
+  const objectiveOptions = [
+    'Build personal brand',
+    'Generate leads',
+    'Network with executives',
+    'Find new job opportunities',
+    'Establish thought leadership',
+    'Grow professional network',
+    'Share industry insights',
+    'Attract clients'
+  ];
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-2xl mx-auto">
-        <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-          {/* Header */}
-          <div className="bg-gradient-to-r from-blue-600 to-indigo-600 px-8 py-12 text-center">
-            <h1 className="text-3xl font-bold text-white mb-2">
-              Create Your Professional Account
-            </h1>
-            <p className="text-blue-100 text-lg">
-              Join our platform to enhance your career journey
-            </p>
+    <div className="min-h-screen flex flex-col hero-gradient">
+      <main className="flex-1 relative overflow-hidden">
+        {/* Animated background elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+            <ComplexOrbitalSystem className="w-96 h-96 opacity-30" />
           </div>
+          <motion.div 
+            className="absolute top-20 right-32 w-48 h-48"
+            animate={{ rotate: -360, x: [0, 30, 0, -30, 0], y: [0, -15, 0, 15, 0] }}
+            transition={{ rotate: { duration: 25, repeat: Infinity, ease: "linear" }, x: { duration: 12, repeat: Infinity, ease: "easeInOut" }, y: { duration: 8, repeat: Infinity, ease: "easeInOut" } }}
+          >
+            <ComplexOrbitalSystem className="opacity-20" />
+          </motion.div>
+          <motion.div 
+            className="absolute bottom-20 left-20 w-32 h-32"
+            animate={{ rotate: 360, scale: [1, 1.2, 1] }}
+            transition={{ rotate: { duration: 20, repeat: Infinity, ease: "linear" }, scale: { duration: 10, repeat: Infinity, ease: "easeInOut" } }}
+          >
+            <ComplexOrbitalSystem className="opacity-25" />
+          </motion.div>
+        </div>
+        
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <motion.div 
+            className="text-center mb-12"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <motion.div 
+              className="inline-flex items-center space-x-2 bg-gradient-to-r from-cyan-500/10 to-purple-500/10 rounded-full px-4 py-2 border border-cyan-500/20 mb-6"
+              whileHover={{ scale: 1.05 }}
+            >
+              <Rocket className="w-4 h-4 text-cyan-400" />
+              <span className="text-sm font-medium">Start Your Journey</span>
+            </motion.div>
+            <h1 className="text-5xl font-bold leading-tight mb-6 text-gray-900">
+              <span className="block">Join Our Community of</span>
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">Ambitious Professionals</span>
+            </h1>
+            <p className="text-xl text-gray-700 mb-8 max-w-3xl mx-auto">
+              Create your account and unlock powerful AI tools to accelerate your career growth.
+            </p>
+          </motion.div>
 
-          {/* Form */}
-          <div className="p-8 space-y-6">
-            {/* Full Name */}
-            <div>
-              <label htmlFor="fullName" className="block text-sm font-semibold text-gray-700 mb-2">
-                Full Name <span className="text-red-500">*</span>
-              </label>
-              <div className="relative">
-                <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                <input
-                  type="text"
-                  id="fullName"
-                  name="fullName"
-                  value={formData.fullName}
-                  onChange={handleInputChange}
-                  className={`w-full pl-12 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
-                    errors.fullName ? 'border-red-500' : 'border-gray-300'
-                  }`}
-                  placeholder="Enter your full name"
-                />
-              </div>
-              {errors.fullName && <p className="mt-1 text-sm text-red-500">{errors.fullName}</p>}
-            </div>
-
-            {/* Email */}
-            <div>
-              <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-2">
-                Email Address <span className="text-red-500">*</span>
-              </label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  className={`w-full pl-12 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
-                    errors.email ? 'border-red-500' : 'border-gray-300'
-                  }`}
-                  placeholder="your.email@example.com"
-                />
-              </div>
-              {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
-            </div>
-
-            {/* Password Fields */}
-            <div className="grid md:grid-cols-2 gap-6">
-              <div>
-                <label htmlFor="password" className="block text-sm font-semibold text-gray-700 mb-2">
-                  Password <span className="text-red-500">*</span>
-                </label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    id="password"
-                    name="password"
-                    value={formData.password}
-                    onChange={handleInputChange}
-                    className={`w-full pl-12 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
-                      errors.password ? 'border-red-500' : 'border-gray-300'
-                    }`}
-                    placeholder="Create a secure password"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                  >
-                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                  </button>
-                </div>
-                {errors.password && <p className="mt-1 text-sm text-red-500">{errors.password}</p>}
-              </div>
-
-              <div>
-                <label htmlFor="confirmPassword" className="block text-sm font-semibold text-gray-700 mb-2">
-                  Confirm Password <span className="text-red-500">*</span>
-                </label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                  <input
-                    type={showConfirmPassword ? "text" : "password"}
-                    id="confirmPassword"
-                    name="confirmPassword"
-                    value={formData.confirmPassword}
-                    onChange={handleInputChange}
-                    className={`w-full pl-12 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
-                      errors.confirmPassword ? 'border-red-500' : 'border-gray-300'
-                    }`}
-                    placeholder="Confirm your password"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                  >
-                    {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                  </button>
-                </div>
-                {errors.confirmPassword && <p className="mt-1 text-sm text-red-500">{errors.confirmPassword}</p>}
-              </div>
-            </div>
-
-            {/* LinkedIn Profile URL */}
-            <div>
-              <label htmlFor="linkedinUrl" className="block text-sm font-semibold text-gray-700 mb-2">
-                LinkedIn Profile URL <span className="text-red-500">*</span>
-              </label>
-              <div className="relative">
-                <Globe className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                <input
-                  type="url"
-                  id="linkedinUrl"
-                  name="linkedinUrl"
-                  value={formData.linkedinUrl}
-                  onChange={handleInputChange}
-                  className={`w-full pl-12 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
-                    errors.linkedinUrl ? 'border-red-500' : 'border-gray-300'
-                  }`}
-                  placeholder="https://www.linkedin.com/in/your-profile"
-                />
-              </div>
-              {errors.linkedinUrl && <p className="mt-1 text-sm text-red-500">{errors.linkedinUrl}</p>}
-            </div>
-
-            {/* Profession with Job Title Dropdown */}
-            <div ref={jobTitleRef}>
-              <label htmlFor="profession" className="block text-sm font-semibold text-gray-700 mb-2">
-                Profession / Job Title <span className="text-red-500">*</span>
-              </label>
-              <div className="relative">
-                <Briefcase className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 z-10" />
-                <input
-                  type="text"
-                  id="profession"
-                  name="profession"
-                  value={formData.profession}
-                  onChange={handleJobTitleInputChange}
-                  onFocus={() => setShowJobTitles(true)}
-                  className={`w-full pl-12 pr-10 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
-                    errors.profession ? 'border-red-500' : 'border-gray-300'
-                  }`}
-                  placeholder="Search for your job title..."
-                  autoComplete="off"
-                />
-                <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                
-                {/* Job Title Dropdown */}
-                {showJobTitles && (
-                  <div className="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
-                    {filteredJobTitles.length > 0 ? (
-                      <>
-                        {/* Group by category */}
-                        {Array.from(new Set(filteredJobTitles.map(job => job.category))).map(category => (
-                          <div key={category}>
-                            <div className="px-4 py-2 bg-gray-50 text-sm font-semibold text-gray-600 border-b">
-                              {category}
-                            </div>
-                            {filteredJobTitles
-                              .filter(job => job.category === category)
-                              .map((job, index) => (
-                                <button
-                                  key={`${category}-${index}`}
-                                  type="button"
-                                  onClick={() => handleJobTitleSelect(job.title)}
-                                  className="w-full text-left px-4 py-2 hover:bg-blue-50 hover:text-blue-700 transition-colors border-b border-gray-100 last:border-b-0"
-                                >
-                                  {job.title}
-                                </button>
-                              ))}
-                          </div>
-                        ))}
-                      </>
-                    ) : (
-                      <div className="px-4 py-3 text-gray-500 text-center">
-                        No job titles found. You can still type your custom job title.
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-              {errors.profession && <p className="mt-1 text-sm text-red-500">{errors.profession}</p>}
-            </div>
-
-            {/* Industry and Experience Level */}
-            <div className="grid md:grid-cols-2 gap-6">
-              <div>
-                <label htmlFor="industry" className="block text-sm font-semibold text-gray-700 mb-2">
-                  Industry <span className="text-red-500">*</span>
-                </label>
-                <select
-                  id="industry"
-                  name="industry"
-                  value={formData.industry}
-                  onChange={handleInputChange}
-                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
-                    errors.industry ? 'border-red-500' : 'border-gray-300'
-                  }`}
-                >
-                  <option value="">Select your industry</option>
-                  {industries.map((industry) => (
-                    <option key={industry} value={industry}>
-                      {industry}
-                    </option>
-                  ))}
-                </select>
-                {errors.industry && <p className="mt-1 text-sm text-red-500">{errors.industry}</p>}
-              </div>
-
-              <div>
-                <label htmlFor="experienceLevel" className="block text-sm font-semibold text-gray-700 mb-2">
-                  Experience Level <span className="text-red-500">*</span>
-                </label>
-                <select
-                  id="experienceLevel"
-                  name="experienceLevel"
-                  value={formData.experienceLevel}
-                  onChange={handleInputChange}
-                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
-                    errors.experienceLevel ? 'border-red-500' : 'border-gray-300'
-                  }`}
-                >
-                  <option value="">Select experience level</option>
-                  {experienceLevels.map((level) => (
-                    <option key={level} value={level}>
-                      {level}
-                    </option>
-                  ))}
-                </select>
-                {errors.experienceLevel && <p className="mt-1 text-sm text-red-500">{errors.experienceLevel}</p>}
-              </div>
-            </div>
-
-            {/* Location with Real-time Autocomplete */}
-            <div ref={locationRef}>
-              <label htmlFor="location" className="block text-sm font-semibold text-gray-700 mb-2">
-                Location <span className="text-red-500">*</span>
-              </label>
-              <div className="relative">
-                <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 z-10" />
-                <input
-                  type="text"
-                  id="location"
-                  name="location"
-                  value={formData.location}
-                  onChange={handleLocationInputChange}
-                  className={`w-full pl-12 pr-10 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
-                    errors.location ? 'border-red-500' : 'border-gray-300'
-                  }`}
-                  placeholder="Start typing your location..."
-                  autoComplete="off"
-                />
-                {locationLoading && (
-                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                    <svg className="animate-spin h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                  </div>
-                )}
-                
-                {/* Location Suggestions Dropdown */}
-                {showLocationSuggestions && locationSuggestions.length > 0 && (
-                  <div className="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
-                    {locationSuggestions.map((location) => (
-                      <button
-                        key={location.place_id}
-                        type="button"
-                        onClick={() => handleLocationSelect(location)}
-                        className="w-full text-left px-4 py-3 hover:bg-blue-50 hover:text-blue-700 transition-colors border-b border-gray-100 last:border-b-0"
-                      >
-                        <div className="flex items-start">
-                          <MapPin className="w-4 h-4 text-gray-400 mt-0.5 mr-2 flex-shrink-0" />
-                          <span className="text-sm">{location.display_name}</span>
-                        </div>
-                      </button>
-                    ))}
-                  </div>
-                )}
-                
-                {/* No suggestions found */}
-                {showLocationSuggestions && locationSuggestions.length === 0 && formData.location.length >= 3 && !locationLoading && (
-                  <div className="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg">
-                    <div className="px-4 py-3 text-gray-500 text-center text-sm">
-                      No locations found. Please try a different search term.
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+            {/* Left side - Form */}
+            <motion.div 
+              className="relative z-10" 
+              initial={{ opacity: 0, x: -20 }} 
+              animate={{ opacity: 1, x: 0 }} 
+              transition={{ delay: 0.2 }}
+            >
+              <Card className="border-0 shadow-xl bg-background/80 backdrop-blur-sm">
+                <CardHeader>
+                  <div className="flex items-center space-x-2 mb-4">
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center ${step >= 1 ? 'bg-indigo-600 text-white' : 'bg-gray-200'}`}>
+                      <User className="w-4 h-4" />
+                    </div>
+                    <div className={`w-8 h-1 ${step >= 2 ? 'bg-indigo-600' : 'bg-gray-200'}`}></div>
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center ${step >= 2 ? 'bg-indigo-600 text-white' : 'bg-gray-200'}`}>
+                      <Briefcase className="w-4 h-4" />
+                    </div>
+                    <div className={`w-8 h-1 ${step >= 3 ? 'bg-indigo-600' : 'bg-gray-200'}`}></div>
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center ${step >= 3 ? 'bg-indigo-600 text-white' : 'bg-gray-200'}`}>
+                      <Target className="w-4 h-4" />
                     </div>
                   </div>
-                )}
+                  <CardTitle className="text-center">
+                    {step === 1 && "Create your account"}
+                    {step === 2 && "Professional details"}
+                    {step === 3 && "Content preferences"}
+                  </CardTitle>
+                  <p className="text-center text-gray-600">
+                    Step {step} of 3 - {step === 1 ? "Basic information" : step === 2 ? "Your professional context" : "Goals and content strategy"}
+                  </p>
+                </CardHeader>
+                
+                <CardContent className="space-y-6">
+                  {step === 1 && (
+                    <>
+                      {/* LinkedIn Signup */}
+                      <Button
+                        onClick={handleLinkedInSignup}
+                        className="w-full bg-blue-600 hover:bg-blue-700"
+                        size="lg"
+                      >
+                        <div className="w-5 h-5 mr-2 bg-white rounded flex items-center justify-center">
+                          <span className="text-blue-600 font-bold text-xs">in</span>
+                        </div>
+                        Sign up with LinkedIn
+                      </Button>
+
+                      <div className="relative">
+                        <Separator />
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <span className="bg-white px-2 text-sm text-gray-500">or</span>
+                        </div>
+                      </div>
+
+                      {/* Basic Profile Form */}
+                      <div className="space-y-4">
+                        <div>
+                          <Label htmlFor="name">Full Name *</Label>
+                          <Input
+                            id="name"
+                            type="text"
+                            value={formData.name}
+                            onChange={(e) => handleInputChange('name', e.target.value)}
+                            placeholder="Enter your full name"
+                            required
+                            className="mt-1"
+                          />
+                        </div>
+
+                        <div>
+                          <Label htmlFor="displayName">Preferred Display Name *</Label>
+                          <Input
+                            id="displayName"
+                            type="text"
+                            value={formData.displayName}
+                            onChange={(e) => handleInputChange('displayName', e.target.value)}
+                            placeholder="How should we address you?"
+                            required
+                            className="mt-1"
+                          />
+                        </div>
+
+                        <div>
+                          <Label htmlFor="email">Email *</Label>
+                          <Input
+                            id="email"
+                            type="email"
+                            value={formData.email}
+                            onChange={(e) => handleInputChange('email', e.target.value)}
+                            placeholder="Enter your email"
+                            required
+                            className="mt-1"
+                          />
+                        </div>
+
+                        <div>
+                          <Label htmlFor="role">I am a *</Label>
+                          <Select value={formData.role} onValueChange={(value) => handleInputChange('role', value)} required>
+                            <SelectTrigger className="mt-1">
+                              <SelectValue placeholder="Select your role" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="professional">Working Professional</SelectItem>
+                              <SelectItem value="company">Company/Recruiter</SelectItem>
+                              <SelectItem value="guest">Job Seeker</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+
+                        <div>
+                          <Label htmlFor="password">Password *</Label>
+                          <Input
+                            id="password"
+                            type="password"
+                            value={formData.password}
+                            onChange={(e) => handleInputChange('password', e.target.value)}
+                            placeholder="Create a password"
+                            required
+                            className="mt-1"
+                          />
+                        </div>
+
+                        <div>
+                          <Label htmlFor="confirmPassword">Confirm Password *</Label>
+                          <Input
+                            id="confirmPassword"
+                            type="password"
+                            value={formData.confirmPassword}
+                            onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
+                            placeholder="Confirm your password"
+                            required
+                            className="mt-1"
+                          />
+                        </div>
+
+                        <Button
+                          onClick={nextStep}
+                          className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700"
+                          size="lg"
+                        >
+                          Continue
+                          <ArrowRight className="w-4 h-4 ml-2" />
+                        </Button>
+                      </div>
+                    </>
+                  )}
+
+                  {step === 2 && (
+                    <div className="space-y-4">
+                      <div>
+                        <Label htmlFor="jobTitle">Current Job Title *</Label>
+                        <Input
+                          id="jobTitle"
+                          type="text"
+                          value={formData.jobTitle}
+                          onChange={(e) => handleInputChange('jobTitle', e.target.value)}
+                          placeholder="e.g. Senior Product Manager"
+                          required
+                          className="mt-1"
+                        />
+                      </div>
+
+                      <div>
+                        <Label htmlFor="company">Company *</Label>
+                        <Input
+                          id="company"
+                          type="text"
+                          value={formData.company}
+                          onChange={(e) => handleInputChange('company', e.target.value)}
+                          placeholder="e.g. Google, Microsoft, Startup Inc."
+                          required
+                          className="mt-1"
+                        />
+                      </div>
+
+                      <div>
+                        <Label htmlFor="industry">Primary Industry *</Label>
+                        <Select value={formData.industry} onValueChange={(value) => handleInputChange('industry', value)} required>
+                          <SelectTrigger className="mt-1">
+                            <SelectValue placeholder="Select your industry" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {industryOptions.map(industry => (
+                              <SelectItem key={industry} value={industry.toLowerCase()}>{industry}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      <div>
+                        <Label>Key Skills or Specialties (add at least 1) *</Label>
+                        <div className="mt-1 space-y-2">
+                          <div className="flex space-x-2">
+                            <Input
+                              value={currentSkill}
+                              onChange={(e) => setCurrentSkill(e.target.value)}
+                              placeholder="e.g. Product Strategy"
+                              onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addSkill())}
+                            />
+                            <Button 
+                              type="button" 
+                              onClick={addSkill}
+                              disabled={formData.keySkills.length >= 5 || !currentSkill.trim()}
+                              size="sm"
+                            >
+                              Add
+                            </Button>
+                          </div>
+                          {formData.keySkills.length > 0 && (
+                            <div className="flex flex-wrap gap-2">
+                              {formData.keySkills.map((skill, index) => (
+                                <span
+                                  key={index}
+                                  className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800"
+                                >
+                                  {skill}
+                                  <button
+                                    type="button"
+                                    onClick={() => removeSkill(index)}
+                                    className="ml-1 text-indigo-600 hover:text-indigo-800"
+                                  >
+                                    ×
+                                  </button>
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Resume Upload */}
+                      <div>
+                        <Label htmlFor="resume">Upload Resume *</Label>
+                        <div className="mt-1">
+                          {!formData.resume ? (
+                            <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-indigo-400 transition-colors">
+                              <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                              <p className="text-sm text-gray-600 mb-2">
+                                Click to upload your resume
+                              </p>
+                              <p className="text-xs text-gray-500">
+                                PDF, DOC, DOCX (Max 5MB)
+                              </p>
+                              <input
+                                id="resume"
+                                type="file"
+                                accept=".pdf,.doc,.docx"
+                                onChange={handleResumeUpload}
+                                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                required
+                              />
+                            </div>
+                          ) : (
+                            <div className="flex items-center justify-between p-3 border border-green-200 bg-green-50 rounded-lg">
+                              <div className="flex items-center space-x-2">
+                                <FileText className="w-5 h-5 text-green-600" />
+                                <span className="text-sm font-medium text-green-800">
+                                  {resumeFileName}
+                                </span>
+                              </div>
+                              <button
+                                type="button"
+                                onClick={removeResume}
+                                className="p-1 text-green-600 hover:text-green-800"
+                              >
+                                <X className="w-4 h-4" />
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="flex space-x-2">
+                        <Button
+                          onClick={prevStep}
+                          variant="outline"
+                          className="flex-1"
+                          size="lg"
+                        >
+                          <ArrowLeft className="w-4 h-4 mr-2" />
+                          Back
+                        </Button>
+                        <Button
+                          onClick={nextStep}
+                          className="flex-1 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700"
+                          size="lg"
+                        >
+                          Continue
+                          <ArrowRight className="w-4 h-4 ml-2" />
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+
+                  {step === 3 && (
+                    <div className="space-y-4">
+                      <div>
+                        <Label>Main Objectives (select at least 1) *</Label>
+                        <div className="mt-1 space-y-2">
+                          <div className="flex space-x-2">
+                            <Select value="" onValueChange={(value) => {
+                              if (value && formData.mainObjectives.length < 3 && !formData.mainObjectives.includes(value)) {
+                                setFormData(prev => ({
+                                  ...prev,
+                                  mainObjectives: [...prev.mainObjectives, value]
+                                }));
+                              }
+                            }}>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select an objective" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {objectiveOptions.map(objective => (
+                                  <SelectItem 
+                                    key={objective} 
+                                    value={objective}
+                                    disabled={formData.mainObjectives.includes(objective)}
+                                  >
+                                    {objective}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div className="flex space-x-2">
+                            <Input
+                              value={currentObjective}
+                              onChange={(e) => setCurrentObjective(e.target.value)}
+                              placeholder="Or type a custom objective"
+                              onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addObjective())}
+                            />
+                            <Button 
+                              type="button" 
+                              onClick={addObjective}
+                              disabled={formData.mainObjectives.length >= 3 || !currentObjective.trim()}
+                              size="sm"
+                            >
+                              Add
+                            </Button>
+                          </div>
+                          {formData.mainObjectives.length > 0 && (
+                            <div className="flex flex-wrap gap-2">
+                              {formData.mainObjectives.map((objective, index) => (
+                                <span
+                                  key={index}
+                                  className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800"
+                                >
+                                  {objective}
+                                  <button
+                                    type="button"
+                                    onClick={() => removeObjective(index)}
+                                    className="ml-1 text-green-600 hover:text-green-800"
+                                  >
+                                    ×
+                                  </button>
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      <div>
+                        <Label htmlFor="postFrequency">Post Frequency Preference *</Label>
+                        <Select value={formData.postFrequency} onValueChange={(value) => handleInputChange('postFrequency', value)} required>
+                          <SelectTrigger className="mt-1">
+                            <SelectValue placeholder="Select frequency" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="daily">Daily</SelectItem>
+                            <SelectItem value="weekly">Weekly</SelectItem>
+                            <SelectItem value="bi-weekly">Bi-weekly</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      <div>
+                        <Label htmlFor="coreTopics">3-5 Core Topic Areas *</Label>
+                        <Input
+                          id="coreTopics"
+                          type="text"
+                          value={formData.coreTopics}
+                          onChange={(e) => handleInputChange('coreTopics', e.target.value)}
+                          placeholder="e.g. AI in healthcare, remote team management, product strategy"
+                          required
+                          className="mt-1"
+                        />
+                        <p className="text-xs text-gray-500 mt-1">Separate topics with commas</p>
+                      </div>
+
+                      <div>
+                        <Label htmlFor="topPerformingPost">Recent Top-Performing Post Link (Optional)</Label>
+                        <Input
+                          id="topPerformingPost"
+                          type="url"
+                          value={formData.topPerformingPost}
+                          onChange={(e) => handleInputChange('topPerformingPost', e.target.value)}
+                          placeholder="https://linkedin.com/posts/..."
+                          className="mt-1"
+                        />
+                        <p className="text-xs text-gray-500 mt-1">Help us understand your style</p>
+                      </div>
+
+                      <div className="flex space-x-2">
+                        <Button
+                          onClick={prevStep}
+                          variant="outline"
+                          className="flex-1"
+                          size="lg"
+                        >
+                          <ArrowLeft className="w-4 h-4 mr-2" />
+                          Back
+                        </Button>
+                        <Button
+                          onClick={handleSubmit}
+                          className="flex-1 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700"
+                          size="lg"
+                          disabled={loading}
+                        >
+                          {loading ? (
+                            'Creating account...'
+                          ) : (
+                            <>
+                              Create Account
+                              <Check className="w-4 h-4 ml-2" />
+                            </>
+                          )}
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+
+                  {step === 1 && (
+                    <div className="text-center">
+                      <p className="text-sm text-gray-600">
+                        Already have an account?{' '}
+                        <button className="text-indigo-600 hover:text-indigo-500 font-medium">
+                          Sign in
+                        </button>
+                      </p>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
+              <div className="mt-6 text-center">
+                <p className="text-xs text-gray-500">
+                  By creating an account, you agree to our{' '}
+                  <a href="#" className="text-indigo-600 hover:text-indigo-500">
+                    Terms of Service
+                  </a>{' '}
+                  and{' '}
+                  <a href="#" className="text-indigo-600 hover:text-indigo-500">
+                    Privacy Policy
+                  </a>
+                </p>
               </div>
-              {errors.location && <p className="mt-1 text-sm text-red-500">{errors.location}</p>}
-              <p className="mt-1 text-xs text-gray-500">
-                Start typing to get location suggestions from around the world
-              </p>
-            </div>
+            </motion.div>
 
-            {/* Submit Button */}
-            <button
-              type="button"
-              onClick={handleSubmit}
-              disabled={isSubmitting}
-              className={`w-full py-4 px-6 rounded-lg text-white font-semibold text-lg transition-all duration-200 ${
-                isSubmitting
-                  ? 'bg-gray-400 cursor-not-allowed'
-                  : 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 focus:ring-4 focus:ring-blue-300'
-              }`}
+            {/* Right side - Benefits */}
+            <motion.div 
+              className="relative z-10 hidden lg:block" 
+              initial={{ opacity: 0, x: 20 }} 
+              animate={{ opacity: 1, x: 0 }} 
+              transition={{ delay: 0.4 }}
             >
-              {isSubmitting ? (
-                <span className="flex items-center justify-center">
-                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
-                  Creating Account...
-                </span>
-              ) : (
-                'Create Professional Account'
-              )}
-            </button>
-
-            {/* Terms and Privacy */}
-            <p className="text-center text-sm text-gray-600">
-              By creating an account, you agree to our{' '}
-              <a href="#" className="text-blue-600 hover:text-blue-700 font-medium">
-                Terms of Service
-              </a>{' '}
-              and{' '}
-              <a href="#" className="text-blue-600 hover:text-blue-700 font-medium">
-                Privacy Policy
-              </a>
-            </p>
-
-            {/* Login Link */}
-            <div className="text-center pt-4 border-t border-gray-200">
-              <p className="text-gray-600">
-                Already have an account?{' '}
-                <a href="#" className="text-blue-600 hover:text-blue-700 font-semibold">
-                  Sign in here
-                </a>
-              </p>
-            </div>
+              <Card className="border-0 shadow-xl bg-background/80 backdrop-blur-sm h-full">
+                <CardHeader>
+                  <CardTitle className="text-2xl font-bold">Why Join Us?</CardTitle>
+                  <CardDescription>Unlock the full potential of your professional journey</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {benefits.map((benefit, index) => (
+                      <motion.div
+                        key={index}
+                        className="flex items-center space-x-3 p-4 rounded-lg bg-background/50 backdrop-blur-sm border border-border/50 hover:shadow-md transition-all"
+                        whileHover={{ x: 5 }}
+                      >
+                        <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center shadow-md">
+                          {index === 0 && <Rocket className="w-5 h-5 text-white" />}
+                          {index === 1 && <Award className="w-5 h-5 text-white" />}
+                          {index === 2 && <Users className="w-5 h-5 text-white" />}
+                          {index === 3 && <Heart className="w-5 h-5 text-white" />}
+                          {index === 4 && <Target className="w-5 h-5 text-white" />}
+                        </div>
+                        <span className="font-medium">{benefit}</span>
+                      </motion.div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
           </div>
         </div>
-      </div>
+      </main>
     </div>
   );
-}
+};
 
 export default PersonalRegisterPage;

@@ -1,323 +1,427 @@
 
-import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import * as React from 'react';
+import { motion } from 'framer-motion';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { TrendingUp, Users, Globe, Award } from 'lucide-react';
+import { TrendingUp, Users, Globe, Award, ArrowRight, Download } from 'lucide-react';
+import Navbar from '@/components/Layout/Navbar';
+import Footer from '@/components/Layout/Footer';
+import { ComplexOrbitalSystem } from '@/components/OrbitalSystem';
+
+interface Metric {
+  title: string;
+  value: string;
+  period: string;
+  description: string;
+  icon: React.ReactNode;
+}
+
+interface Milestone {
+  date: string;
+  event: string;
+  description: string;
+}
 
 const InvestorsPage: React.FC = () => {
-  const investors = [
-    {
-      name: 'Andreessen Horowitz',
-      type: 'Series A Lead',
-      logo: 'a16z',
-      amount: '$15M',
-      description: 'Leading venture capital firm focused on software and AI companies.'
-    },
-    {
-      name: 'Sequoia Capital',
-      type: 'Series A',
-      logo: 'SQA',
-      amount: '$5M',
-      description: 'Premier venture capital firm with investments in Apple, Google, and LinkedIn.'
-    },
-    {
-      name: 'Bessemer Venture Partners',
-      type: 'Seed Round',
-      logo: 'BVP',
-      amount: '$3M',
-      description: 'Early investor in LinkedIn, Shopify, and other category-defining companies.'
-    },
-    {
-      name: 'First Round Capital',
-      type: 'Seed Round',
-      logo: 'FRC',
-      amount: '$2M',
-      description: 'First investors in Uber, Square, and other transformative companies.'
-    }
-  ];
 
-  const metrics = [
+  const renderIcon = (icon: React.ReactNode, className: string) => {
+    if (React.isValidElement(icon)) {
+      return React.cloneElement(icon as React.ReactElement, { className });
+    }
+    return icon;
+  };
+
+  const metrics: Metric[] = [
     {
-      icon: <TrendingUp className="w-8 h-8 text-green-600" />,
+      title: 'Monthly Active Users',
+      value: '2.5M+',
+      period: 'As of Q2 2025',
+      description: 'Growing 15% month-over-month',
+      icon: <Users className="w-8 h-8" />,
+    },
+    {
       title: 'Revenue Growth',
-      value: '400%',
-      period: 'Year-over-year',
-      description: 'Consistent triple-digit growth across all segments'
+      value: '12x',
+      period: 'Year over Year',
+      description: 'Consistent quarter-over-quarter growth',
+      icon: <TrendingUp className="w-8 h-8" />,
     },
     {
-      icon: <Users className="w-8 h-8 text-blue-600" />,
-      title: 'User Growth',
-      value: '50,000+',
-      period: 'Active users',
-      description: 'Serving professionals across 150+ countries'
+      title: 'Global Reach',
+      value: '150+',
+      period: 'Countries',
+      description: 'Active users worldwide',
+      icon: <Globe className="w-8 h-8" />,
     },
     {
-      icon: <Globe className="w-8 h-8 text-purple-600" />,
-      title: 'Market Expansion',
-      value: '12',
-      period: 'New markets',
-      description: 'Expanded to enterprise and international markets'
-    },
-    {
-      icon: <Award className="w-8 h-8 text-orange-600" />,
-      title: 'Product Innovation',
+      title: 'Awards',
       value: '25+',
-      period: 'AI features',
-      description: 'Industry-leading AI capabilities for career advancement'
-    }
+      period: 'Industry Recognitions',
+      description: 'For innovation and impact',
+      icon: <Award className="w-8 h-8" />,
+    },
   ];
 
-  const milestones = [
+  const milestones: Milestone[] = [
     { date: 'Q1 2025', event: 'Company Founded', description: 'PostPilot incorporated with founding team' },
-    // { date: 'Q2 2023', event: 'Seed Funding', description: '$5M seed round led by First Round Capital' },
     { date: 'Q3 2025', event: 'Product Launch', description: 'Beta launch with 1,000 early users' },
     { date: 'Q4 2025', event: 'Market Validation', description: 'Achieved product-market fit metrics' },
-    // { date: 'Q1 2024', event: 'Scale Phase', description: 'Crossed 10,000 active users milestone' },
-    // { date: 'Q2 2024', event: 'Series A', description: '$20M Series A led by Andreessen Horowitz' },
-    // { date: 'Q3 2024', event: 'Enterprise Launch', description: 'Launched enterprise features and team plans' },
-    // { date: 'Q4 2024', event: 'International Expansion', description: 'Expanded to European and Asian markets' }
   ];
 
   return (
-    <div className="min-h-screen pt-16">
-      {/* Hero Section */}
-      <section className="py-20 bg-gradient-to-br from-green-50 via-white to-blue-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-            Investor
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">
-              {" "}Relations
-            </span>
-          </h1>
-          <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-            PostPilot is backed by world-class investors who share our vision of democratizing 
-            professional success through AI-powered career tools.
-          </p>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-green-700 hover:to-blue-700">
-              Download Investment Deck
-            </Button>
-            <Button size="lg" variant="outline">
-              Contact Investor Relations
-            </Button>
+    <div className="min-h-screen flex flex-col hero-gradient">
+      <Navbar />
+      <main className="flex-1 relative overflow-hidden pt-24">
+        {/* Hero Section */}
+        <section className="relative py-24">
+          <div className="absolute inset-0 overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-purple-500/5 to-blue-500/5" />
+            <ComplexOrbitalSystem className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl h-[600px] opacity-30" />
           </div>
-        </div>
-      </section>
+          
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6">
+                Investor
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 via-purple-500 to-blue-500">
+                  {" "}Relations
+                </span>
+              </h1>
+              <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
+                PostPilot is backed by world-class investors who share our vision of democratizing 
+                professional success through AI-powered career tools.
+              </p>
+              
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button 
+                  size="lg" 
+                  className="group bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 transition-all"
+                >
+                  <Download className="w-5 h-5 mr-2" />
+                  Download Investment Deck
+                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                </Button>
+                <Button 
+                  size="lg" 
+                  variant="outline"
+                  className="group"
+                >
+                  Contact Investor Relations
+                  <ArrowRight className="ml-2 h-4 w-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                </Button>
+              </div>
+            </motion.div>
+          </div>
+        </section>
 
-      {/* Key Metrics */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Key Performance Metrics
-            </h2>
-            <p className="text-xl text-gray-600">
-              Strong fundamentals driving sustainable growth
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {metrics.map((metric, index) => (
-              <Card key={index} className="text-center hover:shadow-lg transition-shadow">
-                <CardContent className="p-8">
-                  <div className="mb-4 flex justify-center">{metric.icon}</div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">{metric.title}</h3>
-                  <div className="text-3xl font-bold text-gray-900 mb-1">{metric.value}</div>
-                  <div className="text-sm text-gray-600 mb-3">{metric.period}</div>
-                  <p className="text-sm text-gray-600">{metric.description}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Investors */}
-      {/* <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Our Investors
-            </h2>
-            <p className="text-xl text-gray-600">
-              Backed by leading venture capital firms with a track record of success
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {investors.map((investor, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow">
-                <CardContent className="p-8">
-                  <div className="flex items-start space-x-6">
-                    <div className="flex-shrink-0">
-                      <div className="w-16 h-16 bg-gradient-to-br from-blue-400 to-purple-600 rounded-lg flex items-center justify-center">
-                        <span className="text-white font-bold text-sm">{investor.logo}</span>
+        {/* Key Metrics */}
+        {/* <section className="py-20 bg-background/50 relative">
+          <div className="absolute inset-0 bg-grid-slate-900/[0.04] dark:bg-grid-slate-100/[0.04]" />
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+            <motion.div 
+              className="text-center mb-16"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+            >
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+                Key Performance Metrics
+              </h2>
+              <p className="text-xl text-muted-foreground">
+                Strong fundamentals driving sustainable growth
+              </p>
+            </motion.div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {metrics.map((metric, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                >
+                  <Card className="h-full bg-background/80 backdrop-blur-sm border-border/20 hover:shadow-lg transition-all">
+                    <CardContent className="p-8 text-center">
+                      <div className={`w-16 h-16 rounded-2xl mx-auto mb-6 flex items-center justify-center ${
+                        index === 0 ? 'bg-gradient-to-br from-cyan-500 to-blue-500' :
+                        index === 1 ? 'bg-gradient-to-br from-purple-500 to-pink-500' :
+                        index === 2 ? 'bg-gradient-to-br from-green-500 to-emerald-500' :
+                        'bg-gradient-to-br from-orange-500 to-amber-500'
+                      }`}>
+                        {renderIcon(metric.icon, 'w-8 h-8 text-white')}
                       </div>
-                    </div>
-                    
-                    <div className="flex-1">
-                      <div className="flex items-center space-x-3 mb-2">
-                        <h3 className="text-xl font-bold text-gray-900">{investor.name}</h3>
-                        <Badge variant="outline">{investor.type}</Badge>
+                      <h3 className="text-lg font-semibold text-foreground mb-2">{metric.title}</h3>
+                      <div className="text-3xl font-bold bg-gradient-to-r bg-clip-text text-transparent ${
+                        index === 0 ? 'from-cyan-500 to-blue-500' :
+                        index === 1 ? 'from-purple-500 to-pink-500' :
+                        index === 2 ? 'from-green-500 to-emerald-500' :
+                        'from-orange-500 to-amber-500'
+                      } mb-1">
+                        {metric.value}
                       </div>
-                      <div className="text-2xl font-bold text-green-600 mb-3">{investor.amount}</div>
-                      <p className="text-gray-600">{investor.description}</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-          
-          <div className="text-center mt-12">
-            <div className="bg-blue-50 rounded-lg p-8 max-w-2xl mx-auto">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">Total Funding Raised</h3>
-              <div className="text-4xl font-bold text-blue-600 mb-2">$25 Million</div>
-              <p className="text-gray-600">Across seed and Series A rounds to accelerate growth and innovation</p>
-            </div>
-          </div>
-        </div>
-      </section> */}
-
-      {/* Company Milestones */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Company Milestones
-            </h2>
-            <p className="text-xl text-gray-600">
-              Key achievements on our journey to transform careers globally
-            </p>
-          </div>
-          
-          <div className="relative">
-            <div className="absolute left-1/2 transform -translate-x-0.5 w-0.5 h-full bg-blue-200"></div>
-            <div className="space-y-8">
-              {milestones.map((milestone, index) => (
-                <div key={index} className={`relative flex items-center ${
-                  index % 2 === 0 ? 'justify-start' : 'justify-end'
-                }`}>
-                  <div className={`w-5/12 ${index % 2 === 0 ? 'pr-8 text-right' : 'pl-8 text-left'}`}>
-                    <Card className="bg-gradient-to-br from-blue-50 to-green-50">
-                      <CardContent className="p-6">
-                        <div className="text-sm font-bold text-blue-600 mb-1">{milestone.date}</div>
-                        <h3 className="text-lg font-semibold text-gray-900 mb-2">{milestone.event}</h3>
-                        <p className="text-gray-600">{milestone.description}</p>
-                      </CardContent>
-                    </Card>
-                  </div>
-                  <div className="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-blue-600 rounded-full border-4 border-white"></div>
-                </div>
+                      <div className="text-sm text-muted-foreground mb-3">{metric.period}</div>
+                      <p className="text-sm text-muted-foreground">{metric.description}</p>
+                    </CardContent>
+                  </Card>
+                </motion.div>
               ))}
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Market Opportunity */}
-      <section className="py-20 bg-blue-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-                Massive Market Opportunity
+        {/* --- Section Divider --- */}
+        <div className="w-full h-12 bg-gradient-to-r from-cyan-400/10 via-purple-400/10 to-blue-400/10 flex items-center justify-center">
+          <span className="h-1 w-32 rounded-full bg-gradient-to-r from-cyan-500 via-purple-500 to-blue-500 opacity-40"></span>
+        </div>
+
+        {/* Market Opportunity */}
+        {/* <section className="py-20 bg-background/80 relative">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <motion.div
+              className="text-center mb-16"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+            >
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+                Market Opportunity
               </h2>
-              <p className="text-lg text-gray-600 mb-8">
-                The global career services market is experiencing unprecedented growth, 
-                driven by digital transformation and the need for continuous reskilling.
+              <p className="text-xl text-muted-foreground">
+                Addressing a $100B+ market with significant growth potential
               </p>
-              
-              <div className="space-y-6">
-                <div>
-                  <h4 className="text-lg font-semibold text-gray-900 mb-2">Total Addressable Market</h4>
-                  <div className="text-3xl font-bold text-blue-600">$15.2B</div>
-                  <p className="text-gray-600">Global career services and professional development market</p>
-                </div>
+            </motion.div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {[
+                {
+                  title: 'Market Size',
+                  description: '$100B+ TAM in professional development and career advancement',
+                },
+                {
+                  title: 'Growth Rate',
+                  description: '20%+ CAGR expected through 2030',
+                },
+                {
+                  title: 'Target Audience',
+                  description: '500M+ professionals globally',
+                },
+              ].map((item, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                >
+                  <Card className="h-full bg-background/80 backdrop-blur-sm border-border/20 hover:shadow-lg transition-all">
+                    <CardContent className="p-6">
+                      <h3 className="text-xl font-semibold text-foreground mb-2">{item.title}</h3>
+                      <p className="text-muted-foreground">{item.description}</p>
+                    </CardContent>
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+            >
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+                Key Performance Metrics
+              </h2>
+              <p className="text-xl text-muted-foreground">
+                Strong fundamentals driving sustainable growth
+              </p>
+            </motion.div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {metrics.map((metric, index) => {
+                const gradientMap = [
+                  'from-cyan-500 to-blue-500',
+                  'from-purple-500 to-pink-500',
+                  'from-green-500 to-emerald-500',
+                  'from-orange-500 to-amber-500'
+                ];
+                const gradient = gradientMap[index % gradientMap.length];
                 
-                <div>
-                  <h4 className="text-lg font-semibold text-gray-900 mb-2">Market Growth Rate</h4>
-                  <div className="text-3xl font-bold text-green-600">18.5%</div>
-                  <p className="text-gray-600">Annual growth rate driven by AI adoption and remote work trends</p>
-                </div>
+                return (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                  >
+                    <Card className="h-full bg-background/80 backdrop-blur-sm border-border/20 hover:shadow-lg transition-all">
+                      <CardContent className="p-8 text-center">
+                        <div className={`w-16 h-16 mx-auto mb-6 rounded-2xl flex items-center justify-center bg-gradient-to-r ${gradient}`}>
+                          {React.cloneElement(metric.icon, { className: 'w-8 h-8 text-white' })}
+                        </div>
+                        <h3 className="text-lg font-semibold text-foreground mb-2">{metric.title}</h3>
+                        <div className={`text-3xl font-bold bg-gradient-to-r ${gradient} bg-clip-text text-transparent mb-1`}>
+                          {metric.value}
+                        </div>
+                        <div className="text-sm text-muted-foreground mb-3">{metric.period}</div>
+                        <p className="text-sm text-muted-foreground">{metric.description}</p>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        {/* Market Opportunity */}
+        <section className="py-20 bg-background/80 relative">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <motion.div
+              className="text-center mb-16"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+            >
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+                Market Opportunity
+              </h2>
+              <p className="text-xl text-muted-foreground">
+                Addressing a $100B+ market with significant growth potential
+              </p>
+            </motion.div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {[
+                {
+                  title: 'Market Size',
+                  description: '$100B+ TAM in professional development and career advancement',
+                },
+                {
+                  title: 'Growth Rate',
+                  description: '20%+ CAGR expected through 2030',
+                },
+                {
+                  title: 'Target Audience',
+                  description: '500M+ professionals globally',
+                },
+              ].map((item, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                >
+                  <Card className="h-full bg-background/80 backdrop-blur-sm border-border/20 hover:shadow-lg transition-all">
+                    <CardContent className="p-6">
+                      <h3 className="text-xl font-semibold text-foreground mb-2">{item.title}</h3>
+                      <p className="text-muted-foreground">{item.description}</p>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Company Milestones */}
+        <section className="py-20 bg-background/80 relative">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <motion.div 
+              className="text-center mb-16"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+            >
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+                Company Milestones
+              </h2>
+              <p className="text-xl text-muted-foreground">
+                Our journey of growth and innovation
+              </p>
+            </motion.div>
+            
+            <div className="relative">
+              <div className="absolute left-1/2 transform -translate-x-0.5 w-0.5 h-full bg-gradient-to-b from-cyan-500 via-purple-500 to-blue-500"></div>
+              <div className="space-y-8">
+                {milestones.map((milestone, index) => (
+                  <motion.div 
+                    key={index}
+                    className={`relative flex items-center ${
+                      index % 2 === 0 ? 'justify-start' : 'justify-end'
+                    }`}
+                    initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                  >
+                    <div className={`w-5/6 md:w-2/5 ${
+                      index % 2 === 0 ? 'pr-8 text-right' : 'pl-8 text-left'
+                    }`}>
+                      <Card className="bg-background/80 backdrop-blur-sm border-border/20 hover:shadow-lg transition-all">
+                        <CardContent className="p-6">
+                          <div className="text-sm font-semibold text-cyan-600 dark:text-cyan-400 mb-1">
+                            {milestone.date}
+                          </div>
+                          <h3 className="text-xl font-semibold text-foreground mb-2">
+                            {milestone.event}
+                          </h3>
+                          <p className="text-muted-foreground">{milestone.description}</p>
+                        </CardContent>
+                      </Card>
+                    </div>
+                    <div className="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full border-4 border-background"></div>
+                  </motion.div>
+                ))}
               </div>
             </div>
-            
-            <div className="space-y-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Key Market Drivers</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="flex items-start space-x-3">
-                      <div className="w-2 h-2 bg-blue-600 rounded-full mt-2"></div>
-                      <div>
-                        <h5 className="font-semibold text-gray-900">Digital Transformation</h5>
-                        <p className="text-gray-600 text-sm">Accelerated adoption of AI in HR and recruiting</p>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-start space-x-3">
-                      <div className="w-2 h-2 bg-green-600 rounded-full mt-2"></div>
-                      <div>
-                        <h5 className="font-semibold text-gray-900">Skills Gap Crisis</h5>
-                        <p className="text-gray-600 text-sm">Growing demand for reskilling and career transitions</p>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-start space-x-3">
-                      <div className="w-2 h-2 bg-purple-600 rounded-full mt-2"></div>
-                      <div>
-                        <h5 className="font-semibold text-gray-900">Remote Work</h5>
-                        <p className="text-gray-600 text-sm">Increased focus on professional networking and personal branding</p>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-start space-x-3">
-                      <div className="w-2 h-2 bg-orange-600 rounded-full mt-2"></div>
-                      <div>
-                        <h5 className="font-semibold text-gray-900">Generational Shift</h5>
-                        <p className="text-gray-600 text-sm">Millennials and Gen Z expect AI-powered career tools</p>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Contact Information */}
-      {/* <section className="py-20 bg-gradient-to-r from-green-600 to-blue-600">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Investor Relations Contact
-          </h2>
-          <p className="text-xl text-green-100 mb-8">
-            For investor inquiries, financial information, or partnership opportunities
-          </p>
-          
-          <div className="bg-white/10 rounded-lg p-8 max-w-md mx-auto mb-8">
-            <h3 className="text-xl font-semibold text-white mb-4">Sarah Chen</h3>
-            <p className="text-green-100 mb-2">CEO & Founder</p>
-            <p className="text-green-100 mb-4">investors@postpilot.com</p>
-            <p className="text-green-100">+1 (555) 123-INVEST</p>
+        {/* CTA Section */}
+        <section className="relative py-24 bg-gradient-to-r from-cyan-500 via-purple-500 to-blue-600 text-white">
+          <div className="absolute inset-0 opacity-10">
+            <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuLWJnIiB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgcGF0dGVyblRyYW5zZm9ybT0icm90YXRlKDQ1KSI+PHJlY3Qgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiBmaWxsPSJ3aGl0ZSIgZmlsbC1vcGFjaXR5PSIwLjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjcGF0dGVybi1iZykiLz48L3N2Zz4=')]" />
           </div>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-white text-green-600 hover:bg-gray-100">
-              Download Investor Deck
-            </Button>
-            <Button size="lg" variant="outline" className="text-white border-white hover:bg-white hover:text-green-600">
-              Schedule Meeting
-            </Button>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+            >
+              <h2 className="text-3xl md:text-4xl font-bold mb-6">
+                Join Us in Shaping the Future of Work
+              </h2>
+              <p className="text-xl mb-8 max-w-3xl mx-auto opacity-90">
+                Interested in learning more about investment opportunities? Our team would love to connect.
+              </p>
+              <div className="flex flex-col sm:flex-row justify-center gap-4">
+                <Button 
+                  size="lg" 
+                  className="group bg-white text-foreground hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl"
+                >
+                  Contact Investor Relations
+                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                </Button>
+                <Button 
+                  size="lg" 
+                  variant="outline" 
+                  className="group border-white/30 bg-white/5 text-white hover:bg-white/10 transition-all"
+                >
+                  View Our Pitch Deck
+                  <Download className="ml-2 h-4 w-4 group-hover:translate-y-0.5 transition-transform" />
+                </Button>
+              </div>
+            </motion.div>
           </div>
-        </div>
-      </section> */}
+        </section>
+      </main>
+      <Footer />
     </div>
   );
 };

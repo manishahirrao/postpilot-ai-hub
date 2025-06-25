@@ -1,10 +1,14 @@
 
-import React from 'react';
+import * as React from 'react';
+import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { MapPin, Clock, DollarSign, Users, Coffee, Laptop, Heart, TrendingUp, IndianRupee } from 'lucide-react';
+import { MapPin, Clock, DollarSign, Users, Coffee, Laptop, Heart, TrendingUp, IndianRupee, Rocket, ArrowRight } from 'lucide-react';
+import Navbar from '@/components/Layout/Navbar';
+import Footer from '@/components/Layout/Footer';
+import { ComplexOrbitalSystem } from '@/components/OrbitalSystem';
 
 const CareersPage: React.FC = () => {
   const openPositions = [
@@ -103,254 +107,339 @@ const CareersPage: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen pt-16">
-      {/* Hero Section */}
-      <section className="py-20 bg-gradient-to-br from-purple-50 via-white to-blue-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-            Build the Future of
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-blue-600">
-              {" "}Career Technology
-            </span>
-          </h1>
-          <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-            Join our mission to democratize professional success. We're looking for passionate 
-            individuals who want to make a real impact on millions of careers worldwide.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700">
-              View Open Positions
-            </Button>
-            <Button size="lg" variant="outline">
-              Learn About Our Culture
-            </Button>
+    <div className="min-h-screen flex flex-col hero-gradient">
+      <Navbar />
+      <main className="flex-1 relative overflow-hidden pt-24">
+        {/* Hero Section */}
+        <section className="relative py-24">
+          {/* Animated background elements */}
+          <div className="absolute inset-0 overflow-hidden">
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+              <ComplexOrbitalSystem className="w-96 h-96 opacity-30" />
+            </div>
+            
+            <motion.div 
+              className="absolute top-20 right-32 w-48 h-48"
+              animate={{
+                rotate: -360,
+                x: [0, 30, 0, -30, 0],
+                y: [0, -15, 0, 15, 0],
+              }}
+              transition={{
+                rotate: { duration: 25, repeat: Infinity, ease: "linear" },
+                x: { duration: 12, repeat: Infinity, ease: "easeInOut" },
+                y: { duration: 8, repeat: Infinity, ease: "easeInOut" },
+              }}
+            >
+              <ComplexOrbitalSystem className="opacity-20" />
+            </motion.div>
           </div>
-        </div>
-      </section>
+
+          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <motion.div 
+              className="text-center mb-16"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
+              <motion.div 
+                className="inline-flex items-center space-x-2 bg-gradient-to-r from-cyan-500/10 to-purple-500/10 rounded-full px-4 py-2 border border-cyan-500/20 mb-6"
+                whileHover={{ scale: 1.05 }}
+              >
+                <Rocket className="w-4 h-4 text-cyan-400" />
+                <span className="text-sm font-medium">Join Our Growing Team</span>
+              </motion.div>
+              <h1 className="text-5xl lg:text-7xl font-bold leading-tight mb-6">
+                <span className="block">Build the Future of</span>
+                <span className="block bg-gradient-to-r from-cyan-500 to-purple-600 bg-clip-text text-transparent">
+                  Career Technology
+                </span>
+                <span className="text-3xl lg:text-4xl font-normal opacity-80 mt-4 block">
+                  Join our mission to democratize professional success
+                </span>
+              </h1>
+              <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
+                We're looking for passionate individuals who want to make a real impact on millions of careers worldwide.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button 
+                  size="lg" 
+                  className="bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-600 hover:to-purple-700"
+                >
+                  View Open Positions
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+                <Button size="lg" variant="outline">
+                  Learn About Our Culture
+                </Button>
+              </div>
+            </motion.div>
+          </div>
+        </section>
 
       {/* Why Join Us */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          <motion.div 
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+          >
+            <h2 className="text-4xl font-bold text-foreground mb-4">
               Why Join PostPilot?
             </h2>
-            <p className="text-xl text-gray-600">
+            <p className="text-xl text-muted-foreground">
               More than just a job - it's an opportunity to shape the future of work
             </p>
-          </div>
+          </motion.div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {benefits.map((benefit, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow">
-                <CardContent className="p-6">
-                  <div className="mb-4">{benefit.icon}</div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">{benefit.title}</h3>
-                  <p className="text-gray-600">{benefit.description}</p>
-                </CardContent>
-              </Card>
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+              >
+                <Card className="hover:shadow-lg transition-all hover:border-primary/20 h-full">
+                  <CardContent className="p-6">
+                    <div className="mb-4">{benefit.icon}</div>
+                    <h3 className="text-lg font-semibold text-foreground mb-2">{benefit.title}</h3>
+                    <p className="text-muted-foreground">{benefit.description}</p>
+                  </CardContent>
+                </Card>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
       {/* Our Values */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-muted/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
+              <h2 className="text-4xl font-bold text-foreground mb-6">
                 Our Values Drive Everything We Do
               </h2>
-              <p className="text-lg text-gray-600 mb-8">
+              <p className="text-lg text-muted-foreground mb-8">
                 We're building more than a product - we're creating a culture where everyone 
                 can thrive and do their best work while making a meaningful impact on the world.
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {values.map((value, index) => (
-                  <div key={index} className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-purple-600 rounded-full"></div>
-                    <span className="text-gray-700">{value}</span>
-                  </div>
+                  <motion.div 
+                    key={index} 
+                    className="flex items-center space-x-2"
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.3, delay: index * 0.1 }}
+                  >
+                    <div className="w-2 h-2 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-full"></div>
+                    <span className="text-foreground">{value}</span>
+                  </motion.div>
                 ))}
               </div>
-            </div>
+            </motion.div>
             
-            <div className="relative">
-              <Card className="bg-gradient-to-br from-purple-50 to-blue-50">
+            <motion.div 
+              className="relative"
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
+              <Card className="bg-gradient-to-br from-cyan-50/50 to-purple-50/50 dark:from-cyan-900/10 dark:to-purple-900/10 border-border/20">
                 <CardContent className="p-8">
-                  <h3 className="text-xl font-bold text-gray-900 mb-4">Life at PostPilot</h3>
+                  <h3 className="text-xl font-bold text-foreground mb-6">Life at PostPilot</h3>
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <span className="text-gray-700">Team Size</span>
-                      <span className="font-medium">45 people</span>
+                      <span className="text-muted-foreground">Team Size</span>
+                      <span className="font-medium text-foreground">45 people</span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-gray-700">Average Age</span>
-                      <span className="font-medium">32 years</span>
+                      <span className="text-muted-foreground">Average Age</span>
+                      <span className="font-medium text-foreground">32 years</span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-gray-700">Remote Workers</span>
-                      <span className="font-medium">80%</span>
+                      <span className="text-muted-foreground">Remote Workers</span>
+                      <span className="font-medium text-foreground">80%</span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-gray-700">Countries</span>
-                      <span className="font-medium">12</span>
+                      <span className="text-muted-foreground">Countries</span>
+                      <span className="font-medium text-foreground">12+</span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-gray-700">Diversity</span>
-                      <span className="font-medium">60% underrepresented</span>
+                      <span className="text-muted-foreground">Diversity</span>
+                      <span className="font-medium text-foreground">52% Women</span>
                     </div>
                   </div>
                 </CardContent>
               </Card>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
 
-      {/* Open Positions */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Open Positions
-            </h2>
-            <p className="text-xl text-gray-600">
-              Find your next career opportunity with us
-            </p>
-          </div>
-          
-          <div className="space-y-6">
-            {openPositions.map((position, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow">
-                <CardContent className="p-8">
-                  <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center space-x-3 mb-2">
-                        <h3 className="text-xl font-bold text-gray-900">{position.title}</h3>
-                        <Badge variant="outline">{position.department}</Badge>
-                        <Badge variant="secondary">{position.type}</Badge>
+        {/* Open Positions */}
+        <section className="py-20 bg-background">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <motion.div 
+              className="text-center mb-16"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+            >
+              <h2 className="text-4xl font-bold text-foreground mb-4">
+                Open Positions
+              </h2>
+              <p className="text-xl text-muted-foreground">
+                Ready to join our team? Check out our current job openings.
+              </p>
+            </motion.div>
+            
+            <div className="space-y-6">
+              {openPositions.map((position, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                >
+                  <Card className="hover:shadow-lg transition-all hover:border-primary/20">
+                    <CardContent className="p-6">
+                      <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+                        <div>
+                          <h3 className="text-xl font-bold text-foreground">{position.title}</h3>
+                          <div className="flex flex-wrap items-center gap-2 mt-2">
+                            <Badge variant="outline" className="flex items-center bg-muted/50">
+                              <MapPin className="w-3 h-3 mr-1" />
+                              {position.location}
+                            </Badge>
+                            <Badge variant="outline" className="flex items-center bg-muted/50">
+                              <Clock className="w-3 h-3 mr-1" />
+                              {position.type}
+                            </Badge>
+                            <Badge variant="outline" className="flex items-center bg-muted/50">
+                              <DollarSign className="w-3 h-3 mr-1" />
+                              {position.salary}
+                            </Badge>
+                          </div>
+                          <p className="mt-2 text-muted-foreground">{position.description}</p>
+                        </div>
+                        <Button className="mt-4 md:mt-0 group" variant="outline">
+                          Apply Now
+                          <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                        </Button>
                       </div>
-                      
-                      <div className="flex items-center space-x-6 text-gray-600 mb-4">
-                        <span className="flex items-center">
-                          <MapPin className="w-4 h-4 mr-1" />
-                          {position.location}
-                        </span>
-                        <span className="flex items-center">
-                          <IndianRupee className="w-4 h-4 mr-1" />
-                          {position.salary}
-                        </span>
-                        <span className="flex items-center">
-                          <Clock className="w-4 h-4 mr-1" />
-                          Posted {position.posted}
-                        </span>
-                      </div>
-                      
-                      <p className="text-gray-700 mb-4">{position.description}</p>
-                      
-                      <div className="space-y-2">
-                        <h4 className="font-medium text-gray-900">Key Requirements:</h4>
-                        <ul className="list-disc list-inside text-gray-600 space-y-1">
-                          {position.requirements.map((req, reqIndex) => (
-                            <li key={reqIndex} className="text-sm">{req}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
-                    
-                    <div className="mt-6 lg:mt-0 lg:ml-8">
-                      <Button className="w-full lg:w-auto bg-purple-600 hover:bg-purple-700">
-                        Apply Now
-                      </Button>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
           </div>
-          
-          <div className="text-center mt-12">
-            <p className="text-gray-600 mb-4">
-              Don't see a role that fits? We're always looking for talented people.
-            </p>
-            <Button variant="outline" size="lg">
-              Send Us Your Resume
-            </Button>
-          </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Application Process */}
-      <section className="py-20 bg-purple-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Our Hiring Process
-            </h2>
-            <p className="text-xl text-gray-600">
-              Transparent, fair, and designed to find the best mutual fit
-            </p>
+        {/* Open Positions */}
+        <section className="py-20 bg-background">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <motion.div 
+              className="text-center mb-16"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+            >
+              <h2 className="text-4xl font-bold text-foreground mb-4">
+                Open Positions
+              </h2>
+              <p className="text-xl text-muted-foreground">
+                Ready to join our team? Check out our current job openings.
+              </p>
+            </motion.div>
+            
+            <div className="space-y-6">
+              {openPositions.map((position, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                >
+                  <Card className="hover:shadow-lg transition-all hover:border-primary/20">
+                    <CardContent className="p-6">
+                      <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+                        <div>
+                          <h3 className="text-xl font-bold text-foreground">{position.title}</h3>
+                          <div className="flex flex-wrap items-center gap-2 mt-2">
+                            <Badge variant="outline" className="flex items-center bg-muted/50">
+                              <MapPin className="w-3 h-3 mr-1" />
+                              {position.location}
+                            </Badge>
+                            <Badge variant="outline" className="flex items-center bg-muted/50">
+                              <Clock className="w-3 h-3 mr-1" />
+                              {position.type}
+                            </Badge>
+                            <Badge variant="outline" className="flex items-center bg-muted/50">
+                              <DollarSign className="w-3 h-3 mr-1" />
+                              {position.salary}
+                            </Badge>
+                          </div>
+                          <p className="mt-2 text-muted-foreground">{position.description}</p>
+                        </div>
+                        <Button className="mt-4 md:mt-0 group" variant="outline">
+                          Apply Now
+                          <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
           </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div className="text-center">
-              <div className="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-purple-600 font-bold text-xl">1</span>
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Application Review</h3>
-              <p className="text-gray-600">We review your application within 48 hours</p>
-            </div>
-            
-            <div className="text-center">
-              <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-blue-600 font-bold text-xl">2</span>
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Initial Screen</h3>
-              <p className="text-gray-600">30-minute call with our recruiting team</p>
-            </div>
-            
-            <div className="text-center">
-              <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-green-600 font-bold text-xl">3</span>
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Team Interviews</h3>
-              <p className="text-gray-600">Meet the team and showcase your skills</p>
-            </div>
-            
-            <div className="text-center">
-              <div className="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-orange-600 font-bold text-xl">4</span>
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Final Decision</h3>
-              <p className="text-gray-600">Reference checks and offer within 1 week</p>
-            </div>
-          </div>
-        </div>
-      </section>
+        </section>
 
-      {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-purple-600 to-blue-600">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Ready to make an impact?
-          </h2>
-          <p className="text-xl text-purple-100 mb-8">
-            Join our team and help build the future of professional success.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-white text-purple-600 hover:bg-gray-100">
-              Browse All Positions
-            </Button>
-            <Link to="/contact">
-              <Button size="lg" variant="outline" className="text-white border-white hover:bg-white hover:text-purple-600">
-                Contact Recruiting Team
+        {/* CTA Section */}
+        <section className="py-20 bg-gradient-to-r from-cyan-500/5 via-purple-500/5 to-blue-500/5">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <motion.div 
+              className="bg-background/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-border/20"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+            >
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+                Ready to Join Our Team?
+              </h2>
+              <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+                Don't see a role that fits? We're always looking for talented individuals to join our team.
+              </p>
+              <Button 
+                size="lg" 
+                className="bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-600 hover:to-purple-700"
+              >
+                Contact Us
+                <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
-            </Link>
+            </motion.div>
           </div>
-        </div>
-      </section>
+        </section>
+      </main>
+      <Footer />
     </div>
   );
 };

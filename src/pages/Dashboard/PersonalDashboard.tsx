@@ -1,5 +1,6 @@
-import React from 'react';
+import * as React from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -10,21 +11,46 @@ import {
   TrendingUp, 
   PenTool, 
   Star, 
-  Users, 
   Award,
   ArrowRight,
   Calendar,
-  Target,
-  Zap,
   ChevronRight,
-  Activity,
   BarChart3
 } from 'lucide-react';
 
-const PersonalDashboard: React.FC = () => {
-  const { user } = useAuth();
+// === PostPilot AI Hub: User Management Imports ===
+// import ProfileEditor from '@/components/ProfileEditor';
+// import PostsManager from '@/components/PostsManager';
+// import CareerTipsManager from '@/components/CareerTipsManager';
+// === End User Management Imports ===
 
-  const stats = [
+const PersonalDashboard: React.FC = () => {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+  
+  // Mock data for the dashboard
+  const mockUser = {
+    id: 'demo_user_123',
+    email: 'demo@example.com',
+    email_verified: true,
+    is_active: true,
+    profile: {
+      id: 'profile_123',
+      user_id: 'demo_user_123',
+      full_name: 'Demo User',
+      headline: 'Frontend Demo Account',
+      bio: 'This is a demo account for frontend development.',
+      subscription_plan: 'demo',
+      credits: 10,
+      max_credits: 10,
+    },
+  };
+  
+  // Use mock user if no user is logged in (for demo purposes)
+  const currentUser = user || mockUser;
+
+  // Stats data for the dashboard
+  const statsData = [
     { 
       label: 'Social Media Posts', 
       value: '12', 
@@ -34,29 +60,21 @@ const PersonalDashboard: React.FC = () => {
       color: 'bg-gradient-to-br from-blue-500 to-blue-600'
     },
     { 
-      label: 'Resume Updates', 
-      value: '3', 
-      icon: FileText,
-      change: '+1 this month',
-      changeType: 'positive',
-      color: 'bg-gradient-to-br from-green-500 to-green-600'
-    },
-    { 
       label: 'Job Matches', 
       value: '28', 
       icon: Briefcase,
-      change: '+5 new today',
+      change: '5 new',
       changeType: 'positive',
       color: 'bg-gradient-to-br from-purple-500 to-purple-600'
     },
     { 
       label: 'Career Tips', 
-      value: '15', 
-      icon: TrendingUp,
-      change: '+2 this week',
+      value: '7', 
+      icon: Star,
+      change: '2 new',
       changeType: 'positive',
-      color: 'bg-gradient-to-br from-orange-500 to-orange-600'
-    },
+      color: 'bg-gradient-to-br from-yellow-500 to-yellow-600'
+    }
   ];
 
   const services = [
@@ -152,81 +170,177 @@ const PersonalDashboard: React.FC = () => {
     }
   ];
 
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return 'Good morning';
+    if (hour < 18) return 'Good afternoon';
+    return 'Good evening';
+  };
+
+  const handleLogout = () => {
+    logout();
+    navigate('/auth/login/personal');
+  };
+
+  const quickActions = [
+    {
+      title: 'Create a New Post',
+      description: 'Craft a new LinkedIn post with AI-powered suggestions',
+      icon: PenTool,
+      href: '/Product/PersonalPostGeneration',
+      color: 'bg-blue-500',
+      badge: 'New',
+      action: () => {}
+    },
+    {
+      title: 'Update Your Resume',
+      description: 'Polish your resume with AI-powered improvements',
+      icon: FileText,
+      href: '/Product/ResumeBuilderPage',
+      color: 'bg-green-500',
+      badge: 'Updated',
+      action: () => {}
+    },
+    {
+      title: 'Discover New Job Matches',
+      description: 'Find roles that align with your skills, goals, and personality',
+      icon: Briefcase,
+      href: '/Product/JobMatcherPage',
+      color: 'bg-purple-500',
+      badge: 'Hot',
+      action: () => {}
+    },
+    {
+      title: 'Get Career Insights & Tips',
+      description: 'Stay ahead with personalized career advice and growth tips',
+      icon: TrendingUp,
+      href: '/Product/CareerAnalyticsPage',
+      color: 'bg-orange-500',
+      badge: 'New',
+      action: () => {}
+    }
+  ];
+
+
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50">
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <header className="bg-white shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+          <h1 className="text-2xl font-bold text-gray-900">PostPilot AI Hub</h1>
+          <div className="flex items-center space-x-4">
+            <div className="text-sm text-gray-600">
+              {currentUser.profile?.full_name || 'Demo User'}
+            </div>
+            <Button variant="ghost" size="sm" asChild>
+              <Link to="/dashboard/personal/settings">Settings</Link>
+            </Button>
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={handleLogout}
+              className="text-gray-700 hover:bg-gray-100"
+            >
+              Sign out
+            </Button>
+          </div>
+        </div>
+      </header>
+
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 pt-20 pb-12">
+      <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center space-x-6">
-            <div className="relative">
-              <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center border border-white/30">
-                <Users className="w-10 h-10 text-white" />
-              </div>
-              <div className="absolute -top-2 -right-2 w-6 h-6 bg-green-400 rounded-full flex items-center justify-center">
-                <div className="w-2 h-2 bg-white rounded-full"></div>
-              </div>
-            </div>
-            <div className="text-white">
-              <h1 className="text-4xl font-bold mb-2">Welcome back, {user?.name}! 👋</h1>
-              <p className="text-blue-100 text-lg">{user?.headline || 'Ready to accelerate your career journey?'}</p>
-              <div className="flex items-center space-x-4 mt-3">
-                <div className="flex items-center space-x-2">
-                  <Activity className="w-4 h-4 text-green-300" />
-                  <span className="text-sm text-blue-100">Active today</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Target className="w-4 h-4 text-yellow-300" />
-                  <span className="text-sm text-blue-100">3 goals in progress</span>
-                </div>
-              </div>
-            </div>
+          <div className="text-center">
+            <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
+              {getGreeting()}, {currentUser?.profile?.full_name || 'User'}!
+            </h1>
+            <p className="mt-3 max-w-md mx-auto text-xl text-blue-100 sm:max-w-3xl">
+              Welcome to your personal career dashboard
+            </p>
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 pb-12">
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-          {stats.map((stat, index) => (
-            <Card key={index} className="relative overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-              <div className={`absolute inset-0 ${stat.color} opacity-5`}></div>
-              <CardContent className="p-6 relative">
-                <div className="flex items-center justify-between mb-4">
-                  <div className={`w-12 h-12 ${stat.color} rounded-xl flex items-center justify-center shadow-lg`}>
-                    <stat.icon className="w-6 h-6 text-white" />
+      {/* Stats Section */}
+      <div className="bg-white py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {statsData.map((stat, index) => (
+              <Card key={index} className="overflow-hidden">
+                <CardHeader className="pb-2">
+                  <div className={`${stat.color} p-3 rounded-lg inline-block mb-2`}>
+                    <stat.icon className="h-6 w-6 text-white" />
                   </div>
-                  <div className="text-right">
-                    <p className="text-3xl font-bold text-gray-900">{stat.value}</p>
-                    <p className="text-sm text-gray-600">{stat.label}</p>
-                  </div>
+                  <CardTitle className="text-lg font-medium">
+                    {stat.label}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">{stat.value}</div>
+                  <p className={`text-sm ${
+                    stat.changeType === 'positive' ? 'text-green-600' : 'text-red-600'
+                  }`}>
+                    {stat.change}
+                  </p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Quick Actions */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {quickActions.map((action, index) => (
+            <Link
+              key={index}
+              to={action.href || '#'}
+              className="block bg-white/5 hover:bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/10 hover:border-white/20 transition-all duration-200 group"
+              onClick={action.action}
+            >
+              <div className="flex items-center space-x-3">
+                <div className={`p-2 rounded-lg ${action.color} bg-opacity-10`}>
+                  {action.icon && <action.icon className="h-6 w-6" />}
                 </div>
-                <div className="flex items-center space-x-2">
-                  <TrendingUp className="w-4 h-4 text-green-500" />
-                  <span className="text-sm text-green-600 font-medium">{stat.change}</span>
+                <div>
+                  <h3 className="font-medium text-white">{action.title}</h3>
+                  <p className="text-xs text-blue-100">{action.description}</p>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+              <div className="mt-3 flex items-center justify-between">
+                <span className="text-xs text-blue-200">{action.badge}</span>
+                <ArrowRight className="w-4 h-4 text-blue-200 group-hover:translate-x-1 transition-transform" />
+              </div>
+            </Link>
           ))}
         </div>
+      </div>
 
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 pb-12">
+        {/* Services Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Services Grid */}
           <div className="lg:col-span-2">
             <div className="flex items-center justify-between mb-8">
               <div>
-                <h2 className="text-3xl font-bold text-gray-900">Your Career Tools</h2>
-                <p className="text-gray-600 mt-1">Powered by AI to accelerate your success</p>
+                <h2 className="text-2xl font-bold text-gray-900">Your Career Tools</h2>
+                <p className="text-gray-600 mt-1">Smart tools to accelerate your career success</p>
               </div>
-              <div className="flex items-center space-x-2">
-                <Zap className="w-5 h-5 text-yellow-500" />
-                <span className="text-sm font-medium text-gray-700">AI-Powered</span>
+              <div className="flex items-center justify-between">
+                <h2 className="text-xl font-semibold">Career Tools</h2>
+                <Button variant="ghost" size="sm" className="text-blue-600 hover:text-blue-700">
+                  <ChevronRight className="h-4 w-4 mr-1" />
+                  View All
+                </Button>
               </div>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {services.map((service, index) => (
-                <Card key={index} className="group hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border-0 shadow-lg overflow-hidden">
-                  <div className={`h-2 bg-gradient-to-r ${service.gradient}`}></div>
+                <Card key={index} className="group hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border-0 shadow-lg overflow-hidden relative">
+                  <div className={`absolute inset-0 bg-gradient-to-r ${service.gradient} opacity-0 group-hover:opacity-5 transition-opacity`}></div>
+                  <div className={`h-1.5 bg-gradient-to-r ${service.gradient}`}></div>
                   <CardHeader className="pb-4">
                     <div className="flex items-start justify-between">
                       <div className="flex items-center space-x-3">
@@ -234,22 +348,28 @@ const PersonalDashboard: React.FC = () => {
                           <service.icon className="w-6 h-6 text-white" />
                         </div>
                         <div>
-                          <CardTitle className="text-lg group-hover:text-blue-600 transition-colors">
+                          <CardTitle className="text-lg font-semibold group-hover:text-blue-600 transition-colors">
                             {service.title}
                           </CardTitle>
+                          <Badge className={`mt-1 ${service.badgeColor} border-0 text-xs h-5`}>
+                            {service.badge}
+                          </Badge>
                         </div>
                       </div>
-                      <Badge className={`${service.badgeColor} border-0`}>
-                        {service.badge}
-                      </Badge>
+                      <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                        <ChevronRight className="w-4 h-4" />
+                      </Button>
                     </div>
                   </CardHeader>
                   <CardContent className="pt-0">
-                    <p className="text-gray-600 mb-6 leading-relaxed">{service.description}</p>
-                    <Button asChild className="w-full group-hover:bg-gray-900 transition-colors duration-300">
+                    <p className="text-gray-600 mb-6 leading-relaxed text-sm">{service.description}</p>
+                    <Button 
+                      asChild 
+                      className="w-full bg-gray-900 hover:bg-gray-800 transition-colors duration-300 group/button"
+                    >
                       <Link to={service.href} className="flex items-center justify-center space-x-2">
                         <span>Launch Tool</span>
-                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                        <ArrowRight className="w-4 h-4 group-hover/button:translate-x-1 transition-transform" />
                       </Link>
                     </Button>
                   </CardContent>
@@ -344,18 +464,41 @@ const PersonalDashboard: React.FC = () => {
                     </div>
                   ))}
                 </div>
-                <Button variant="outline" className="w-full mt-6 group" asChild>
-                  <Link to="/Product/CareerAnalyticsPage" className="flex items-center justify-center space-x-2">
-                    <TrendingUp className="w-4 h-4" />
-                    <span>View All Tips</span>
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </Link>
-                </Button>
               </CardContent>
             </Card>
           </div>
         </div>
       </div>
+
+      {/* === PostPilot AI Hub: User Management Section === */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 space-y-8">
+        <div className="flex justify-between items-center">
+          <h2 className="text-2xl font-bold">Your Profile & Content Management</h2>
+          <Button asChild variant="outline" className="flex items-center gap-2">
+            <Link to="/resume-enhancer">
+              Try our new Resume Enhancer
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </Button>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <Card className="hover:shadow-lg transition-shadow">
+            <CardHeader>
+              <CardTitle>Profile Editor</CardTitle>
+              <p className="text-sm text-gray-500">Update your professional profile information</p>
+            </CardHeader>
+            <CardContent>
+              <Button variant="outline" className="w-full">
+                Edit Profile
+              </Button>
+            </CardContent>
+          </Card>
+          {/* <ProfileEditor />
+          <PostsManager />
+          <CareerTipsManager /> */}
+        </div>
+      </div>
+      {/* === End User Management Section === */}
     </div>
   );
 };

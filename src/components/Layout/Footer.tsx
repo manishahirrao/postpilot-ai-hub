@@ -1,123 +1,141 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { 
-  Mail, 
-  Phone, 
-  MapPin, 
-  Twitter, 
-  Linkedin, 
-  Github, 
-  Instagram,
-  ArrowRight,
-  Zap,
-  Users,
-  TrendingUp,
-  Shield,
-  Globe,
-  Heart
-} from 'lucide-react';
+import { motion } from "framer-motion";
+import { OrbitLogo } from "../OrbitLogo";
+import { Twitter, Linkedin, Github, Mail, Phone, MapPin, Clock, Shield, Lock, Zap, Users, TrendingUp, Globe, Instagram, ArrowRight } from "lucide-react";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Link } from "react-router-dom";
 
-const Footer: React.FC = () => {
-  const currentYear = new Date().getFullYear();
+const personalProducts = [
+  { name: 'LinkedIn Post Builder', href: '/product/personalpostgeneration', icon: <Zap className="w-4 h-4" /> },
+  { name: 'Resume Enhancer', href: '/product/resume-builder', icon: <Users className="w-4 h-4" /> },
+  { name: 'Career Match', href: '/product/job-matcher', icon: <TrendingUp className="w-4 h-4" /> },
+  { name: 'Career Insights & Tips', href: '/product/career-analytics', icon: <Globe className="w-4 h-4" /> },
+];
 
-  const personalProducts = [
-    { name: 'LinkedIn Post Builder', href: '/product/personalpostgeneration', icon: <Zap className="w-4 h-4" /> },
-    { name: 'Resume Enhancer', href: '/product/resume-builder', icon: <Users className="w-4 h-4" /> },
-    { name: 'Career Match', href: '/product/job-matcher', icon: <TrendingUp className="w-4 h-4" /> },
-    { name: 'Career Insights & Tips', href: '/product/career-analytics', icon: <Globe className="w-4 h-4" /> },
-  ];
+const companyInfo = [
+  { name: 'About Us', href: '/about' },
+  { name: 'Careers', href: '/about/careers' },
+  { name: 'Management Team', href: '/about/management' },
+  { name: 'Investor Relations', href: '/about/investors' },
+];
 
-  const companyProducts = [
-    { name: 'Post a Job', href: '/product/free-job-postings' },
-    { name: 'Hire Assist', href: '/product/hiring-outsourcing' },
-    { name: 'AI Workflow', href: '/products/automations' },
-    { name: 'AI Customer Support', href: '/products/support' },
-    { name: 'Voice Agents', href: '/products/voice-agents' },
-    { name: 'Ads Copy AI', href: '/products/ads-generator' },
-    { name: 'AI Post Builder', href: '/product/linkedin-posts' },
-  ];
+const supportLinks = [
+  { name: 'Learning Center', href: '/resources' },
+  { name: 'Contact Support', href: '/contact' },
+];
 
-  const companyInfo = [
-    { name: 'About Us', href: '/about' },
-    { name: 'Careers', href: '/about/careers' },
-    { name: 'Management Team', href: '/about/management' },
-    { name: 'Investor Relations', href: '/about/investors' },
-  ];
+const legalLinks = [
+  { name: 'Terms of Service', href: '/terms' },
+  { name: 'Privacy Policy', href: '/privacy' },
+  { name: 'Cookie Policy', href: '/cookie-policy' },
+  { name: 'GDPR Compliance', href: '/gdpr' },
+  { name: 'Security', href: '/security' },
+  { name: 'Acceptable Use', href: '/acceptable-use' },
+];
 
-  const supportLinks = [
-    { name: 'Learning Center', href: '/resources' },
-    { name: 'Contact Support', href: '/contact' },
-  ];
+const socialLinks = [
+  { name: 'Twitter', href: 'https://twitter.com/postpilot', icon: <Twitter className="w-5 h-5" /> },
+  { name: 'LinkedIn', href: 'https://linkedin.com/company/postpilot', icon: <Linkedin className="w-5 h-5" /> },
+  { name: 'GitHub', href: 'https://github.com/postpilot', icon: <Github className="w-5 h-5" /> },
+  { name: 'Instagram', href: 'https://instagram.com/postpilot', icon: <Instagram className="w-5 h-5" /> },
+];
 
-  const legalLinks = [
-    { name: 'Terms of Service', href: '/terms' },
-    { name: 'Privacy Policy', href: '/privacy' },
-    { name: 'Cookie Policy', href: '/cookie-policy' },
-    { name: 'GDPR Compliance', href: '/gdpr' },
-    { name: 'Security', href: '/security' },
-    { name: 'Acceptable Use', href: '/acceptable-use' },
-  ];
+const contactInfo = [
+  { icon: Mail, text: "support@postpilot.ai", href: "mailto:support@postpilot.ai" },
+  { icon: Phone, text: "+1 (555) 123-4567", href: "tel:+15551234567" },
+  { 
+    icon: MapPin, 
+    text: "123 Startup St, San Francisco, CA 94107", 
+    href: "https://maps.google.com" 
+  },
+  { icon: Clock, text: "Mon-Fri: 9am-6pm PST", href: "#" }
+];
 
-  const socialLinks = [
-    { name: 'Twitter', href: 'https://twitter.com/postpilot', icon: <Twitter className="w-5 h-5" /> },
-    { name: 'LinkedIn', href: 'https://linkedin.com/company/postpilot', icon: <Linkedin className="w-5 h-5" /> },
-    { name: 'GitHub', href: 'https://github.com/postpilot', icon: <Github className="w-5 h-5" /> },
-    { name: 'Instagram', href: 'https://instagram.com/postpilot', icon: <Instagram className="w-5 h-5" /> },
-  ];
+const FooterLink = ({ href, children }: { href: string; children: React.ReactNode }) => (
+  <Link to={href} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+    {children}
+  </Link>
+);
+
+const FooterSection = ({ title, children }: { title: string; children: React.ReactNode }) => (
+  <div>
+    <h3 className="text-sm font-semibold mb-4">{title}</h3>
+    <ul className="space-y-3">
+      {children}
+    </ul>
+  </div>
+);
+
+export default function Footer() {
+  const [email, setEmail] = useState("");
+  const [isSubscribed, setIsSubscribed] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+    
+    setIsLoading(true);
+    try {
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      setIsSubscribed(true);
+      setEmail("");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
-    <footer className="bg-gradient-to-br from-gray-900 via-gray-800 to-indigo-900 text-white">
-      {/* Newsletter Section */}
-      <div className="border-b border-gray-700/50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-            <div>
-              <h3 className="text-2xl font-bold text-white mb-2">
-                Stay ahead of the curve
-              </h3>
-              <p className="text-gray-300 text-lg">
-                Get the latest updates on AI-powered career tools, industry insights, and exclusive features.
-              </p>
-            </div>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <div className="flex-1">
-                <input
-                  type="email"
-                  placeholder="Enter your email address"
-                  className="w-full px-4 py-3 bg-white/10 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent backdrop-blur-sm"
-                />
-              </div>
-              <button className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-6 py-3 rounded-lg font-medium transition-all duration-200 flex items-center justify-center group">
-                Subscribe
-                <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Footer Content */}
+    <footer className="bg-background border-t border-border/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8">
-          {/* Brand Section */}
-          <div className="lg:col-span-2">
-            <Link to="/" className="flex items-center mb-6">
-              <div className="text-3xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
-                PostPilot
-              </div>
-            </Link>
-            <p className="text-gray-300 mb-6 leading-relaxed">
-              Empowering professionals and businesses with AI-powered tools for career growth, 
-              content creation, and hiring solutions. Join thousands who trust PostPilot for their success.
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
+          {/* Company Info & Newsletter */}
+          <div className="lg:col-span-2 space-y-6">
+            <div className="flex items-center space-x-3">
+              <OrbitLogo size="sm" />
+              <span className="text-xl font-bold bg-gradient-to-r from-cyan-500 to-blue-600 bg-clip-text text-transparent">
+                PostPilot AI
+              </span>
+            </div>
+            
+            <p className="text-muted-foreground">
+              Empowering professionals with AI-powered tools for career growth and content creation.
             </p>
-            <div className="flex space-x-4">
+            
+            {/* Newsletter */}
+            <div className="space-y-4">
+              <h3 className="font-medium">Subscribe to our newsletter</h3>
+              {isSubscribed ? (
+                <div className="p-3 bg-green-50 text-green-800 rounded-md text-sm">
+                  Thank you for subscribing! Check your email to confirm.
+                </div>
+              ) : (
+                <form onSubmit={handleSubscribe} className="flex space-x-2">
+                  <Input
+                    type="email"
+                    placeholder="Your email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    className="flex-1"
+                  />
+                  <Button type="submit" disabled={isLoading}>
+                    {isLoading ? "Sending..." : <ArrowRight className="h-4 w-4" />}
+                  </Button>
+                </form>
+              )}
+            </div>
+
+            {/* Social Links */}
+            <div className="flex space-x-4 pt-4">
               {socialLinks.map((social) => (
                 <a
                   key={social.name}
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 bg-white/10 hover:bg-indigo-600 rounded-lg flex items-center justify-center transition-all duration-200 hover:scale-110 backdrop-blur-sm"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
                   aria-label={social.name}
                 >
                   {social.icon}
@@ -126,160 +144,110 @@ const Footer: React.FC = () => {
             </div>
           </div>
 
-          {/* Personal Products */}
+          {/* Navigation Links */}
           <div>
-            <h4 className="text-lg font-semibold text-white mb-6 flex items-center">
-              <Users className="w-5 h-5 mr-2 text-indigo-400" />
-              Personal Tools
-            </h4>
-            <ul className="space-y-3">
-              {personalProducts.map((product) => (
-                <li key={product.href}>
-                  <Link
-                    to={product.href}
-                    className="text-gray-300 hover:text-white transition-colors duration-200 flex items-center group"
-                  >
-                    <span className="text-indigo-400 mr-2 group-hover:translate-x-1 transition-transform">
-                      {product.icon}
-                    </span>
-                    {product.name}
-                  </Link>
-                </li>
+            <FooterSection title="Products">
+              {personalProducts.map((item) => (
+                <motion.li
+                  key={item.name}
+                  initial={{ opacity: 0, x: -10 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                >
+                  <FooterLink href={item.href}>
+                    <div className="flex items-center space-x-2">
+                      {item.icon}
+                      <span>{item.name}</span>
+                    </div>
+                  </FooterLink>
+                </motion.li>
               ))}
-            </ul>
+            </FooterSection>
           </div>
 
-          {/* Company Solutions */}
-          <div>
-            <h4 className="text-lg font-semibold text-white mb-6 flex items-center">
-              <TrendingUp className="w-5 h-5 mr-2 text-purple-400" />
-              Business Tools
-            </h4>
-            <ul className="space-y-3">
-              {companyProducts.map((product) => (
-                <li key={product.href}>
-                  <Link
-                    to={product.href}
-                    className="text-gray-300 hover:text-white transition-colors duration-200 hover:translate-x-1 transform inline-block"
-                  >
-                    {product.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Company */}
-          <div>
-            <h4 className="text-lg font-semibold text-white mb-6 flex items-center">
-              <Globe className="w-5 h-5 mr-2 text-green-400" />
-              Company
-            </h4>
-            <ul className="space-y-3">
+          <div className="space-y-6">
+            <FooterSection title="Company">
               {companyInfo.map((item) => (
-                <li key={item.href}>
-                  <Link
-                    to={item.href}
-                    className="text-gray-300 hover:text-white transition-colors duration-200 hover:translate-x-1 transform inline-block"
-                  >
-                    {item.name}
-                  </Link>
-                </li>
+                <motion.li
+                  key={item.name}
+                  initial={{ opacity: 0, x: -10 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                >
+                  <FooterLink href={item.href}>{item.name}</FooterLink>
+                </motion.li>
               ))}
-            </ul>
+            </FooterSection>
+
+            <FooterSection title="Support">
+              {supportLinks.map((item) => (
+                <motion.li
+                  key={item.name}
+                  initial={{ opacity: 0, x: -10 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                >
+                  <FooterLink href={item.href}>{item.name}</FooterLink>
+                </motion.li>
+              ))}
+            </FooterSection>
           </div>
 
-          {/* Support & Legal */}
-          <div>
-            <h4 className="text-lg font-semibold text-white mb-6 flex items-center">
-              <Shield className="w-5 h-5 mr-2 text-yellow-400" />
-              Support & Legal
-            </h4>
-            <ul className="space-y-3">
-              {supportLinks.slice(0, 3).map((item) => (
-                <li key={item.href}>
-                  <Link
-                    to={item.href}
-                    className="text-gray-300 hover:text-white transition-colors duration-200 hover:translate-x-1 transform inline-block"
-                  >
-                    {item.name}
-                  </Link>
-                </li>
+          <div className="space-y-6">
+            <FooterSection title="Legal">
+              {legalLinks.map((item) => (
+                <motion.li
+                  key={item.name}
+                  initial={{ opacity: 0, x: -10 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                >
+                  <FooterLink href={item.href}>{item.name}</FooterLink>
+                </motion.li>
               ))}
-              {legalLinks.slice(0, 3).map((item) => (
-                <li key={item.href}>
-                  <Link
-                    to={item.href}
-                    className="text-gray-300 hover:text-white transition-colors duration-200 hover:translate-x-1 transform inline-block"
-                  >
-                    {item.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
+            </FooterSection>
 
-        {/* Contact Information */}
-        <div className="mt-16 pt-8 border-t border-gray-700/50">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="flex items-center text-gray-300">
-              <Mail className="w-5 h-5 mr-3 text-indigo-400" />
-              <div>
-                <p className="font-medium text-white">Email Us</p>
-                <a href="mailto:hello@postpilot.com" className="hover:text-white transition-colors">
-                  hello@postpilot.com
-                </a>
-              </div>
-            </div>
-            <div className="flex items-center text-gray-300">
-              <Phone className="w-5 h-5 mr-3 text-purple-400" />
-              <div>
-                <p className="font-medium text-white">Call Us</p>
-                <a href="tel:+1-555-123-4567" className="hover:text-white transition-colors">
-                  +1 (555) 123-4567
-                </a>
-              </div>
-            </div>
-            <div className="flex items-center text-gray-300">
-              <MapPin className="w-5 h-5 mr-3 text-green-400" />
-              <div>
-                <p className="font-medium text-white">Visit Us</p>
-                <p>Delhi,India</p>
+            {/* Contact Info */}
+            <div className="space-y-3">
+              <h3 className="text-sm font-semibold">Contact Us</h3>
+              <div className="space-y-2">
+                {contactInfo.map((item, i) => (
+                  <motion.a 
+                    key={i}
+                    href={item.href}
+                    className="flex items-start space-x-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.1 }}
+                    viewport={{ once: true }}
+                  >
+                    <item.icon className="h-4 w-4 mt-0.5 flex-shrink-0" />
+                    <span>{item.text}</span>
+                  </motion.a>
+                ))}
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Bottom Bar */}
-      <div className="border-t border-gray-700/50 bg-gray-900/50 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <div className="flex items-center text-gray-400 text-sm">
-              <p>&copy; {currentYear} PostPilot. All rights reserved.</p>
-             
+        {/* Bottom Bar */}
+        <div className="border-t border-border/20 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-sm text-muted-foreground">
+            &copy; {new Date().getFullYear()} PostPilot AI. All rights reserved.
+          </p>
+          
+          <div className="flex items-center space-x-6">
+            <div className="flex items-center space-x-2 text-muted-foreground">
+              <Shield className="h-4 w-4" />
+              <span className="text-xs">GDPR Compliant</span>
             </div>
-            <div className="flex items-center space-x-6 text-sm">
-              <Link to="/privacy" className="text-gray-400 hover:text-white transition-colors">
-                Privacy
-              </Link>
-              <Link to="/terms" className="text-gray-400 hover:text-white transition-colors">
-                Terms
-              </Link>
-              <Link to="/cookie-policy" className="text-gray-400 hover:text-white transition-colors">
-                Cookies
-              </Link>
-              <div className="flex items-center text-gray-400">
-                <Globe className="w-4 h-4 mr-1" />
-                English (US)
-              </div>
+            <div className="flex items-center space-x-2 text-muted-foreground">
+              <Lock className="h-4 w-4" />
+              <span className="text-xs">Secure Payments</span>
             </div>
           </div>
         </div>
       </div>
     </footer>
   );
-};
-
-export default Footer;
+}

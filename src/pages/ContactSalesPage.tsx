@@ -1,5 +1,6 @@
 
-import React, { useState } from 'react';
+import * as React from "react";
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -81,13 +82,13 @@ const ContactSalesPage: React.FC = () => {
       {/* Hero Section */}
       <section className="py-20 bg-gradient-to-br from-blue-50 via-white to-purple-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+          <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6">
             Let's Discuss Your
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
               {" "}Business Needs
             </span>
           </h1>
-          <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+          <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
             Get a personalized demo and learn how PostPilot can transform your team's 
             LinkedIn presence and accelerate your business growth.
           </p>
@@ -259,24 +260,24 @@ const ContactSalesPage: React.FC = () => {
                 <div className="flex items-center space-x-3">
                   <Phone className="w-5 h-5 text-blue-600" />
                   <div>
-                    <p className="font-medium text-gray-900">Sales Hotline</p>
-                    <p className="text-gray-600">+1 (555) 123-SALES</p>
+                    <p className="font-medium text-foreground">Sales Hotline</p>
+                    <p className="text-muted-foreground">+1 (555) 123-SALES</p>
                   </div>
                 </div>
 
                 <div className="flex items-center space-x-3">
                   <Mail className="w-5 h-5 text-green-600" />
                   <div>
-                    <p className="font-medium text-gray-900">Email Sales</p>
-                    <p className="text-gray-600">sales@postpilot.com</p>
+                    <p className="font-medium text-foreground">Email Sales</p>
+                    <p className="text-muted-foreground">sales@postpilot.com</p>
                   </div>
                 </div>
 
                 <div className="flex items-center space-x-3">
                   <Clock className="w-5 h-5 text-purple-600" />
                   <div>
-                    <p className="font-medium text-gray-900">Business Hours</p>
-                    <p className="text-gray-600">Mon-Fri, 9 AM - 6 PM EST</p>
+                    <p className="font-medium text-foreground">Business Hours</p>
+                    <p className="text-muted-foreground">Mon-Fri, 9 AM - 6 PM EST</p>
                   </div>
                 </div>
               </CardContent>
@@ -292,32 +293,32 @@ const ContactSalesPage: React.FC = () => {
                   <div className="flex items-start space-x-3">
                     <CheckCircle className="w-5 h-5 text-green-500 mt-0.5" />
                     <div>
-                      <p className="font-medium text-gray-900">Quick Response</p>
-                      <p className="text-sm text-gray-600">A sales rep will contact you within 24 hours</p>
+                      <p className="font-medium text-foreground">Quick Response</p>
+                      <p className="text-sm text-muted-foreground">A sales rep will contact you within 24 hours</p>
                     </div>
                   </div>
 
                   <div className="flex items-start space-x-3">
                     <CheckCircle className="w-5 h-5 text-green-500 mt-0.5" />
                     <div>
-                      <p className="font-medium text-gray-900">Personalized Demo</p>
-                      <p className="text-sm text-gray-600">Tailored to your specific use case and needs</p>
+                      <p className="font-medium text-foreground">Personalized Demo</p>
+                      <p className="text-sm text-muted-foreground">Tailored to your specific use case and needs</p>
                     </div>
                   </div>
 
                   <div className="flex items-start space-x-3">
                     <CheckCircle className="w-5 h-5 text-green-500 mt-0.5" />
                     <div>
-                      <p className="font-medium text-gray-900">Custom Pricing</p>
-                      <p className="text-sm text-gray-600">Flexible plans designed for your organization</p>
+                      <p className="font-medium text-foreground">Custom Pricing</p>
+                      <p className="text-sm text-muted-foreground">Flexible plans designed for your organization</p>
                     </div>
                   </div>
 
                   <div className="flex items-start space-x-3">
                     <CheckCircle className="w-5 h-5 text-green-500 mt-0.5" />
                     <div>
-                      <p className="font-medium text-gray-900">No Pressure</p>
-                      <p className="text-sm text-gray-600">Learn about our solution at your own pace</p>
+                      <p className="font-medium text-foreground">No Pressure</p>
+                      <p className="text-sm text-muted-foreground">Learn about our solution at your own pace</p>
                     </div>
                   </div>
                 </div>
@@ -335,8 +336,8 @@ const ContactSalesPage: React.FC = () => {
                     <div key={index} className="flex items-start space-x-3">
                       {benefit.icon}
                       <div>
-                        <p className="font-medium text-gray-900">{benefit.title}</p>
-                        <p className="text-sm text-gray-600">{benefit.description}</p>
+                        <p className="font-medium text-foreground">{benefit.title}</p>
+                        <p className="text-sm text-muted-foreground">{benefit.description}</p>
                       </div>
                     </div>
                   ))}
@@ -347,8 +348,8 @@ const ContactSalesPage: React.FC = () => {
             {/* Trust Signals */}
             <Card className="bg-gradient-to-br from-blue-50 to-purple-50">
               <CardContent className="p-6 text-center">
-                <h3 className="font-semibold text-gray-900 mb-3">Trusted by 50,000+ Professionals</h3>
-                <div className="flex justify-center space-x-6 text-sm text-gray-600">
+                <h3 className="font-semibold text-foreground mb-3">Trusted by 50,000+ Professionals</h3>
+                <div className="flex justify-center space-x-6 text-sm text-muted-foreground">
                   <div>
                     <p className="font-bold text-blue-600">99.9%</p>
                     <p>Uptime</p>

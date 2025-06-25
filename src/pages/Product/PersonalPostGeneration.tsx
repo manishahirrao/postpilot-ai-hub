@@ -10,6 +10,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ArrowRight, Zap, Image, FileText, Share, CheckCircle, Sparkles, TrendingUp, Users, Clock, Target, Calendar, User, Heart, MessageCircle } from 'lucide-react';
 import { ContentGenerator } from './Postgeneration';
+import Navbar from '@/components/Layout/Navbar';
+import Footer from '@/components/Layout/Footer';
 
 const PersonalPostGeneration: React.FC = () => {
   const [jobTitle, setJobTitle] = useState('');
@@ -150,7 +152,9 @@ const PersonalPostGeneration: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen pt-16 bg-gradient-to-br from-slate-50 via-white to-purple-50">
+    <>
+      <Navbar />
+      <div className="min-h-screen pt-16 bg-gradient-to-br from-slate-50 via-white to-purple-50">
       {/* Hero Section */}
       <section className="py-24 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-purple-50 via-white to-pink-50 opacity-60"></div>
@@ -430,7 +434,9 @@ const PersonalPostGeneration: React.FC = () => {
           </div>
         </div>
       </section>
-    </div>
+      </div>
+      <Footer />
+    </>
   );
 };
 

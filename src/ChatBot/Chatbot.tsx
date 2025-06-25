@@ -1,4 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
+import * as React from "react";
+import { useState, useRef, useEffect } from 'react';
 import { MessageCircle, X, Send, User, Bot, LifeBuoy, CheckCircle, Sparkles, Zap, Clock } from 'lucide-react';
 
 interface Message {

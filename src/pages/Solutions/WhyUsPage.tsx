@@ -1,319 +1,274 @@
-
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { motion } from "framer-motion";
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { ArrowRight, Shield, Headphones, Zap, Users, Award, Lock } from 'lucide-react';
+import { 
+  ArrowRight, 
+  Zap, 
+  Clock, 
+  TrendingUp, 
+  UserCheck, 
+  CheckCircle,
+  Star
+} from 'lucide-react';
+import { ComplexOrbitalSystem } from '@/components/OrbitalSystem';
+import Navbar from '@/components/Layout/Navbar';
+import Footer from '@/components/Layout/Footer';
+import { Link } from 'react-router-dom';
+import PageSection from '@/components/Layout/PageSection';
+import Animated from '@/components/Layout/Animated';
+
+const features = [
+  {
+    icon: <Zap className="w-10 h-10 text-blue-500" />,
+    title: "AI-Powered Content",
+    description: "Generate high-quality, engaging posts in seconds using our advanced AI technology.",
+    color: "from-blue-100 to-blue-50",
+    points: [
+      "Tone Control & Style Options",
+      "Length Settings & Customization",
+      "Anecdote Integration & Personal Touch"
+    ]
+  },
+  {
+    icon: <Clock className="w-10 h-10 text-purple-500" />,
+    title: "Time-Saving",
+    description: "Cut your content creation time by 80% and focus on what matters most.",
+    color: "from-purple-100 to-purple-50",
+    points: [
+      "Quick Post Generation",
+      "Batch Scheduling",
+      "Content Calendar"
+    ]
+  },
+  {
+    icon: <TrendingUp className="w-10 h-10 text-green-500" />,
+    title: "Grow Your Network",
+    description: "Attract more connections and opportunities with optimized content.",
+    color: "from-green-100 to-green-50",
+    points: [
+      "Engagement Analytics",
+      "Follower Growth",
+      "Networking Tools"
+    ]
+  },
+  {
+    icon: <UserCheck className="w-10 h-10 text-amber-500" />,
+    title: "Personal Branding",
+    description: "Build a strong, consistent professional brand across all your content.",
+    color: "from-amber-100 to-amber-50",
+    points: [
+      "Brand Voice Consistency",
+      "Content Strategy",
+      "Profile Optimization"
+    ]
+  }
+];
+
+const stats = [
+  { number: '50,000+', label: 'Professionals Empowered' },
+  { number: '2M+', label: 'Posts Created' },
+  { number: '10x', label: 'More Engagement' },
+  { number: '4.9/5', label: 'User Rating' }
+];
+
+const testimonials = [
+  {
+    quote: "PostPilot transformed my LinkedIn presence. I went from 500 to 10,000+ followers in 6 months!",
+    author: "Sarah Johnson",
+    role: "Marketing Director",
+    avatar: "SJ"
+  },
+  {
+    quote: "The AI suggestions are incredibly accurate. I spend 80% less time creating content now.",
+    author: "Michael Chen",
+    role: "Tech Entrepreneur",
+    avatar: "MC"
+  },
+  {
+    quote: "Best investment in my professional development. The engagement on my posts has skyrocketed.",
+    author: "Priya Patel",
+    role: "Freelance Designer",
+    avatar: "PP"
+  }
+];
 
 const WhyUsPage: React.FC = () => {
-  const differentiators = [
-    {
-      icon: <Shield className="w-12 h-12 text-blue-600" />,
-      title: 'Enterprise-Grade Security & Compliance',
-      description: 'Your data is protected with bank-level encryption, SOC 2 compliance, and GDPR adherence. We never share your personal information with third parties.',
-      features: ['256-bit SSL encryption', 'SOC 2 Type II certified', 'GDPR compliant', 'Regular security audits']
-    },
-    {
-      icon: <Zap className="w-12 h-12 text-purple-600" />,
-      title: 'Seamless LinkedIn API Integration',
-      description: 'Native integration with LinkedIn\'s official APIs ensures reliable posting, data sync, and compliance with platform guidelines.',
-      features: ['Official LinkedIn Partner', 'Real-time data sync', 'No risk of account suspension', 'Full API coverage']
-    },
-    {
-      icon: <Users className="w-12 h-12 text-green-600" />,
-      title: 'AI-Powered Insights Tailored to Your Role',
-      description: 'Our advanced AI doesn\'t just generate content – it understands your industry, role, and career goals to provide personalized recommendations.',
-      features: ['Industry-specific templates', 'Role-based optimization', 'Career stage awareness', 'Personalized learning paths']
-    },
-    {
-      icon: <Headphones className="w-12 h-12 text-orange-600" />,
-      title: 'Dedicated 24/7 Support & Knowledge Base',
-      description: 'Get help when you need it with our dedicated support team, comprehensive knowledge base, and regular training sessions.',
-      features: ['24/7 chat support', 'Dedicated success manager', 'Video tutorials', 'Regular webinars']
-    },
-    {
-      icon: <Award className="w-12 h-12 text-red-600" />,
-      title: 'Proven Results & ROI',
-      description: 'Our customers see measurable improvements in their LinkedIn engagement, job opportunities, and career advancement.',
-      features: ['Average 300% engagement increase', '2x more job interviews', '40% faster career progression', 'Money-back guarantee']
-    }
-  ];
-
-  const stats = [
-    { number: '50,000+', label: 'Active Users' },
-    { number: '2M+', label: 'Posts Generated' },
-    { number: '99.9%', label: 'Uptime' },
-    { number: '4.9/5', label: 'User Rating' }
-  ];
-
-  const testimonials = [
-    {
-      quote: "PostPilot's security standards were crucial for our enterprise adoption. The SOC 2 compliance gave our legal team confidence.",
-      author: "David Chen",
-      role: "IT Director",
-      company: "Fortune 500 Company"
-    },
-    {
-      quote: "Unlike other tools, PostPilot actually understands my industry. The content suggestions are always relevant and professional.",
-      author: "Sarah Martinez",
-      role: "Marketing Manager",
-      company: "TechStartup Inc."
-    }
-  ];
-
   return (
-    <div className="min-h-screen pt-16">
+    <div className="min-h-screen">
+      <Navbar />
+      
       {/* Hero Section */}
-      <section className="py-20 bg-gradient-to-br from-blue-50 via-white to-purple-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <Badge className="mb-4 bg-blue-100 text-blue-800">
-            Why Choose PostPilot?
-          </Badge>
-          <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-            The Smart Choice for
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
-              {" "}Professional Growth
-            </span>
-          </h1>
-          <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-            Discover what makes PostPilot the preferred choice for professionals and companies 
-            looking to excel on LinkedIn and advance their careers with confidence and security.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/auth/register">
-              <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
-                Get Started
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </Button>
-            </Link>
-            <Link to="/contact-sales">
-              <Button size="lg" variant="outline">
-                Talk to Sales
-              </Button>
-            </Link>
+      <PageSection className="relative min-h-[80vh] flex items-center overflow-hidden hero-gradient">
+        {/* Animated background elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+            <ComplexOrbitalSystem className="w-96 h-96 opacity-30" />
           </div>
         </div>
-      </section>
-
+        
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <Animated delay={0.1}>
+            <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+              Elevate Your Professional
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 block">
+                Brand on LinkedIn
+              </span>
+            </h1>
+            <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+              Join thousands of professionals who are growing their network and career 
+              with AI-powered LinkedIn optimization.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link to="/auth/register">
+                <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
+                  Get Started Free
+                  <ArrowRight className="w-5 h-5 ml-2" />
+                </Button>
+              </Link>
+              <Link to="/features">
+                <Button size="lg" variant="outline">
+                  Learn More
+                </Button>
+              </Link>
+            </div>
+          </Animated>
+        </div>
+      </PageSection>
+      
       {/* Stats Section */}
-      <section className="py-16 bg-white">
+      <PageSection className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             {stats.map((stat, index) => (
-              <div key={index}>
-                <div className="text-4xl font-bold text-blue-600 mb-2">{stat.number}</div>
+              <Animated key={index} delay={0.2 + index * 0.1} className="group">
+                <div className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2 group-hover:scale-110 transition-transform">
+                  {stat.number}
+                </div>
                 <div className="text-gray-600">{stat.label}</div>
-              </div>
+              </Animated>
             ))}
           </div>
         </div>
-      </section>
+      </PageSection>
 
-      {/* Differentiators */}
-      <section className="py-20 bg-gray-50">
+      {/* Features Section */}
+      <PageSection className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              What Sets Us Apart
+            <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+              Everything You Need to Succeed
             </h2>
-            <p className="text-xl text-gray-600">
-              Five key differentiators that make PostPilot the smart choice for your career
+            <p className="mt-4 text-xl text-gray-600 max-w-3xl mx-auto">
+              Powerful features designed to help you grow your professional brand
             </p>
           </div>
-          
-          <div className="space-y-16">
-            {differentiators.map((item, index) => (
-              <div key={index} className={`grid grid-cols-1 lg:grid-cols-2 gap-12 items-center ${
-                index % 2 === 1 ? 'lg:grid-flow-col-dense' : ''
-              }`}>
-                <div className={index % 2 === 1 ? 'lg:col-start-2' : ''}>
-                  <div className="mb-6">{item.icon}</div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">{item.title}</h3>
-                  <p className="text-lg text-gray-600 mb-6">{item.description}</p>
-                  <ul className="space-y-2">
-                    {item.features.map((feature, featureIndex) => (
-                      <li key={featureIndex} className="flex items-center space-x-2">
-                        <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
-                        <span className="text-gray-700">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                
-                <div className={index % 2 === 1 ? 'lg:col-start-1' : ''}>
-                  <Card className="bg-white shadow-lg">
-                    <CardContent className="p-8">
-                      {index === 0 && (
-                        <div className="space-y-4">
-                          <div className="flex items-center space-x-3">
-                            <Lock className="w-6 h-6 text-blue-600" />
-                            <span className="font-semibold">Enterprise Security</span>
-                          </div>
-                          <div className="grid grid-cols-2 gap-4 text-sm">
-                            <div className="bg-blue-50 p-3 rounded">
-                              <div className="font-medium text-blue-900">SOC 2 Type II</div>
-                              <div className="text-blue-700">Certified</div>
-                            </div>
-                            <div className="bg-green-50 p-3 rounded">
-                              <div className="font-medium text-green-900">GDPR</div>
-                              <div className="text-green-700">Compliant</div>
-                            </div>
-                            <div className="bg-purple-50 p-3 rounded">
-                              <div className="font-medium text-purple-900">256-bit SSL</div>
-                              <div className="text-purple-700">Encryption</div>
-                            </div>
-                            <div className="bg-orange-50 p-3 rounded">
-                              <div className="font-medium text-orange-900">Regular</div>
-                              <div className="text-orange-700">Audits</div>
-                            </div>
-                          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {features.map((feature, index) => (
+              <Animated key={index} delay={0.1 * index}>
+                <Card className={`h-full bg-gradient-to-br ${feature.color} hover:shadow-xl transition-all duration-300 hover:-translate-y-1`}>
+                  <CardContent className="p-8">
+                    <div className="flex items-start gap-6">
+                      <div className="flex-shrink-0">
+                        <div className="w-14 h-14 rounded-xl bg-white shadow-sm flex items-center justify-center">
+                          {feature.icon}
                         </div>
-                      )}
-                      {index === 1 && (
-                        <div className="space-y-4">
-                          <div className="flex items-center space-x-3">
-                            <div className="w-8 h-8 bg-blue-600 rounded flex items-center justify-center">
-                              <span className="text-white font-bold text-sm">in</span>
-                            </div>
-                            <span className="font-semibold">Official LinkedIn Partner</span>
-                          </div>
-                          <div className="space-y-2 text-sm">
-                            <div className="flex justify-between">
-                              <span>API Rate Limit</span>
-                              <span className="text-green-600 font-medium">Unlimited</span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span>Data Sync</span>
-                              <span className="text-green-600 font-medium">Real-time</span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span>Account Safety</span>
-                              <span className="text-green-600 font-medium">Guaranteed</span>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                      {index === 2 && (
-                        <div className="space-y-4">
-                          <div className="text-center">
-                            <div className="text-3xl font-bold text-purple-600">AI Engine</div>
-                            <div className="text-sm text-gray-600">Industry-Aware</div>
-                          </div>
-                          <div className="space-y-2">
-                            <div className="bg-gray-100 p-2 rounded text-sm">
-                              <span className="font-medium">Your Role:</span> Software Engineer
-                            </div>
-                            <div className="bg-gray-100 p-2 rounded text-sm">
-                              <span className="font-medium">Industry:</span> Technology
-                            </div>
-                            <div className="bg-gray-100 p-2 rounded text-sm">
-                              <span className="font-medium">Experience:</span> 5+ years
-                            </div>
-                            <div className="bg-purple-50 p-2 rounded text-sm text-purple-700">
-                              <span className="font-medium">AI Recommendation:</span> Focus on leadership content
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                      {index === 3 && (
-                        <div className="space-y-4">
-                          <div className="flex items-center space-x-3">
-                            <Headphones className="w-6 h-6 text-orange-600" />
-                            <span className="font-semibold">24/7 Support</span>
-                          </div>
-                          <div className="space-y-3">
-                            <div className="flex items-center space-x-2">
-                              <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                              <span className="text-sm">Live chat available</span>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                              <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                              <span className="text-sm">Response time: &lt; 5 minutes</span>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                              <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                              <span className="text-sm">Success manager assigned</span>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                      {index === 4 && (
-                        <div className="space-y-4">
-                          <div className="text-center">
-                            <div className="text-3xl font-bold text-green-600">300%</div>
-                            <div className="text-sm text-gray-600">Avg. Engagement Increase</div>
-                          </div>
-                          <div className="grid grid-cols-2 gap-4 text-sm">
-                            <div className="text-center">
-                              <div className="text-xl font-bold text-blue-600">2x</div>
-                              <div className="text-gray-600">More Interviews</div>
-                            </div>
-                            <div className="text-center">
-                              <div className="text-xl font-bold text-purple-600">40%</div>
-                              <div className="text-gray-600">Faster Growth</div>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                    </CardContent>
-                  </Card>
-                </div>
-              </div>
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-bold text-gray-900 mb-2">{feature.title}</h3>
+                        <p className="text-gray-700 mb-4">{feature.description}</p>
+                        <ul className="space-y-2">
+                          {feature.points.map((point, i) => (
+                            <li key={i} className="flex items-start">
+                              <CheckCircle className="w-5 h-5 text-green-500 mt-0.5 mr-2 flex-shrink-0" />
+                              <span className="text-gray-700">{point}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Animated>
             ))}
           </div>
         </div>
-      </section>
+      </PageSection>
 
       {/* Testimonials */}
-      <section className="py-20 bg-white">
+      <PageSection className="py-20 bg-gradient-to-br from-blue-50 to-purple-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Trusted by Industry Leaders
+            <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+              Trusted by Professionals
             </h2>
+            <p className="mt-4 text-xl text-gray-600 max-w-3xl mx-auto">
+              Join thousands of professionals who have transformed their LinkedIn presence
+            </p>
           </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {testimonials.map((testimonial, index) => (
-              <Card key={index} className="bg-gradient-to-br from-blue-50 to-purple-50">
-                <CardContent className="p-8">
-                  <p className="text-lg text-gray-700 mb-6 italic">"{testimonial.quote}"</p>
-                  <div>
-                    <p className="font-semibold text-gray-900">{testimonial.author}</p>
-                    <p className="text-gray-600">{testimonial.role} at {testimonial.company}</p>
-                  </div>
-                </CardContent>
-              </Card>
+              <Animated key={index} delay={0.1 * index} className="h-full">
+                <Card className="h-full bg-white/80 backdrop-blur-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                  <CardContent className="p-8 h-full flex flex-col">
+                    <div className="mb-6 text-blue-500">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className="w-5 h-5 inline-block fill-current" />
+                      ))}
+                    </div>
+                    <p className="text-lg text-gray-700 mb-6 flex-grow">"{testimonial.quote}"</p>
+                    <div className="flex items-center">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold text-lg">
+                        {testimonial.avatar}
+                      </div>
+                      <div className="ml-4">
+                        <div className="font-semibold text-gray-900">{testimonial.author}</div>
+                        <div className="text-sm text-gray-600">{testimonial.role}</div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Animated>
             ))}
           </div>
         </div>
-      </section>
+      </PageSection>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-blue-600 to-purple-600">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Experience the PostPilot difference
-          </h2>
-          <p className="text-xl text-blue-100 mb-8">
-            Join thousands of professionals who trust PostPilot with their career growth.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/auth/register">
-              <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100">
-                Start Free Trial
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </Button>
-            </Link>
-            <Link to="/contact-sales">
-              <Button size="lg" variant="outline" className="text-white border-white hover:bg-white hover:text-blue-600">
-                Schedule Demo
-              </Button>
-            </Link>
-          </div>
+      <PageSection className="relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 opacity-95"></div>
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-20">
+          <Animated delay={0.1}>
+            <h2 className="text-3xl font-extrabold text-white sm:text-4xl mb-6">
+              Ready to Transform Your Professional Brand?
+            </h2>
+            <p className="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
+              Join thousands of professionals who are growing their network and career with PostPilot.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link to="/auth/register">
+                <Button size="lg" className="bg-white text-blue-700 hover:bg-blue-50 font-medium">
+                  Start Free Trial
+                  <ArrowRight className="w-5 h-5 ml-2" />
+                </Button>
+              </Link>
+              <Link to="/demo">
+                <Button size="lg" variant="outline" className="text-white border-white hover:bg-white/10 font-medium">
+                  Watch Demo
+                </Button>
+              </Link>
+            </div>
+          </Animated>
+          
+          {/* Animated elements */}
+          <div className="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-white/10"></div>
+          <div className="absolute -bottom-20 -left-20 w-80 h-80 rounded-full bg-white/5"></div>
         </div>
-      </section>
+      </PageSection>
+
+      <Footer />
     </div>
   );
 };
