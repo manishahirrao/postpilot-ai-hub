@@ -1,95 +1,124 @@
-import React, { useState, ChangeEvent } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { ArrowRight, Check, ArrowLeft, User, Briefcase, Target, Upload, FileText, X, Rocket, Heart, Users, Award } from 'lucide-react';
-import { ComplexOrbitalSystem } from '@/components/OrbitalSystem';
+import { Separator } from '@/components/ui/separator';
+import { User, Briefcase, Target, Rocket, ArrowRight, ArrowLeft, Check, X, Upload, FileText, Users, Award, Heart } from 'lucide-react';
+import { auth } from '@/lib/api';
 
-type FormData = {
-  name: string;
-  displayName: string;
+// Removed unused AuthResponse interface
+
+interface UploadResponse {
+  fileUrl?: string;
+  error?: string;
+  [key: string]: any;
+}
+
+interface FormData {
+  full_name: string;
   email: string;
   password: string;
   confirmPassword: string;
   role: string;
-  jobTitle: string;
+  job_title: string;
   company: string;
   industry: string;
-  keySkills: string[];
+  key_skills: string[];
   resume: File | null;
-  mainObjectives: string[];
-  postFrequency: string;
-  coreTopics: string;
-  topPerformingPost: string;
-};
+  main_objectives: string[];
+  post_frequency: string;
+  core_topics: string;
+  top_performing_post: string;
+  display_name?: string;
+}
+
+
 
 const PersonalRegisterPage = () => {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState<FormData>({
-    name: '',
-    displayName: '',
+    full_name: '',
     email: '',
     password: '',
     confirmPassword: '',
-    role: '',
-    jobTitle: '',
+    role: 'user',
+    job_title: '',
     company: '',
     industry: '',
-    keySkills: [],
+    key_skills: [],
     resume: null,
-    mainObjectives: [],
-    postFrequency: '',
-    coreTopics: '',
-    topPerformingPost: ''
+    main_objectives: [],
+    post_frequency: 'weekly',
+    core_topics: '',
+    top_performing_post: '',
+    display_name: ''
   });
-  
   const [currentSkill, setCurrentSkill] = useState('');
   const [currentObjective, setCurrentObjective] = useState('');
   const [loading, setLoading] = useState(false);
   const [resumeFileName, setResumeFileName] = useState('');
 
+  const validateStep = (stepNumber: number) => {
+    switch (stepNumber) {
+      case 1:
+        return formData.full_name && formData.email && formData.password && formData.confirmPassword;
+      case 2:
+        return formData.job_title && formData.company && formData.industry && formData.key_skills.length > 0;
+      case 3:
+        return formData.main_objectives.length > 0 && formData.post_frequency && 
+               formData.core_topics;
+      default:
+        return false;
+    }
+  };
+
+
+  // Form handlers
   const handleInputChange = (field: keyof FormData, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleResumeUpload = (e: ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files || e.target.files.length === 0) {
-      return; // Exit early if no files are selected
-    }
-    
-    const file = e.target.files[0];
-    const allowedTypes = ['.pdf', '.doc', '.docx'];
-    const fileExtension = '.' + file.name.split('.').pop()?.toLowerCase();
-    
-    if (!fileExtension || !allowedTypes.includes(fileExtension)) {
-      alert('Please upload a PDF, DOC, or DOCX file');
-      return;
-    }
+  const handleResumeUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      const allowedTypes = ['.pdf', '.doc', '.docx'];
+      const fileExtension = '.' + file.name.split('.').pop()?.toLowerCase();
+      
+      if (!fileExtension || !allowedTypes.includes(fileExtension)) {
+        alert('Please upload a PDF, DOC, or DOCX file');
+        return;
+      }
 
-    // Check file size (5MB limit)
-    if (file.size > 5 * 1024 * 1024) {
-      alert('File size must be less than 5MB');
-      return;
+      // Check file size (5MB limit)
+      if (file.size > 5 * 1024 * 1024) {
+        alert('File size must be less than 5MB');
+        return;
+      }
+      
+      setFormData(prev => ({
+        ...prev,
+        resume: file
+      }));
+      setResumeFileName(file.name);
     }
-
-    setFormData(prev => ({ ...prev, resume: file }));
-    setResumeFileName(file.name);
   };
 
   const removeResume = () => {
-    setFormData(prev => ({ ...prev, resume: null }));
+    setFormData(prev => ({
+      ...prev,
+      resume: null
+    }));
     setResumeFileName('');
   };
 
   const addSkill = () => {
-    if (currentSkill.trim() && formData.keySkills.length < 5) {
+    if (currentSkill.trim() && formData.key_skills.length < 5) {
       setFormData(prev => ({
         ...prev,
-        keySkills: [...prev.keySkills, currentSkill.trim()]
+        key_skills: [...prev.key_skills, currentSkill.trim()]
       }));
       setCurrentSkill('');
     }
@@ -98,15 +127,15 @@ const PersonalRegisterPage = () => {
   const removeSkill = (index: number) => {
     setFormData(prev => ({
       ...prev,
-      keySkills: prev.keySkills.filter((_, i) => i !== index)
+      key_skills: prev.key_skills.filter((_, i) => i !== index)
     }));
   };
 
   const addObjective = () => {
-    if (currentObjective.trim() && formData.mainObjectives.length < 3) {
+    if (currentObjective.trim() && formData.main_objectives.length < 3) {
       setFormData(prev => ({
         ...prev,
-        mainObjectives: [...prev.mainObjectives, currentObjective.trim()]
+        main_objectives: [...prev.main_objectives, currentObjective.trim()]
       }));
       setCurrentObjective('');
     }
@@ -115,26 +144,11 @@ const PersonalRegisterPage = () => {
   const removeObjective = (index: number) => {
     setFormData(prev => ({
       ...prev,
-      mainObjectives: prev.mainObjectives.filter((_, i) => i !== index)
+      main_objectives: prev.main_objectives.filter((_, i) => i !== index)
     }));
   };
 
-  const validateStep = (stepNumber: number) => {
-    switch (stepNumber) {
-      case 1:
-        return formData.name && formData.email && formData.password && 
-               formData.confirmPassword && formData.role;
-      case 2:
-        return formData.jobTitle && formData.company && formData.industry && 
-               formData.keySkills.length > 0;
-      case 3:
-        return formData.mainObjectives.length > 0 && formData.postFrequency && 
-               formData.coreTopics;
-      default:
-        return false;
-    }
-  };
-
+  // Form submission handler
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -150,12 +164,114 @@ const PersonalRegisterPage = () => {
 
     setLoading(true);
     
-    // Simulate API call
-    setTimeout(() => {
-      console.log('Registration data:', formData);
-      alert('Account created successfully!');
+    try {
+      // Log cookies for debugging
+      console.log('Current cookies:', document.cookie);
+      
+      // Destructure form data
+      const { confirmPassword, resume } = formData;
+      
+      // Prepare the user data for registration in the format expected by the backend
+      const userDataToSend = {
+        email: formData.email,
+        password: formData.password,
+        name: formData.full_name,
+        company: formData.company,
+        jobTitle: formData.job_title, // Map job_title to jobTitle
+        industry: formData.industry,
+        keySkills: JSON.stringify(formData.key_skills || []), // Convert array to JSON string
+        mainObjectives: JSON.stringify(formData.main_objectives || []), // Convert array to JSON string
+        postFrequency: formData.post_frequency, // Map post_frequency to postFrequency
+        coreTopics: formData.core_topics, // Map core_topics to coreTopics
+        role: formData.role || 'user',
+        displayName: formData.display_name || formData.full_name.split(' ')[0]
+      };
+
+      console.log('Sending registration data:', JSON.stringify(userDataToSend, null, 2));
+
+      // Register the user
+      try {
+        const response = await auth.register(userDataToSend);
+        console.log('Registration response:', response);
+
+        if (response.success) {
+          // If there's a resume, upload it after successful registration
+          if (resume) {
+            await uploadResumeWithRetry(resume);
+          }
+
+          // Registration successful
+          alert('Account created successfully! You can now log in.');
+          window.location.href = '/auth/login';
+        } else {
+          throw new Error(response.error || 'Registration failed');
+        }
+      } catch (registerError: any) {
+        console.error('Registration API error:', registerError);
+        if (registerError.response) {
+          console.error('Response data:', registerError.response.data);
+          console.error('Response status:', registerError.response.status);
+          console.error('Response headers:', registerError.response.headers);
+        }
+        throw registerError;
+      }
+    } catch (error: any) {
+      console.error('Registration error:', error);
+      const errorMessage = error.response?.data?.message || 
+                         error.response?.data?.error || 
+                         error.message || 
+                         'Registration failed. Please try again.';
+      alert(`Error: ${errorMessage}`);
+    } finally {
       setLoading(false);
-    }, 2000);
+    }
+  };
+
+  // Helper function to handle resume upload with retry logic
+  const uploadResumeWithRetry = async (resume: File, retryCount = 0): Promise<UploadResponse> => {
+    const MAX_RETRIES = 2;
+    
+    try {
+      console.log('Attempting to upload resume...');
+      const resumeFormData = new FormData();
+      resumeFormData.append('resume', resume);
+      
+      // Get CSRF token from cookies
+      const csrfToken = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('XSRF-TOKEN='))
+        ?.split('=')[1];
+        
+      if (csrfToken) {
+        const decodedToken = decodeURIComponent(csrfToken);
+        resumeFormData.append('_csrf', decodedToken);
+        console.log('Added CSRF token to resume upload');
+      } else {
+        console.warn('No CSRF token found in cookies');
+      }
+
+      const uploadResponse = await auth.uploadResume(resumeFormData);
+      console.log('Resume upload response:', uploadResponse);
+      
+      if (uploadResponse && 'fileUrl' in uploadResponse) {
+        console.log('Resume uploaded successfully:', uploadResponse.fileUrl);
+        return uploadResponse;
+      } else {
+        throw new Error(uploadResponse?.error || 'Failed to upload resume');
+      }
+    } catch (error: any) {
+      console.error('Resume upload error:', error);
+      
+      if (retryCount < MAX_RETRIES) {
+        console.log(`Retrying resume upload (attempt ${retryCount + 1}/${MAX_RETRIES})...`);
+        // Wait for 1 second before retrying
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        return uploadResumeWithRetry(resume, retryCount + 1);
+      }
+      
+      console.error('Max retries reached for resume upload');
+      throw error;
+    }
   };
 
   const handleLinkedInSignup = () => {
@@ -179,13 +295,13 @@ const PersonalRegisterPage = () => {
     'Smart job matching',
     'Career analytics and insights',
     'Priority support'
-  ];
+  ] as const;
 
   const industryOptions = [
     'Technology', 'Healthcare', 'Finance', 'FinTech', 'Health Tech',
     'Education', 'Marketing', 'Sales', 'Consulting', 'Manufacturing',
     'Retail', 'Real Estate', 'Legal', 'Non-profit', 'Government', 'Other'
-  ];
+  ] as const;
 
   const objectiveOptions = [
     'Build personal brand',
@@ -196,7 +312,7 @@ const PersonalRegisterPage = () => {
     'Grow professional network',
     'Share industry insights',
     'Attract clients'
-  ];
+  ] as const;
 
   return (
     <div className="min-h-screen flex flex-col hero-gradient">
@@ -204,21 +320,21 @@ const PersonalRegisterPage = () => {
         {/* Animated background elements */}
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-            <ComplexOrbitalSystem className="w-96 h-96 opacity-30" />
+            <div className="w-96 h-96 opacity-30" />
           </div>
           <motion.div 
             className="absolute top-20 right-32 w-48 h-48"
             animate={{ rotate: -360, x: [0, 30, 0, -30, 0], y: [0, -15, 0, 15, 0] }}
             transition={{ rotate: { duration: 25, repeat: Infinity, ease: "linear" }, x: { duration: 12, repeat: Infinity, ease: "easeInOut" }, y: { duration: 8, repeat: Infinity, ease: "easeInOut" } }}
           >
-            <ComplexOrbitalSystem className="opacity-20" />
+            <div className="opacity-20" />
           </motion.div>
           <motion.div 
             className="absolute bottom-20 left-20 w-32 h-32"
             animate={{ rotate: 360, scale: [1, 1.2, 1] }}
             transition={{ rotate: { duration: 20, repeat: Infinity, ease: "linear" }, scale: { duration: 10, repeat: Infinity, ease: "easeInOut" } }}
           >
-            <ComplexOrbitalSystem className="opacity-25" />
+            <div className="opacity-25" />
           </motion.div>
         </div>
         
@@ -303,12 +419,12 @@ const PersonalRegisterPage = () => {
                       {/* Basic Profile Form */}
                       <div className="space-y-4">
                         <div>
-                          <Label htmlFor="name">Full Name *</Label>
+                          <Label htmlFor="full_name">Full Name *</Label>
                           <Input
-                            id="name"
+                            id="full_name"
                             type="text"
-                            value={formData.name}
-                            onChange={(e) => handleInputChange('name', e.target.value)}
+                            value={formData.full_name}
+                            onChange={(e) => handleInputChange('full_name', e.target.value)}
                             placeholder="Enter your full name"
                             required
                             className="mt-1"
@@ -316,12 +432,12 @@ const PersonalRegisterPage = () => {
                         </div>
 
                         <div>
-                          <Label htmlFor="displayName">Preferred Display Name *</Label>
+                          <Label htmlFor="display_name">Preferred Display Name *</Label>
                           <Input
-                            id="displayName"
+                            id="display_name"
                             type="text"
-                            value={formData.displayName}
-                            onChange={(e) => handleInputChange('displayName', e.target.value)}
+                            value={formData.display_name}
+                            onChange={(e) => handleInputChange('display_name', e.target.value)}
                             placeholder="How should we address you?"
                             required
                             className="mt-1"
@@ -343,7 +459,11 @@ const PersonalRegisterPage = () => {
 
                         <div>
                           <Label htmlFor="role">I am a *</Label>
-                          <Select value={formData.role} onValueChange={(value) => handleInputChange('role', value)} required>
+                          <Select 
+                            value={formData.role} 
+                            onValueChange={(value) => handleInputChange('role', value)}
+                            required
+                          >
                             <SelectTrigger className="mt-1">
                               <SelectValue placeholder="Select your role" />
                             </SelectTrigger>
@@ -396,12 +516,12 @@ const PersonalRegisterPage = () => {
                   {step === 2 && (
                     <div className="space-y-4">
                       <div>
-                        <Label htmlFor="jobTitle">Current Job Title *</Label>
+                        <Label htmlFor="job_title">Current Job Title *</Label>
                         <Input
-                          id="jobTitle"
+                          id="job_title"
                           type="text"
-                          value={formData.jobTitle}
-                          onChange={(e) => handleInputChange('jobTitle', e.target.value)}
+                          value={formData.job_title}
+                          onChange={(e) => handleInputChange('job_title', e.target.value)}
                           placeholder="e.g. Senior Product Manager"
                           required
                           className="mt-1"
@@ -423,7 +543,11 @@ const PersonalRegisterPage = () => {
 
                       <div>
                         <Label htmlFor="industry">Primary Industry *</Label>
-                        <Select value={formData.industry} onValueChange={(value) => handleInputChange('industry', value)} required>
+                        <Select 
+                          value={formData.industry} 
+                          onValueChange={(value) => handleInputChange('industry', value)} 
+                          required
+                        >
                           <SelectTrigger className="mt-1">
                             <SelectValue placeholder="Select your industry" />
                           </SelectTrigger>
@@ -448,15 +572,15 @@ const PersonalRegisterPage = () => {
                             <Button 
                               type="button" 
                               onClick={addSkill}
-                              disabled={formData.keySkills.length >= 5 || !currentSkill.trim()}
+                              disabled={formData.key_skills.length >= 5 || !currentSkill.trim()}
                               size="sm"
                             >
                               Add
                             </Button>
                           </div>
-                          {formData.keySkills.length > 0 && (
+                          {formData.key_skills.length > 0 && (
                             <div className="flex flex-wrap gap-2">
-                              {formData.keySkills.map((skill, index) => (
+                              {formData.key_skills.map((skill, index) => (
                                 <span
                                   key={index}
                                   className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800"
@@ -547,10 +671,10 @@ const PersonalRegisterPage = () => {
                         <div className="mt-1 space-y-2">
                           <div className="flex space-x-2">
                             <Select value="" onValueChange={(value) => {
-                              if (value && formData.mainObjectives.length < 3 && !formData.mainObjectives.includes(value)) {
+                              if (value && formData.main_objectives.length < 3 && !formData.main_objectives.includes(value)) {
                                 setFormData(prev => ({
                                   ...prev,
-                                  mainObjectives: [...prev.mainObjectives, value]
+                                  main_objectives: [...prev.main_objectives, value]
                                 }));
                               }
                             }}>
@@ -562,7 +686,7 @@ const PersonalRegisterPage = () => {
                                   <SelectItem 
                                     key={objective} 
                                     value={objective}
-                                    disabled={formData.mainObjectives.includes(objective)}
+                                    disabled={formData.main_objectives.includes(objective)}
                                   >
                                     {objective}
                                   </SelectItem>
@@ -580,15 +704,15 @@ const PersonalRegisterPage = () => {
                             <Button 
                               type="button" 
                               onClick={addObjective}
-                              disabled={formData.mainObjectives.length >= 3 || !currentObjective.trim()}
+                              disabled={formData.main_objectives.length >= 3 || !currentObjective.trim()}
                               size="sm"
                             >
                               Add
                             </Button>
                           </div>
-                          {formData.mainObjectives.length > 0 && (
+                          {formData.main_objectives.length > 0 && (
                             <div className="flex flex-wrap gap-2">
-                              {formData.mainObjectives.map((objective, index) => (
+                              {formData.main_objectives.map((objective, index) => (
                                 <span
                                   key={index}
                                   className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800"
@@ -609,8 +733,12 @@ const PersonalRegisterPage = () => {
                       </div>
 
                       <div>
-                        <Label htmlFor="postFrequency">Post Frequency Preference *</Label>
-                        <Select value={formData.postFrequency} onValueChange={(value) => handleInputChange('postFrequency', value)} required>
+                        <Label htmlFor="post_frequency">Post Frequency Preference *</Label>
+                        <Select 
+                          value={formData.post_frequency} 
+                          onValueChange={(value) => handleInputChange('post_frequency', value)} 
+                          required
+                        >
                           <SelectTrigger className="mt-1">
                             <SelectValue placeholder="Select frequency" />
                           </SelectTrigger>
@@ -623,12 +751,12 @@ const PersonalRegisterPage = () => {
                       </div>
 
                       <div>
-                        <Label htmlFor="coreTopics">3-5 Core Topic Areas *</Label>
+                        <Label htmlFor="core_topics">3-5 Core Topic Areas *</Label>
                         <Input
-                          id="coreTopics"
+                          id="core_topics"
                           type="text"
-                          value={formData.coreTopics}
-                          onChange={(e) => handleInputChange('coreTopics', e.target.value)}
+                          value={formData.core_topics}
+                          onChange={(e) => handleInputChange('core_topics', e.target.value)}
                           placeholder="e.g. AI in healthcare, remote team management, product strategy"
                           required
                           className="mt-1"
@@ -637,12 +765,12 @@ const PersonalRegisterPage = () => {
                       </div>
 
                       <div>
-                        <Label htmlFor="topPerformingPost">Recent Top-Performing Post Link (Optional)</Label>
+                        <Label htmlFor="top_performing_post">Recent Top-Performing Post Link (Optional)</Label>
                         <Input
-                          id="topPerformingPost"
+                          id="top_performing_post"
                           type="url"
-                          value={formData.topPerformingPost}
-                          onChange={(e) => handleInputChange('topPerformingPost', e.target.value)}
+                          value={formData.top_performing_post}
+                          onChange={(e) => handleInputChange('top_performing_post', e.target.value)}
                           placeholder="https://linkedin.com/posts/..."
                           className="mt-1"
                         />

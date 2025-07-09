@@ -14,6 +14,7 @@ type UserProfile = {
   phone?: string;
   company?: string;
   job_title?: string;
+  user_type?: 'content_creator' | 'job_seeker' | 'employer' | 'hr_agency';
   subscription_tier?: {
     tier_name: string;
     monthly_credits: number;
@@ -99,8 +100,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           setIsAuthenticated(true);
           
           // Redirect to onboarding for new users
-          if ((result.user.isNewUser ?? false) && !location.pathname.startsWith('/onboarding')) {
-            navigate('/onboarding', { replace: true });
+          if ((result.user.isNewUser ?? false) && !location.pathname.startsWith('/auth/register')) {
+            navigate('/auth/register', { replace: true });
           }
         } else {
           setIsAuthenticated(false);
@@ -123,41 +124,78 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setError(null);
 
       try {
+        console.log('Attempting login with:', { email });
         const result = await auth.login(email, password);
+        console.log('Login result:', result);
         
-        if (result?.token && result.user?.id && result.user?.email) {
-          const userData = {
-            id: result.user.id,
-            email: result.user.email,
-            display_name: result.user.display_name || '',
-            isNewUser: result.isNewUser ?? false,
-            isEmailVerified: result.user.isEmailVerified ?? false,
-          };
+        // Handle new user case (401/404 or error suggesting user doesn't exist)
+        const shouldRedirectToRegister = 
+          (result.isNewUser || 
+           !result.success || 
+           (result.error && (
+             result.error.includes('not found') || 
+             result.error.includes('incorrect') ||
+             result.error.includes('invalid login'))));
+        
+        if (shouldRedirectToRegister) {
+          const redirectTo = '/auth/register';
+          console.log('New user detected, redirecting to:', redirectTo);
+          toast.info('New user detected. Please complete your registration.');
           
-          setUser(userData);
-          setIsAuthenticated(true);
-          
-          // If this is a new user, redirect to registration
-          if (result.isNewUser && result.redirectTo) {
-            toast.success('Please complete your registration');
-            navigate(result.redirectTo, { 
-              state: { email, isNewUser: true },
-              replace: true 
-            });
-            return { success: true, isNewUser: true };
+          // Store the email in sessionStorage temporarily in case the page refreshes
+          if (email) {
+            sessionStorage.setItem('pendingRegistrationEmail', email);
           }
           
-          // For existing users, redirect to dashboard
+          navigate(redirectTo, { 
+            state: { 
+              email: result.email || email, 
+              isNewUser: true 
+            },
+            replace: true 
+          });
+          return { success: false, error: 'New user', isNewUser: true };
+        }
+        
+        // Handle successful login
+        if (result?.token) {
+          console.log('Login successful, getting user profile...');
+          // Get user profile if needed
+          const profile = await auth.getProfile().catch((err) => {
+            console.error('Error getting profile:', err);
+            return null;
+          });
+          
+          const userData = {
+            id: result.user?.id || '',
+            email: result.user?.email || email,
+            display_name: result.user?.display_name || email.split('@')[0],
+            isNewUser: false,
+            isEmailVerified: result.user?.isEmailVerified ?? false,
+            profile: profile?.data
+          };
+          
+          console.log('Setting user data:', userData);
+          setUser(userData);
+          setIsAuthenticated(true);
+          toast.success('Login successful!');
+          
+          // Redirect based on role or default dashboard
           const redirectTo = location.state?.from?.pathname || '/dashboard';
+          console.log('Redirecting to:', redirectTo);
           navigate(redirectTo, { replace: true });
           
-          toast.success('Login successful');
           return { success: true };
         }
         
+        // If we get here, login failed
+        const errorMessage = result?.error || 'Login failed';
+        console.error('Login failed:', errorMessage);
+        setError(errorMessage);
+        toast.error('Login failed', { description: errorMessage });
         return { 
           success: false, 
-          error: result?.error || 'Login failed',
+          error: errorMessage,
           isNewUser: result?.isNewUser
         };
       } catch (error: any) {

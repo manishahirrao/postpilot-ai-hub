@@ -1,0 +1,2 @@
+VITE_API_URL=http://localhost:3001
+# Remove the '/api' from the end of the URL since the backend already adds it

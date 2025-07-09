@@ -1,8 +1,8 @@
 import axios, { AxiosInstance } from 'axios';
 import { supabase } from './supabaseClient';
 
-// Define API base URL from environment variable or default to localhost:3001/api
-const API_BASE = (import.meta.env.VITE_API_URL || 'http://localhost:3001') + '/api';
+// Define API base URL from environment variable or default to localhost:3001
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
 // Create axios instance with default config
 const api: AxiosInstance = axios.create({
@@ -10,11 +10,29 @@ const api: AxiosInstance = axios.create({
   withCredentials: true, // Important for sending cookies
   headers: {
     'Content-Type': 'application/json',
+    'Accept': 'application/json',
   },
   validateStatus: (status) => status < 500, // Don't throw on 4xx errors
 });
 
+// Ensure withCredentials is set for all requests
+api.interceptors.request.use(config => {
+  config.withCredentials = true;
+  return config;
+});
+
 // Types
+
+interface UploadResumeResponse {
+  fileUrl: string;
+}
+
+interface UploadResumeError {
+  error: string;
+}
+
+type UploadResumeResult = UploadResumeResponse | UploadResumeError;
+
 export interface UserProfile {
   id: string;
   email: string;
@@ -28,6 +46,7 @@ export interface UserProfile {
   phone?: string;
   company?: string;
   job_title?: string;
+  user_type?: 'content_creator' | 'job_seeker' | 'employer' | 'hr_agency';
   subscription_tier?: {
     tier_name: string;
     monthly_credits: number;
@@ -69,14 +88,20 @@ export interface AuthResponse {
     id: string;
     email: string;
     display_name: string;
-    isNewUser: boolean;
+    isNewUser?: boolean;
     isEmailVerified: boolean;
   };
+  id?: string;
+  email?: string;
+  display_name?: string;
+  isNewUser?: boolean;
+  isEmailVerified?: boolean;
   token?: string;
+  access_token?: string;
+  refresh_token?: string;
   refreshToken?: string;
   error?: string;
   success?: boolean;
-  isNewUser?: boolean;
   redirectTo?: string;
 }
 
@@ -145,8 +170,12 @@ api.interceptors.request.use(
         config.headers['X-CSRF-Token'] = token;
         config.headers['X-XSRF-Token'] = token;
         
-        // Also add to request data if it's a form submission
-        if (config.data && typeof config.data === 'object' && !(config.data instanceof FormData)) {
+        // For FormData, append the CSRF token to the form data
+        if (config.data instanceof FormData) {
+          config.data.append('_csrf', token);
+        } 
+        // For regular JSON data, add it to the payload
+        else if (config.data && typeof config.data === 'object') {
           config.data._csrf = token;
         }
       }
@@ -243,26 +272,178 @@ if (import.meta.env.DEV) {
 
 // Auth methods
 const auth = {
-  async login(email: string, password: string): Promise<AuthResponse> {
+  async register(userData: Record<string, any>): Promise<AuthResponse> {
     try {
-      const response = await api.post<AuthResponse>('/auth/login', { email, password });
+      // Get CSRF token first
+      const csrfToken = await getCsrfToken();
+      
+      // Add CSRF token to the request data
+      const requestData = {
+        ...userData,
+        _csrf: csrfToken
+      };
+      
+      const response = await api.post<AuthResponse>('/api/auth/register', requestData, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        withCredentials: true,
+      });
+      
       if (response.data.token) {
         localStorage.setItem('access_token', response.data.token);
-        localStorage.setItem('refresh_token', response.data.refreshToken || '');
-        
-        // If this is a new user, we'll also get isNewUser flag in the response
-        if (response.data.isNewUser) {
-          return {
-            ...response.data,
-            isNewUser: true,
-            redirectTo: '/register/personal'
-          };
+        if (response.data.refreshToken) {
+          localStorage.setItem('refresh_token', response.data.refreshToken);
         }
       }
+      
       return response.data;
     } catch (error: any) {
+      console.error('Registration error:', error);
+      
+      let errorMessage = 'Registration failed';
+      if (error.response) {
+        const errorData = error.response.data || {};
+        errorMessage = typeof errorData === 'string' 
+          ? errorData 
+          : errorData.error || errorData.message || 'Registration failed';
+      } else if (error.request) {
+        errorMessage = 'No response from server. Please check your connection.';
+      } else {
+        errorMessage = error.message || 'Registration failed';
+      }
+      
+      return {
+        success: false,
+        error: errorMessage,
+        isNewUser: true
+      };
+    }
+  },
+  
+  async uploadResume(formData: FormData): Promise<UploadResumeResult> {
+    try {
+      // Get CSRF token first
+      const csrfToken = await getCsrfToken();
+      
+      // Ensure formData has the CSRF token
+      if (csrfToken) {
+        formData.append('_csrf', csrfToken);
+      }
+      
+      const response = await api.post('/api/upload/resume', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Accept': 'application/json',
+        },
+        withCredentials: true,
+      });
+      
+      return response.data;
+    } catch (error: any) {
+      console.error('Resume upload error:', error);
+      const errorMessage = error.response?.data?.error || 
+                         error.response?.data?.message || 
+                         error.message || 
+                         'Failed to upload resume';
+      return { error: errorMessage };
+    }
+  },
+  async login(email: string, password: string): Promise<AuthResponse> {
+    try {
+      interface LoginResponse {
+        access_token: string;
+        refresh_token: string;
+        user?: {
+          id: string;
+          email: string;
+          display_name: string;
+          isEmailVerified: boolean;
+        };
+        success?: boolean;
+        error?: string;
+      }
+
+      const response = await api.post<LoginResponse>('/api/auth/login', { email, password });
+      console.log('Login response:', response.data);
+      
+      if (response.data.access_token) {
+        localStorage.setItem('access_token', response.data.access_token);
+        if (response.data.refresh_token) {
+          localStorage.setItem('refresh_token', response.data.refresh_token);
+        }
+        
+        // Create a safe user object with default values
+        const user = response.data.user || {
+          id: '',
+          email: email,
+          display_name: email.split('@')[0],
+          isEmailVerified: false
+        };
+        
+        // Return the user data in the expected format
+        const userData: AuthResponse = {
+          success: true,
+          user: {
+            id: user.id,
+            email: user.email,
+            display_name: user.display_name,
+            isNewUser: false,
+            isEmailVerified: user.isEmailVerified
+          },
+          token: response.data.access_token,
+          refreshToken: response.data.refresh_token
+        };
+        
+        return userData;
+      }
+      
+      // If we don't have an access token but the request was successful, return the data as is
+      return {
+        ...response.data,
+        success: response.data.success || false,
+        error: response.data.error
+      };
+    } catch (error: any) {
       console.error('Login error:', error);
-      // Handle 401 specifically as it might indicate a new user
+      
+      // Handle user not found cases
+      const errorData = error.response?.data || {};
+      const errorMessage = (typeof errorData === 'string' ? errorData : errorData.error || '').toLowerCase();
+      const errorCode = (typeof errorData === 'object' && errorData.code) || error.response?.status;
+      
+      // For debugging
+      console.log('Login error details:', {
+        status: error.response?.status,
+        code: errorCode,
+        message: errorMessage,
+        errorData: errorData,
+        response: error.response
+      });
+      
+      // Consider it a new user if we get a 401 with an email not found message
+      // or if the error message indicates the user doesn't exist
+      const isUserNotFound = 
+        error.response?.status === 401 ||
+        errorCode === 400 ||
+        errorMessage.includes('user not found') ||
+        errorMessage.includes('no user found') ||
+        errorMessage.includes('invalid login') ||
+        errorMessage.includes('email or password') ||
+        errorMessage.includes('incorrect');
+      
+      if (isUserNotFound) {
+        return {
+          success: false,
+          error: 'User not found. Please register first.',
+          isNewUser: true,
+          redirectTo: '/auth/register',
+          email: email
+        };
+      }
+      
+      // Handle 401 as invalid credentials
       if (error.response?.status === 401) {
         return {
           success: false,
@@ -270,6 +451,8 @@ const auth = {
           isNewUser: false
         };
       }
+      
+      // Handle other errors
       return {
         success: false,
         error: error.response?.data?.message || 'Login failed. Please try again.',
@@ -280,7 +463,7 @@ const auth = {
 
   async logout(): Promise<void> {
     try {
-      await api.post('/auth/logout');
+      await api.post('/api/auth/logout');
     } catch (error) {
       console.error('Logout error:', error);
     } finally {
@@ -291,7 +474,7 @@ const auth = {
 
   async validateSession(): Promise<AuthResponse> {
     try {
-      const response = await api.get<AuthResponse>('/auth/session');
+      const response = await api.get<AuthResponse>('/api/auth/session');
       return response.data;
     } catch (error) {
       console.error('Session validation error:', error);
@@ -307,7 +490,7 @@ const auth = {
     job_title?: string;
   }): Promise<AuthResponse> {
     try {
-      const response = await api.post<AuthResponse>('/auth/complete-profile', profileData);
+      const response = await api.post<AuthResponse>('/api/auth/complete-profile', profileData);
       return response.data;
     } catch (error: any) {
       console.error('Profile registration error:', error);
@@ -320,7 +503,7 @@ const auth = {
 
   async verifyEmail(token: string): Promise<AuthResponse> {
     try {
-      const response = await api.post<AuthResponse>('/auth/verify-email', { token });
+      const response = await api.post<AuthResponse>('/api/auth/verify-email', { token });
       return response.data;
     } catch (error: any) {
       console.error('Email verification error:', error);
@@ -347,7 +530,7 @@ const auth = {
   },
 
   async getProfile(): Promise<{ data: UserProfile }> {
-    const response = await api.get<{ data: UserProfile }>('/auth/profile');
+    const response = await api.get<{ data: UserProfile }>('/api/auth/profile');
     return response.data;
   },
 };

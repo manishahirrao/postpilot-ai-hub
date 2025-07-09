@@ -60,11 +60,14 @@ const LoginPersonalPage: React.FC = () => {
       setIsSubmitting(true);
       const result = await login(email, password);
       
+      if (result.isNewUser) {
+        // New user flow is handled by AuthContext's redirect
+        return;
+      }
+      
       if (result.success) {
-        // If it's a new user, we'll be redirected by the AuthContext
-        if (!result.isNewUser) {
-          navigate('/dashboard/personal', { replace: true });
-        }
+        // Regular successful login
+        navigate('/dashboard/personal', { replace: true });
       } else {
         setErrors({
           general: result.error || 'Invalid email or password. Please try again.'
@@ -254,7 +257,7 @@ const LoginPersonalPage: React.FC = () => {
             <div className="px-6 py-4 text-center text-sm bg-muted/50">
               <span className="text-muted-foreground">
                 Don't have an account?{' '}
-                <Link to="/auth/register/personal" className="font-medium text-primary hover:underline">
+                <Link to="/auth/register" className="font-medium text-primary hover:underline">
                   Sign up
                 </Link>
               </span>

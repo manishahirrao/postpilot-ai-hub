@@ -40,8 +40,8 @@ import LoginPersonalPage from "./pages/Auth/LoginPersonalPage";
 import Callback from "./pages/Auth/Callback";
 
 // Dashboard Pages
-import DashboardPage from "./pages/Dashboard/DashboardPage";
-import PersonalDashboard from "./pages/Dashboard/PersonalDashboard";
+import DashboardPage from "./pages/Dashboard/Dashboard";
+// import PersonalDashboard from "./pages/Dashboard/PersonalDashboard";
 // import CompanyDashboard from "./pages/Dashboard/CompanyDashboard";
 
 // Home Pages
@@ -97,14 +97,14 @@ const App: React.FC = () => (
                   </ProtectedRoute>
                 }
               />
-              <Route
+              {/* <Route
                 path="/dashboard/personal"
                 element={
                   <ProtectedRoute>
                     <PersonalDashboard />
                   </ProtectedRoute>
                 }
-              />
+              /> */}
               {/* <Route
                 path="/dashboard/company"
                 element={
