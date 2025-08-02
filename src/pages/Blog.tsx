@@ -33,15 +33,15 @@ const blogArticles = [
     category: 'Recruitment',
     image: '/Blog3.jpeg'
   },
-  {
-    id: 'gpt-powered-content-analytics',
-    title: 'Revolutionize Your Hiring with GPT-Powered Content and Analytics',
-    excerpt: 'Our platform uses GPT content generation to automatically draft engaging LinkedIn posts, job descriptions, and ads while providing actionable insights.',
-    readTime: '5 min read',
-    date: 'Dec 28, 2024',
-    category: 'AI Tools',
-    image: '/Blog4.jpeg'
-  },
+  // {
+  //   id: 'gpt-powered-content-analytics',
+  //   title: 'Revolutionize Your Hiring with GPT-Powered Content and Analytics',
+  //   excerpt: 'Our platform uses GPT content generation to automatically draft engaging LinkedIn posts, job descriptions, and ads while providing actionable insights.',
+  //   readTime: '5 min read',
+  //   date: 'Dec 28, 2024',
+  //   category: 'AI Tools',
+  //   image: '/Blog4.jpeg'
+  // },
   {
     id: 'career-growth-tools-2025',
     title: 'Top 10 Career Growth Tools for 2025: AI and Automation You Need',
@@ -51,15 +51,15 @@ const blogArticles = [
     category: 'Career Growth',
     image: '/Blog5.jpeg'
   },
-  {
-    id: 'automated-job-posting-outsourcing',
-    title: 'Streamline Hiring with Automated Job Posting and Outsourcing Solutions',
-    excerpt: 'Automated job posting platforms let companies advertise positions across multiple free job boards with one click, reaching a wide pool of candidates.',
-    readTime: '5 min read',
-    date: 'Jan 10, 2025',
-    category: 'Recruitment',
-    image: '/Blog6.jpeg'
-  },
+  // {
+  //   id: 'automated-job-posting-outsourcing',
+  //   title: 'Streamline Hiring with Automated Job Posting and Outsourcing Solutions',
+  //   excerpt: 'Automated job posting platforms let companies advertise positions across multiple free job boards with one click, reaching a wide pool of candidates.',
+  //   readTime: '5 min read',
+  //   date: 'Jan 10, 2025',
+  //   category: 'Recruitment',
+  //   image: '/Blog6.jpeg'
+  // },
   {
     id: 'linkedin-video-content-automation',
     title: 'Maximizing LinkedIn with Automated Video Content Creation',
@@ -69,15 +69,15 @@ const blogArticles = [
     category: 'LinkedIn Automation',
     image: '/Blog7.jpeg'
   },
-  {
-    id: 'hiring-teams-linkedin-automation',
-    title: 'Why Hiring Teams Are Embracing LinkedIn Automation and AI Chatbots',
-    excerpt: 'Recruiters and hiring managers are turning to AI tools to gain a competitive edge. LinkedIn automation allows teams to connect with hundreds of prospects.',
-    readTime: '5 min read',
-    date: 'Jan 23, 2025',
-    category: 'Recruitment',
-    image: '/Blog8.jpeg'
-  },
+  // {
+  //   id: 'hiring-teams-linkedin-automation',
+  //   title: 'Why Hiring Teams Are Embracing LinkedIn Automation and AI Chatbots',
+  //   excerpt: 'Recruiters and hiring managers are turning to AI tools to gain a competitive edge. LinkedIn automation allows teams to connect with hundreds of prospects.',
+  //   readTime: '5 min read',
+  //   date: 'Jan 23, 2025',
+  //   category: 'Recruitment',
+  //   image: '/Blog8.jpeg'
+  // },
   {
     id: 'future-job-search-ai-tools',
     title: 'The Future of Job Search: AI Tools for Resumes, Profiles, and Applications',
@@ -87,15 +87,15 @@ const blogArticles = [
     category: 'Career Growth',
     image: '/Blog9.jpeg'
   },
-  {
-    id: 'ai-chatbots-recruitment-support',
-    title: 'How AI-Powered Chatbots Enhance Recruitment and Customer Support',
-    excerpt: 'AI chatbots are revolutionizing support for both candidates and clients. Companies can offer 24/7 assistance to job applicants instantly.',
-    readTime: '5 min read',
-    date: 'Feb 2, 2025',
-    category: 'AI Tools',
-    image: '/Blog10.jpeg'
-  },
+  // {
+  //   id: 'ai-chatbots-recruitment-support',
+  //   title: 'How AI-Powered Chatbots Enhance Recruitment and Customer Support',
+  //   excerpt: 'AI chatbots are revolutionizing support for both candidates and clients. Companies can offer 24/7 assistance to job applicants instantly.',
+  //   readTime: '5 min read',
+  //   date: 'Feb 2, 2025',
+  //   category: 'AI Tools',
+  //   image: '/Blog10.jpeg'
+  // },
   {
     id: 'linkedin-profile-optimization-ai',
     title: 'Optimizing Your LinkedIn Profile with AI for Better Career Outcomes',
@@ -105,33 +105,33 @@ const blogArticles = [
     category: 'LinkedIn Automation',
     image: '/Blog11.jpeg'
   },
-  {
-    id: 'hiring-automation-best-practices',
-    title: 'Implementing Hiring Automation: Best Practices for HR Teams',
-    excerpt: 'Hiring automation can greatly boost efficiency, but it must be done responsibly. Follow these best practices for successful implementation.',
-    readTime: '6 min read',
-    date: 'Feb 9, 2025',
-    category: 'Recruitment',
-    image: '/Blog12.jpeg'
-  },
-  {
-    id: 'free-job-posting-strategies',
-    title: 'Increase Your Reach: Free Job Posting Strategies for Companies',
-    excerpt: 'Posting jobs online doesn\'t have to break the bank. Free job portals and social platforms can connect you with great candidates.',
-    readTime: '4 min read',
-    date: 'Feb 13, 2025',
-    category: 'Recruitment',
-    image: '/Blog13.jpeg'
-  },
-  {
-    id: 'recruitment-outsourcing-benefits',
-    title: 'Supercharge Recruitment: The Benefits of Hiring Outsourcing Services',
-    excerpt: 'Outsourcing recruitment (RPO) lets companies tap into expert recruiting teams and tools. Key benefits include scalability and cost savings.',
-    readTime: '5 min read',
-    date: 'Feb 17, 2025',
-    category: 'Recruitment',
-    image: '/Blog14.jpeg'
-  },
+  // {
+  //   id: 'hiring-automation-best-practices',
+  //   title: 'Implementing Hiring Automation: Best Practices for HR Teams',
+  //   excerpt: 'Hiring automation can greatly boost efficiency, but it must be done responsibly. Follow these best practices for successful implementation.',
+  //   readTime: '6 min read',
+  //   date: 'Feb 9, 2025',
+  //   category: 'Recruitment',
+  //   image: '/Blog12.jpeg'
+  // },
+  // {
+  //   id: 'free-job-posting-strategies',
+  //   title: 'Increase Your Reach: Free Job Posting Strategies for Companies',
+  //   excerpt: 'Posting jobs online doesn\'t have to break the bank. Free job portals and social platforms can connect you with great candidates.',
+  //   readTime: '4 min read',
+  //   date: 'Feb 13, 2025',
+  //   category: 'Recruitment',
+  //   image: '/Blog13.jpeg'
+  // },
+  // {
+  //   id: 'recruitment-outsourcing-benefits',
+  //   title: 'Supercharge Recruitment: The Benefits of Hiring Outsourcing Services',
+  //   excerpt: 'Outsourcing recruitment (RPO) lets companies tap into expert recruiting teams and tools. Key benefits include scalability and cost savings.',
+  //   readTime: '5 min read',
+  //   date: 'Feb 17, 2025',
+  //   category: 'Recruitment',
+  //   image: '/Blog14.jpeg'
+  // },
   {
     id: 'gpt-content-creation-linkedin',
     title: 'Content Creation with GPT: Crafting LinkedIn Posts that Convert',
@@ -159,15 +159,15 @@ const blogArticles = [
     category: 'LinkedIn Automation',
     image: '/Blog17.jpeg'
   },
-  {
-    id: 'hiring-automation-trends-2025',
-    title: 'Hiring Automation Trends 2025: What HR Professionals Need to Know',
-    excerpt: 'As AI continues to reshape HR, several key trends are emerging. Automation in recruiting is becoming the norm across industries.',
-    readTime: '8 min read',
-    date: 'March 8, 2025',
-    category: 'Recruitment',
-    image: '/Blog18.jpeg'
-  }
+  // {
+  //   id: 'hiring-automation-trends-2025',
+  //   title: 'Hiring Automation Trends 2025: What HR Professionals Need to Know',
+  //   excerpt: 'As AI continues to reshape HR, several key trends are emerging. Automation in recruiting is becoming the norm across industries.',
+  //   readTime: '8 min read',
+  //   date: 'March 8, 2025',
+  //   category: 'Recruitment',
+  //   image: '/Blog18.jpeg'
+  // }
 ];
 
 const Blog = () => {

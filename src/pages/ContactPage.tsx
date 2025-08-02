@@ -1,254 +1,170 @@
-
-import * as React from "react";
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Mail, MessageCircle, Send, Briefcase } from 'lucide-react';
-import { ComplexOrbitalSystem } from '@/components/OrbitalSystem';
-import Navbar from '@/components/Layout/Navbar';
-import Footer from '@/components/Layout/Footer';
-import PageSection from '@/components/Layout/PageSection';
-import Animated from '@/components/Layout/Animated';
+import { Mail, Phone, MessageSquare, Send, Building, Check } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 
-const ContactPage: React.FC = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    category: '',
-    message: ''
-  });
+const contactMethods = [
+  {
+    icon: Mail,
+    title: 'Email Support',
+    description: 'Our team will get back to you within 24 hours.',
+    contact: 'support@postpilot.ai',
+    href: 'mailto:support@postpilot.ai',
+  },
+  {
+    icon: Phone,
+    title: 'Phone Support',
+    description: 'Mon-Fri, 9am-5pm EST.',
+    contact: '+1 (555) 123-4567',
+    href: 'tel:+15551234567',
+  },
+  {
+    icon: MessageSquare,
+    title: 'Live Chat',
+    description: 'Chat with a support agent right now.',
+    contact: 'Start Chat',
+    href: '#',
+  },
+];
+
+const ContactPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
-
-  const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    await new Promise(resolve => setTimeout(resolve, 1200));
-    setSubmitSuccess(true);
-    setFormData({ name: '', email: '', subject: '', category: '', message: '' });
-    setTimeout(() => setSubmitSuccess(false), 4000);
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 1500));
     setIsSubmitting(false);
+    setSubmitSuccess(true);
+    // Reset form after a delay
+    setTimeout(() => setSubmitSuccess(false), 5000);
   };
 
-  const contactMethods = [
-    {
-      icon: <Mail className="w-6 h-6 text-blue-600" />,
-      title: 'Email Support',
-      description: 'Get detailed, professional help from our team',
-      contact: 'support@postpilot.ai',
-      action: 'Email Us',
-      href: 'mailto:support@postpilot.ai'
-    },
-    {
-      icon: <MessageCircle className="w-6 h-6 text-purple-600" />,
-      title: 'Live Chat',
-      description: 'Chat with our professional support team in real-time',
-      contact: 'Available 24/7',
-      action: 'Start Chat',
-      href: '#'
-    },
-    {
-      icon: <Briefcase className="w-6 h-6 text-green-600" />,
-      title: '1:1 Consultation',
-      description: 'Book a session with a LinkedIn expert',
-      contact: 'Schedule a call',
-      action: 'Book Now',
-      href: '#'
-    }
-  ];
-
-
   return (
-    <div className="min-h-screen pt-16 bg-gray-50">
+    <div className="bg-background text-foreground">
       {/* Hero Section */}
-      <section className="py-20 bg-gradient-to-br from-blue-50 via-white to-purple-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-            Get in
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
-              {" "}Touch
-            </span>
-          </h1>
-          <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-            Have questions about PostPilot? Need help with your account? Want to share feedback? 
-            We'd love to hear from you and help you succeed.
+      <section className="py-20 md:py-28">
+        <div className="container mx-auto px-4 text-center">
+          <Badge variant="outline" className="mb-4">We're Here to Help</Badge>
+          <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-4">Get in Touch</h1>
+          <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto">
+            Have a question, a feature request, or need help with your account? Reach out and we'll be happy to assist.
           </p>
         </div>
       </section>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Contact Methods */}
-          <div className="lg:col-span-1 space-y-6">
-            <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">How to Reach Us</h2>
-              <div className="space-y-4">
-                {contactMethods.map((method, index) => (
-                  <Animated key={index} delay={0.1 * (index + 1)}>
-                    <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-                      <CardContent className="p-6">
-                        <div className="flex items-start space-x-4">
-                          <div className="flex-shrink-0">{method.icon}</div>
-                          <div className="flex-1">
-                            <h3 className="font-semibold text-gray-900 mb-1">{method.title}</h3>
-                            <p className="text-gray-600 text-sm mb-2">{method.description}</p>
-                            <p className="font-medium text-gray-900 mb-3">{method.contact}</p>
-                            <Button size="sm" variant="outline">
-                              {method.action}
-                            </Button>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </Animated>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      {/* Main Section */}
-      <PageSection className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {/* Contact Form */}
-            <div className="bg-gray-50 rounded-2xl p-8 shadow-sm">
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">Send a Message</h2>
-              <p className="text-gray-600 mb-6">We typically respond within 24 hours.</p>
-              {submitSuccess && (
-                <div className="mb-6 p-4 bg-green-50 text-green-800 rounded-lg">
-                  Thank you for your message! We'll get back to you soon.
-                </div>
-              )}
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <Label htmlFor="name" className="text-gray-700">Full Name *</Label>
-                    <div className="mt-1 relative">
-                      <Input
-                        id="name"
-                        value={formData.name}
-                        onChange={(e) => handleInputChange('name', e.target.value)}
-                        placeholder="Your name"
-                        required
-                      />
+      {/* Contact Form & Info Section */}
+      <section className="py-20 md:py-24 bg-muted/40">
+        <div className="container mx-auto px-4">
+          <div className="grid lg:grid-cols-2 gap-12">
+            {/* Form Card */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-2xl">Send Us a Message</CardTitle>
+                <CardDescription>We typically respond within one business day.</CardDescription>
+              </CardHeader>
+              <CardContent>
+                {submitSuccess ? (
+                  <div className="flex flex-col items-center justify-center h-full text-center p-8">
+                    <div className="bg-green-100 p-3 rounded-full mb-4">
+                      <Check className="h-8 w-8 text-green-600" />
                     </div>
+                    <h3 className="text-xl font-semibold mb-2">Message Sent!</h3>
+                    <p className="text-muted-foreground">Thank you for reaching out. We'll get back to you shortly.</p>
                   </div>
-                  <div>
-                    <Label htmlFor="email" className="text-gray-700">Email Address *</Label>
-                    <div className="mt-1 relative">
-                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <Mail className="h-5 w-5 text-gray-400" />
+                ) : (
+                  <form onSubmit={handleSubmit} className="space-y-6">
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="name">Full Name</Label>
+                        <Input id="name" placeholder="John Doe" required />
                       </div>
-                      <Input
-                        id="email"
-                        type="email"
-                        className="pl-10"
-                        value={formData.email}
-                        onChange={(e) => handleInputChange('email', e.target.value)}
-                        placeholder="your@email.com"
-                        required
-                      />
+                      <div className="space-y-2">
+                        <Label htmlFor="email">Email Address</Label>
+                        <Input id="email" type="email" placeholder="john.doe@example.com" required />
+                      </div>
                     </div>
-                  </div>
-                </div>
-                <div>
-                  <Label htmlFor="category" className="text-gray-700">Category *</Label>
-                  <div className="mt-1 relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <Briefcase className="h-5 w-5 text-gray-400" />
+                    <div className="space-y-2">
+                      <Label htmlFor="category">Inquiry Type</Label>
+                      <Select required>
+                        <SelectTrigger id="category">
+                          <SelectValue placeholder="Select a category" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="support">Technical Support</SelectItem>
+                          <SelectItem value="billing">Billing & Subscriptions</SelectItem>
+                          <SelectItem value="feedback">Feedback & Suggestions</SelectItem>
+                          <SelectItem value="partnership">Partnership Inquiry</SelectItem>
+                          <SelectItem value="other">Other</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
-                    <Select value={formData.category} onValueChange={(value) => handleInputChange('category', value)}>
-                      <SelectTrigger className="pl-10">
-                        <SelectValue placeholder="Select a category" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="general">General Inquiry</SelectItem>
-                        <SelectItem value="support">Technical Support</SelectItem>
-                        <SelectItem value="account">Account Help</SelectItem>
-                        <SelectItem value="feedback">Feedback</SelectItem>
-                        <SelectItem value="other">Other</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-                <div>
-                  <Label htmlFor="subject" className="text-gray-700">Subject *</Label>
-                  <Input
-                    id="subject"
-                    value={formData.subject}
-                    onChange={(e) => handleInputChange('subject', e.target.value)}
-                    placeholder="How can we help you?"
-                    required
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="message" className="text-gray-700">Message *</Label>
-                  <Textarea
-                    id="message"
-                    value={formData.message}
-                    onChange={(e) => handleInputChange('message', e.target.value)}
-                    placeholder="Tell us more about your inquiry..."
-                    rows={5}
-                    required
-                    className="mt-1"
-                  />
-                </div>
-                <div className="pt-2">
-                  <Button type="submit" className="w-full md:w-auto bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700" disabled={isSubmitting}>
-                    {isSubmitting ? 'Sending...' : (
-                      <>
-                        <Send className="w-4 h-4 mr-2" />
-                        Send Message
-                      </>
-                    )}
-                  </Button>
-                </div>
-              </form>
-            </div>
-            {/* Professional Support Methods */}
-            <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-8">Other ways to reach us</h2>
-              <div className="space-y-6">
-                {contactMethods.map((method, idx) => (
-                  <Animated key={idx} delay={0.1 * (idx + 1)}>
-                    <Card className="border border-gray-100 hover:border-blue-100 transition-colors">
-                      <CardContent className="p-6">
-                        <div className="flex items-start">
-                          <div className="flex-shrink-0 bg-gradient-to-br from-blue-50 to-purple-50 p-3 rounded-xl">
-                            {method.icon}
+                    <div className="space-y-2">
+                      <Label htmlFor="subject">Subject</Label>
+                      <Input id="subject" placeholder="How can we help?" required />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="message">Message</Label>
+                      <Textarea id="message" placeholder="Tell us more..." rows={5} required />
+                    </div>
+                    <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
+                      {isSubmitting ? 'Sending...' : <><Send className="mr-2 h-4 w-4" /> Send Message</>}
+                    </Button>
+                  </form>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Info Side */}
+            <div className="space-y-8">
+              <div>
+                <h2 className="text-2xl font-bold tracking-tight mb-4">Contact Information</h2>
+                <div className="space-y-4">
+                  {contactMethods.map((method) => (
+                    <a key={method.title} href={method.href} className="block">
+                      <Card className="hover:border-primary/80 transition-colors">
+                        <CardContent className="p-6 flex items-start space-x-4">
+                          <div className="bg-primary/10 p-3 rounded-full">
+                            <method.icon className="h-6 w-6 text-primary" />
                           </div>
-                          <div className="ml-4">
-                            <h3 className="text-lg font-semibold text-gray-900">{method.title}</h3>
-                            <p className="mt-1 text-gray-600">{method.description}</p>
-                            <p className="mt-2 font-medium text-gray-900">{method.contact}</p>
-                            <a href={method.href} className="mt-2 inline-flex items-center text-blue-600 hover:text-blue-800 font-medium">
-                              {method.action}
-                            </a>
+                          <div>
+                            <h3 className="font-semibold text-lg">{method.title}</h3>
+                            <p className="text-muted-foreground">{method.description}</p>
+                            <p className="text-primary font-medium mt-1">{method.contact}</p>
                           </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </Animated>
-                ))}
+                        </CardContent>
+                      </Card>
+                    </a>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold tracking-tight mb-4">Our Office</h2>
+                <Card>
+                  <CardContent className="p-6 flex items-start space-x-4">
+                    <div className="bg-primary/10 p-3 rounded-full">
+                      <Building className="h-6 w-6 text-primary" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-lg">Corporate HQ</h3>
+                      <p className="text-muted-foreground">123 AI Avenue, Suite 404, Silicon Valley, CA 94043</p>
+                    </div>
+                  </CardContent>
+                </Card>
               </div>
             </div>
           </div>
         </div>
-      </PageSection>
-      <Footer />
+      </section>
     </div>
   );
 };
 
 export default ContactPage;
-

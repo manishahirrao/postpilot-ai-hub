@@ -63,14 +63,14 @@ const InvestorsPage: React.FC = () => {
   ];
 
   const milestones: Milestone[] = [
-    { date: 'Q1 2025', event: 'Company Founded', description: 'PostPilot incorporated with founding team' },
+    { date: 'Q1 2025', event: 'Company Founded', description: 'ContentHelm incorporated with founding team' },
     { date: 'Q3 2025', event: 'Product Launch', description: 'Beta launch with 1,000 early users' },
     { date: 'Q4 2025', event: 'Market Validation', description: 'Achieved product-market fit metrics' },
   ];
 
   return (
     <div className="min-h-screen flex flex-col hero-gradient">
-      <Navbar />
+      
       <main className="flex-1 relative overflow-hidden pt-24">
         {/* Hero Section */}
         <section className="relative py-24">
@@ -92,7 +92,7 @@ const InvestorsPage: React.FC = () => {
                 </span>
               </h1>
               <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
-                PostPilot is backed by world-class investors who share our vision of democratizing 
+                ContentHelm is backed by world-class investors who share our vision of democratizing 
                 professional success through AI-powered career tools.
               </p>
               
@@ -421,7 +421,7 @@ const InvestorsPage: React.FC = () => {
           </div>
         </section>
       </main>
-      <Footer />
+    
     </div>
   );
 };

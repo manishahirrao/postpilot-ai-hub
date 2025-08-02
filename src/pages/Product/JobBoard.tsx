@@ -24,6 +24,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { JobDetailModal } from "../JobDetailModal";
 import { OrbitalSystem } from "@/components/OrbitalSystem";
+import ProductLayout from "@/components/Layout/ProductLayout";
 
 interface Job {
   id: string;
@@ -216,7 +217,11 @@ export default function JobBoard() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-50 dark:from-purple-950 dark:to-indigo-950 relative overflow-hidden">
+    <ProductLayout 
+      title="Job Board"
+      description="Find your dream job with our curated job board"
+      className="bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800"
+    >
       {/* Background Orbital Systems */}
       <div className="absolute inset-0 pointer-events-none">
         <motion.div
@@ -591,6 +596,6 @@ export default function JobBoard() {
         isOpen={isModalOpen}
         onClose={closeJobDetail}
       />
-    </div>
+    </ProductLayout>
   );
 }

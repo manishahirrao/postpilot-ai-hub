@@ -15,9 +15,7 @@ const EmployerDashboard = lazy(() => Promise.resolve({ default: () => <Placehold
 const HrAgencyDashboard = lazy(() => Promise.resolve({ default: () => <PlaceholderDashboard /> }));
 
 // Import page components for menu items
-const AboutPage = lazy(() => import('@/pages/About/AboutUsPage'));
-const CareersPage = lazy(() => import('@/pages/About/CareersPage'));
-const ManagementTeam = lazy(() => import('@/pages/About/ManagementPage'));
+const AboutPage = lazy(() => import('@/pages/About/AboutUsPage'))
 const InvestorRelations = lazy(() => import('@/pages/About/InvestorsPage'));
 const ContactPage = lazy(() => import('@/pages/ContactPage'));
 const SolutionsPage = lazy(() => import('@/pages/Solutions/WhyUsPage'));
@@ -76,8 +74,6 @@ const Dashboard: FC = () => {
               
               {/* About section routes */}
               <Route path="/about" element={<AboutPage />} />
-              <Route path="/about/careers" element={<CareersPage />} />
-              <Route path="/about/management" element={<ManagementTeam />} />
               <Route path="/about/investors" element={<InvestorRelations />} />
               <Route path="/contact" element={<ContactPage />} />
               

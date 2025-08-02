@@ -4,10 +4,9 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+
 import { ArrowRight, Target, Heart, Users, Award, Rocket, Globe } from 'lucide-react';
-import Navbar from '@/components/Layout/Navbar';
-import Footer from '@/components/Layout/Footer';
+import MainLayout from '@/components/Layout/MainLayout';
 import { ComplexOrbitalSystem } from '@/components/OrbitalSystem';
 
 const AboutUsPage: React.FC = () => {
@@ -46,7 +45,7 @@ const AboutUsPage: React.FC = () => {
     {
       year: '2025',
       title: 'Company Founded',
-      description: 'PostPilot was founded with a mission to democratize professional networking and career advancement.'
+      description: 'ContentHelm was founded with a mission to democratize professional networking and career advancement.'
     },
     {
       year: '2025',
@@ -64,11 +63,10 @@ const AboutUsPage: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col hero-gradient">
-      <Navbar />
-      <main className="flex-1 relative overflow-hidden pt-24">
+    
+      <main className="flex-1 relative overflow-hidden ">
         {/* Hero Section */}
-        <section className="relative py-24">
+        <section className="relative ">
           {/* Animated background elements */}
           <div className="absolute inset-0 overflow-hidden">
             {/* Complex multi-layer orbital system */}
@@ -535,15 +533,7 @@ const AboutUsPage: React.FC = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <Link to="/about/management">
-              <Button 
-                size="lg" 
-                className="bg-gradient-to-r from-cyan-500 to-purple-600 text-white shadow-lg hover:shadow-purple-500/25 rounded-full px-8 py-3 font-semibold text-lg transition-all duration-300"
-              >
-                Meet the Full Team
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </Button>
-            </Link>
+          
           </motion.div>
         </div>
       </section>
@@ -590,7 +580,7 @@ const AboutUsPage: React.FC = () => {
             </h2>
             
             <p className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto">
-              Join thousands of professionals who are already accelerating their success with PostPilot's powerful tools and community.
+              Join thousands of professionals who are already accelerating their success with ContentHelm powerful tools and community.
             </p>
             
             <motion.div 
@@ -675,8 +665,7 @@ const AboutUsPage: React.FC = () => {
         </div>
       </section>
       </main>
-      <Footer />
-    </div>
+    
   );
 };
 

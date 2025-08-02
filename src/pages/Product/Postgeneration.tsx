@@ -1,11 +1,32 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { 
-  Wand2Icon, RefreshCwIcon, LightbulbIcon, ClipboardCopy, 
-  Sparkles, Download, Eye, Share2, Image as ImageIcon, 
-  Music, FileText, Hash, Upload, Zap, CheckCircle, Copy,
-  Search, ChevronDown, MapPin, ArrowRight, ArrowLeft,
-  PlayCircle, Clock, Palette, Settings
+  Wand2 as Wand2Icon, 
+  RefreshCw as RefreshCwIcon, 
+  Lightbulb as LightbulbIcon, 
+  ClipboardCopy, 
+  Sparkles, 
+  Download, 
+  Eye, 
+  Share2, 
+  Image as ImageIcon, 
+  Music, 
+  FileText, 
+  Hash, 
+  Upload, 
+  Zap, 
+  CheckCircle, 
+  Copy,
+  Search, 
+  ChevronDown, 
+  MapPin, 
+  ArrowRight, 
+  ArrowLeft,
+  PlayCircle, 
+  Clock, 
+  Palette, 
+  Settings
 } from 'lucide-react';
+import { useThemeStyles } from '@/lib/theme-utils';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -18,6 +39,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
+import ProductLayout from '@/components/Layout/ProductLayout';
 
 interface Country {
   name: string;
@@ -137,8 +159,21 @@ const FieldWithControls = ({
 );
 
 export const ContentGenerator: React.FC<ContentGeneratorProps> = ({ selectedAdType = "LinkedIn" }) => {
+  const themeStyles = useThemeStyles();
+  const { toast } = useToast();
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [generatedContent, setGeneratedContent] = useState("");
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
+
   const [loading, setLoading] = useState(false);
-  const [generatedContent, setGeneratedContent] = useState('');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [hashtags, setHashtags] = useState('');
@@ -170,7 +205,6 @@ export const ContentGenerator: React.FC<ContentGeneratorProps> = ({ selectedAdTy
   const [selectedTemplate, setSelectedTemplate] = useState<number | null>(null);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const { toast } = useToast();
 
   const filteredCountries = COUNTRIES.filter(country =>
     country.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -347,7 +381,11 @@ ${productUrl ? `🔗 Product URL: ${productUrl}\n\n` : ''}${toneInfo}${contentTy
   };
 
   return (
-    <div className="space-y-8 px-4 py-8 max-w-7xl mx-auto">
+    <ProductLayout 
+      title="AI-Powered Content Generation"
+      description="Create engaging and effective content with our AI-powered tools"
+      className={themeStyles.bgGradient}
+    >
       {/* Tone Selection Section */}
       <Card className="shadow-lg border-0 bg-gradient-to-r from-purple-50 to-indigo-50">
         <CardHeader className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-t-lg">
@@ -1118,28 +1156,28 @@ ${productUrl ? `🔗 Product URL: ${productUrl}\n\n` : ''}${toneInfo}${contentTy
                 <div className="mx-auto w-24 h-24 bg-gradient-to-r from-indigo-100 to-purple-100 rounded-full flex items-center justify-center">
                   <Sparkles className="w-12 h-12 text-indigo-500" />
                 </div>
-                <div className="space-y-2">
-                  <h3 className="text-xl font-semibold text-gray-800">Ready to Create Amazing Content?</h3>
-                  <p className="text-gray-600 max-w-md mx-auto">
-                    Fill in your content details and let our AI generate engaging {selectedAdType} posts that resonate with your audience.
-                  </p>
-                </div>
-                <div className="grid grid-cols-2 gap-4 max-w-sm mx-auto text-sm text-gray-500">
-                  <div className="flex items-center space-x-2">
-                    <CheckCircle className="w-4 h-4 text-green-500" />
-                    <span>AI-Powered</span>
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                  <div className="text-center mb-12">
+                    <h1 className={`text-4xl font-bold mb-4 ${themeStyles.textPrimary}`}>
+                      AI Content Generator
+                    </h1>
+                    <p className={`text-xl ${themeStyles.textSecondary} max-w-3xl mx-auto`}>
+                      Create engaging {selectedAdType} content with AI in seconds. Let our AI generate engaging {selectedAdType} posts that resonate with your audience.
+                    </p>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <CheckCircle className="w-4 h-4 text-green-500" />
-                    <span>Instant Results</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <CheckCircle className="w-4 h-4 text-green-500" />
-                    <span>Platform Optimized</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <CheckCircle className="w-4 h-4 text-green-500" />
-                    <span>Ready to Publish</span>
+                  <div className="flex flex-col items-center space-y-4">
+                    <div className="flex items-center space-x-2">
+                      <CheckCircle className="w-4 h-4 text-green-500" />
+                      <span>Instant Results</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <CheckCircle className="w-4 h-4 text-green-500" />
+                      <span>Platform Optimized</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <CheckCircle className="w-4 h-4 text-green-500" />
+                      <span>Ready to Publish</span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1147,6 +1185,6 @@ ${productUrl ? `🔗 Product URL: ${productUrl}\n\n` : ''}${toneInfo}${contentTy
           </CardContent>
         </Card>
       </div>
-    </div>
+    </ProductLayout>
   );
 };

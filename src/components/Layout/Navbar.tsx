@@ -1,8 +1,8 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, Fragment } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sun, Moon, Menu, X, ChevronDown, Sparkles, Award, TrendingUp, Shield, Users, Briefcase, User, Handshake, Mail } from "lucide-react";
+import { Menu, X, ChevronDown, MessageSquare, Award, TrendingUp, Shield, Mic2, Briefcase, User, Handshake, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useTheme } from "../ThemeProvider";
+import { cn } from "@/lib/utils";
 import { Link, useLocation } from "react-router-dom";
 import AgentOSLogo from "../Logo/logo";
 
@@ -14,313 +14,231 @@ interface NavItem {
   items?: NavItem[];
 }
 
-const aboutItems = [
-  { name: 'About Us', href: '/about', icon: Users, desc: 'Our story' },
-  { name: 'Careers', href: '/about/careers', icon: Briefcase, desc: 'Join our team' },
-  { name: 'Management Team', href: '/about/management', icon: User, desc: 'Meet the leaders' },
-  { name: 'Investor Relations', href: '/about/investors', icon: Handshake, desc: 'For investors' },
-  { name: 'Contact Us', href: '/contact', icon: Mail, desc: 'Get in touch' }
+const aboutItems: NavItem[] = [
+  { name: 'About Us', href: '/about', icon: User, desc: 'Our story, mission, and values' },
+  { name: 'Investors', href: '/about/investors', icon: Handshake, desc: 'Information for our investors' },
+  
 ];
 
-const solutionItems = [
-  { name: 'Why Us?', href: '/solutions/why-us', icon: Award, desc: 'See our advantages' },
-  { name: 'By Use Case', href: '/solutions/use-cases', icon: Briefcase, desc: 'Industry solutions' }
+const solutionItems: NavItem[] = [
+  { name: 'Why ContentHelm?', href: '/solutions/why-us', icon: Award, desc: 'Discover your competitive advantage' },
+  { name: 'Use Cases', href: '/solutions/use-cases', icon: Briefcase, desc: 'Solutions for every industry' }
 ];
 
-const productItems = [
-  { name: 'LinkedIn Post Builder', href: '/product/personal-post-generation', icon: Sparkles, desc: 'Create engaging posts' },
-  { name: 'Resume Enhancer', href: '/product/resume-builder', icon: Award, desc: 'Boost your profile' },
-  { name: 'Career Match', href: '/product/job-matcher', icon: TrendingUp, desc: 'Find perfect jobs' },
-  { name: 'Career Insights & Tips', href: '/product/career-analytics', icon: Shield, desc: 'Get expert advice' }
+const productItems: NavItem[] = [
+  { name: 'LinkedIn Post Builder', href: '/product/post-generation', icon: MessageSquare, desc: 'Craft compelling, engaging posts' },
+  { name: 'Resume Enhancer', href: '/product/resume-enhancer', icon: Award, desc: 'Optimize your resume for success' },
+  { name: 'Career Match', href: '/product/job-matcher', icon: TrendingUp, desc: 'Find your perfect job match' },
+  { name: 'Mock Interview', href: '/product/mock-interview', icon: Mic2, desc: 'Practice and excel in interviews' },
+  { name: 'Career Insights', href: '/product/career-analytics', icon: Shield, desc: 'Gain expert advice and insights' }
 ];
 
 const navItems: NavItem[] = [
   { name: 'Home', href: '/' },
-  { 
-    name: 'About', 
-    href: '/about',
-    items: aboutItems
-  },
-  { 
-    name: 'Solution', 
-    href: '/solution',
-    items: solutionItems
-  },
+  
+  { name: 'About', href: '/about', items: aboutItems },
+  { name: 'Products', href: '/product', items: productItems },
+  { name: 'Solutions', href: '/solutions', items: solutionItems },
   { name: 'Resources', href: '/resources' },
-  { 
-    name: 'Products', 
-    href: '/product',
-    items: productItems
-  },
-  { name: 'Pricing', href: '/pricing' }
+  
+  { name: 'Pricing', href: '/pricing' },
+  { name: 'Contact Us', href: '/contact', icon: Mail, desc: 'Get in touch with our team' }
 ];
 
-const DropdownMenu = ({ items, isOpen, onClose }: { items: NavItem[], isOpen: boolean, onClose: () => void }) => {
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (ref.current && !ref.current.contains(event.target as Node)) {
-        onClose();
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [onClose]);
-
-  if (!isOpen) return null;
-
-  return (
-    <motion.div
-      ref={ref}
-      className="absolute left-0 mt-2 w-64 rounded-lg shadow-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 overflow-hidden"
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 10 }}
-      transition={{ duration: 0.15 }}
-      style={{
-        '--tw-shadow': '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
-        '--tw-shadow-colored': '0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color)'
-      } as React.CSSProperties}
-    >
-      <div className="py-1">
-        {items.map((item) => (
-          <Link
-            key={item.href}
-            to={item.href}
-            className="flex items-center px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
-          >
-            {item.icon && <item.icon className="h-5 w-5 text-muted-foreground mr-3" />}
-            <span>{item.name}</span>
-          </Link>
-        ))}
-      </div>
-    </motion.div>
-  );
-};
-
-const MobileDropdownMenu = ({ items, isOpen }: { items: NavItem[], isOpen: boolean }) => {
-  if (!isOpen) return null;
-
-  const location = useLocation();
-  
-  return (
-    <div className="pl-6 py-1 space-y-1">
-      {items.map((item) => (
-        <Link
-          key={item.href}
-          to={item.href}
-          className={`px-3 py-2 text-sm font-medium rounded-md transition-colors ${
-            location.pathname === item.href
-              ? 'bg-primary text-primary-foreground'
-              : 'text-foreground/70 hover:text-foreground hover:bg-accent'
-          }`}
-        >
-          {item.name}
-        </Link>
-      ))}
-    </div>
-  );
-};
+const DropdownMenu = ({ items }: { items: NavItem[] }) => (
+  <div className="grid grid-cols-1 gap-1.5 p-2 w-full min-w-[280px]">
+    {items.map((item) => (
+      <Link
+        to={item.href}
+        key={item.href}
+        className="group relative flex items-start gap-3 rounded-lg p-3 text-sm transition-all duration-200 hover:bg-gray-50 hover:shadow-sm focus:outline-none w-full text-left border border-transparent hover:border-border/20"
+      >
+        {item.icon && (
+          <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 text-primary">
+            <item.icon className="h-4.5 w-4.5 transition-transform group-hover:scale-110" />
+          </div>
+        )}
+        <div className="flex-1 space-y-1">
+          <p className="font-medium text-gray-900 group-hover:text-primary transition-colors">{item.name}</p>
+          <p className="text-xs text-gray-500 leading-snug">{item.desc}</p>
+        </div>
+        <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity -z-10" />
+      </Link>
+    ))}
+  </div>
+);
 
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
-  const { theme, setTheme } = useTheme();
-  const { pathname } = useLocation();
+  const [scrolled, setScrolled] = useState(false);
+  const location = useLocation();
+  const dropdownTimeout = useRef<number | null>(null);
 
-  // Initialize theme on mount
   useEffect(() => {
-    // Check for saved theme or system preference
-    const savedTheme = localStorage.getItem('theme');
-    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const initialTheme = savedTheme === 'dark' || (!savedTheme && systemPrefersDark) ? 'dark' : 'light';
-    
-    // Apply the theme
-    if (initialTheme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-    
-    // Update theme state
-    setTheme(initialTheme);
+    const handleScroll = () => setScrolled(window.scrollY > 10);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const toggleTheme = () => {
-    const newTheme = theme === 'dark' ? 'light' : 'dark';
-    
-    // Update the class on the html element
-    if (newTheme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-    
-    // Save to localStorage and update state
-    localStorage.setItem('theme', newTheme);
-    setTheme(newTheme);
+  useEffect(() => {
+    setMobileMenuOpen(false);
+    setOpenDropdown(null);
+  }, [location.pathname]);
+
+  const handleMouseEnter = (name: string) => {
+    if (dropdownTimeout.current) clearTimeout(dropdownTimeout.current);
+    setOpenDropdown(name);
   };
 
-  const toggleDropdown = (name: string) => {
-    setOpenDropdown(openDropdown === name ? null : name);
+  const handleMouseLeave = () => {
+    dropdownTimeout.current = window.setTimeout(() => {
+      setOpenDropdown(null);
+    }, 100);
   };
 
   return (
-    <motion.nav 
-      className="fixed top-0 w-full z-50 backdrop-blur-sm bg-background/80 border-b border-border/10"
-      initial={{ y: -100, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.5, ease: "easeOut" }}
+    <header 
+      className={cn(
+        "sticky top-0 z-50 w-full transition-all duration-300",
+        scrolled 
+          ? "border-b border-border/60 bg-background/80 backdrop-blur-xl"
+          : "border-b border-transparent"
+      )}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          {/* Logo */}
-          <motion.div 
-            className="flex items-center space-x-3"
-            whileHover={{ scale: 1.05 }}
-            transition={{ type: "spring", stiffness: 400, damping: 17 }}
-          >
-            <AgentOSLogo size="lg" />
-            <Link to="/" className="text-xl font-bold bg-gradient-to-r from-cyan-500 to-blue-600 bg-clip-text text-transparent">PostPilot</Link>
-          </motion.div>
-
-          {/* Desktop Navbar */}
-          <div className="hidden md:flex items-center space-x-1 relative">
+      <div className="container flex h-16 items-center justify-between">
+        <div className="flex items-center gap-8">
+          <Link to="/" className="flex items-center gap-2 hover:no-underline">
+            <AgentOSLogo />
+            <span className="text-lg font-semibold text-foreground">ContentHelm</span>
+          </Link>
+          
+          <nav className="hidden lg:flex items-center gap-1">
             {navItems.map((item) => (
-              <div key={item.name} className="relative">
-                <Link 
-                  to={item.href} 
-                  className={`flex items-center px-3 py-2 text-sm font-medium transition-colors rounded-md ${
-                    pathname === item.href
-                      ? 'text-foreground bg-accent'
-                      : 'text-foreground/80 hover:text-foreground hover:bg-accent'
-                  }`}
-                  onClick={(e) => item.items && (e.preventDefault(), toggleDropdown(item.name))}
+              <div 
+                key={item.name}
+                className="relative"
+                onMouseEnter={() => item.items && handleMouseEnter(item.name)}
+                onMouseLeave={() => item.items && handleMouseLeave()}
+              >
+                <Link
+                  to={item.href}
+                  className={cn(
+                    "flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium transition-colors",
+                    location.pathname.startsWith(item.href) && item.href !== '/'
+                      ? 'bg-accent text-accent-foreground'
+                      : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground',
+                    location.pathname === '/' && item.href === '/' 
+                      ? 'bg-accent text-accent-foreground'
+                      : ''
+                  )}
                 >
                   {item.name}
-                  {item.items && (
-                    <ChevronDown 
-                      className={`ml-1 h-4 w-4 transition-transform ${openDropdown === item.name ? 'rotate-180' : ''}`} 
-                    />
-                  )}
+                  {item.items && <ChevronDown className="h-4 w-4" />}
                 </Link>
-                
-                {item.items && (
-                  <div className="relative">
-                    <AnimatePresence>
-                      <DropdownMenu 
-                        items={item.items} 
-                        isOpen={openDropdown === item.name} 
-                        onClose={() => setOpenDropdown(null)} 
-                      />
-                    </AnimatePresence>
-                  </div>
-                )}
+
+                <AnimatePresence>
+                  {item.items && openDropdown === item.name && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 8, scale: 0.98 }}
+                      transition={{ duration: 0.2, ease: "easeOut" }}
+                      className="absolute left-0 top-full mt-1.5 w-auto origin-top-left rounded-xl border bg-white p-1.5 text-foreground shadow-lg z-50 ring-1 ring-border/10"
+                    >
+                      <DropdownMenu items={item.items} />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             ))}
-          </div>
-
-          {/* Theme Toggle & CTA */}
-          <div className="flex items-center space-x-2">
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              onClick={toggleTheme}
-              className="hover:bg-foreground/5 transition-colors duration-200"
-              aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-            >
-              {theme === "dark" ? (
-                <Sun className="h-5 w-5 text-yellow-400" />
-              ) : (
-                <Moon className="h-5 w-5 text-blue-400" />
-              )}
-            </Button>
-            
-            <Button 
-              className="hidden md:block bg-gradient-to-r from-cyan-500 to-purple-600 text-white hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-300 animate-glow"
-              asChild
-            >
-              <Link to="/auth/login">Get Started</Link>
-            </Button>
-            
-            <Button
-              variant="ghost"
-              size="icon"
-              className="md:hidden hover:bg-foreground/5 transition-colors duration-200"
-              onClick={() => setIsOpen(!isOpen)}
-              aria-label={isOpen ? "Close menu" : "Open menu"}
-            >
-              {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-            </Button>
-          </div>
+          </nav>
         </div>
 
-          {/* Mobile menu */}
-          <AnimatePresence>
-            {isOpen && (
-              <motion.div 
-                className="md:hidden bg-background/95 backdrop-blur-sm border-t border-border/10 shadow-lg overflow-hidden"
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.2, ease: "easeOut" }}
-              >
-                <div className="py-2 px-4 space-y-1">
-                  {navItems.map((item) => (
-                    <div key={item.name} className="space-y-1">
-                      <div className="flex items-center justify-between">
-                        <Link
-                          to={item.href}
-                          onClick={(e) => {
-                            if (item.items) {
-                              e.preventDefault();
-                              toggleDropdown(item.name);
-                            } else {
-                              setIsOpen(false);
-                            }
-                          }}
-                          className="flex-1 px-4 py-2 text-base font-medium text-foreground/90 hover:bg-accent rounded-md"
-                        >
-                          {item.name}
-                        </Link>
-                        {item.items && (
-                          <button
-                            onClick={(e) => {
-                              e.preventDefault();
-                              toggleDropdown(item.name);
-                            }}
-                            className="p-2 -mr-2"
-                          >
-                            <ChevronDown 
-                              className={`h-4 w-4 transition-transform ${openDropdown === item.name ? 'rotate-180' : ''}`} 
-                            />
-                          </button>
-                        )}
-                      </div>
-                      {item.items && (
-                        <MobileDropdownMenu 
-                          items={item.items} 
-                          isOpen={openDropdown === item.name} 
-                        />
-                      )}
-                    </div>
-                  ))}
-                </div>
-                <div className="p-4 border-t border-border/10">
-                  <Button 
-                    className="w-full bg-gradient-to-r from-cyan-500 to-purple-600 text-white"
-                    onClick={() => window.location.href = '/auth/login'}
-                  >
-                    Get Started
-                  </Button>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+        <div className="flex items-center gap-2">
+          <div className="hidden lg:flex items-center gap-2">
+            <Button variant="ghost" asChild>
+              <Link to="/login">Sign In</Link>
+            </Button>
+            <Button asChild>
+              <Link to="/signup">Get Started</Link>
+            </Button>
+          </div>
+          
+          <Button
+            variant="ghost"
+            size="icon"
+            className="lg:hidden"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </Button>
+        </div>
       </div>
-    </motion.nav>
+
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
+            className="lg:hidden"
+          >
+            <div className="container space-y-2 p-4">
+              {navItems.map((item) => (
+                <Fragment key={item.name}>
+                  {item.items ? (
+                    <div>
+                      <button
+                        onClick={() => setOpenDropdown(openDropdown === item.name ? null : item.name)}
+                        className="flex w-full items-center justify-between rounded-md py-2 text-sm font-medium"
+                      >
+                        {item.name}
+                        <ChevronDown className={cn('h-4 w-4 transition-transform', openDropdown === item.name && 'rotate-180')} />
+                      </button>
+                      <AnimatePresence>
+                        {openDropdown === item.name && (
+                          <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: 'auto' }}
+                            exit={{ opacity: 0, height: 0 }}
+                            className="overflow-hidden pl-4"
+                          >
+                            {item.items.map((subItem) => (
+                              <Link
+                                key={subItem.href}
+                                to={subItem.href}
+                                className="block rounded-md py-2 text-muted-foreground"
+                              >
+                                {subItem.name}
+                              </Link>
+                            ))}
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  ) : (
+                    <Link to={item.href} className="block rounded-md py-2 text-sm font-medium">
+                      {item.name}
+                    </Link>
+                  )}
+                </Fragment>
+              ))}
+              <div className="flex flex-col gap-2 pt-4">
+                <Button variant="outline" asChild>
+                  <Link to="/login">Sign In</Link>
+                </Button>
+                <Button asChild>
+                  <Link to="/signup">Get Started</Link>
+                </Button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </header>
   );
 };
 
