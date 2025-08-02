@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
 import { 
   BarChart2,
   ArrowRight,
@@ -15,24 +14,136 @@ import {
   Award,
   DollarSign,
   Users,
-  Zap
+  Zap,
+  Sparkles,
+  Brain,
+  Rocket,
+  Eye
 } from 'lucide-react';
-import { useThemeStyles } from '@/lib/theme-utils';
-import ProductLayout from '@/components/Layout/ProductLayout';
+
+// 3D Card Component with glass morphism
+const GlassCard = ({ children, className = "", delay = 0, hover3D = true }) => {
+  const [isHovered, setIsHovered] = useState(false);
+  
+  return (
+    <div 
+      className={`
+        relative group cursor-pointer
+        transform-gpu transition-all duration-700 ease-out
+        ${hover3D && isHovered ? 'scale-[1.02] -translate-y-1' : 'scale-100 translate-y-0'}
+        ${className}
+      `}
+      style={{
+        perspective: '1000px',
+        animationDelay: `${delay}ms`
+      }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <div className={`
+        relative w-full h-full
+        bg-gradient-to-br from-white/10 via-white/5 to-transparent
+        backdrop-blur-xl border border-white/20
+        rounded-3xl overflow-hidden
+        transform-gpu transition-all duration-700
+        ${hover3D && isHovered ? 'rotateX-1 rotateY-1' : 'rotateX-0 rotateY-0'}
+        shadow-2xl shadow-black/20
+      `}>
+        {/* Animated gradient border */}
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        
+        {/* Shimmer effect */}
+        <div className={`
+          absolute -top-4 left-0 w-full h-4 
+          bg-gradient-to-r from-transparent via-white/20 to-transparent
+          transform skew-x-45 transition-transform duration-1000
+          ${isHovered ? 'translate-x-full' : '-translate-x-full'}
+        `} />
+        
+        {/* Content */}
+        <div className="relative z-10 p-6">
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Animated metric component
+const AnimatedMetric = ({ value, label, suffix = "", prefix = "", color = "blue" }) => {
+  const [displayValue, setDisplayValue] = useState(0);
+  
+  useEffect(() => {
+    const numericValue = parseInt(value.toString().replace(/[^0-9]/g, ''));
+    const timer = setTimeout(() => {
+      let current = 0;
+      const increment = numericValue / 30;
+      const counter = setInterval(() => {
+        current += increment;
+        if (current >= numericValue) {
+          setDisplayValue(numericValue);
+          clearInterval(counter);
+        } else {
+          setDisplayValue(Math.floor(current));
+        }
+      }, 50);
+    }, 500);
+    
+    return () => clearTimeout(timer);
+  }, [value]);
+  
+  const colorClasses = {
+    blue: 'from-blue-400 to-cyan-400',
+    purple: 'from-purple-400 to-pink-400',
+    green: 'from-green-400 to-teal-400',
+    orange: 'from-orange-400 to-red-400'
+  };
+  
+  return (
+    <div className="text-center">
+      <div className={`text-4xl font-bold bg-gradient-to-r ${colorClasses[color]} bg-clip-text text-transparent mb-2`}>
+        {prefix}{displayValue}{suffix}
+      </div>
+      <div className="text-white/60 text-sm">{label}</div>
+    </div>
+  );
+};
+
+// Skill progress bar
+const SkillBar = ({ skill, level, delay = 0 }) => {
+  const [animated, setAnimated] = useState(false);
+  
+  useEffect(() => {
+    const timer = setTimeout(() => setAnimated(true), delay);
+    return () => clearTimeout(timer);
+  }, [delay]);
+  
+  return (
+    <div className="space-y-2">
+      <div className="flex justify-between text-sm">
+        <span className="text-white/90">{skill}</span>
+        <span className="text-white/60">{level}%</span>
+      </div>
+      <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+        <div 
+          className="h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full transition-all duration-1000 ease-out"
+          style={{ width: animated ? `${level}%` : '0%' }}
+        />
+      </div>
+    </div>
+  );
+};
 
 const CareerAnalyticsPage = () => {
-  const themeStyles = useThemeStyles();
-  const [mounted, setMounted] = useState(false);
   const [activeTab, setActiveTab] = useState('currentJob');
-  const [expandedSection, setExpandedSection] = useState(null);
+  const [expandedSection, setExpandedSection] = useState('roleSnapshot');
+  const [scrollY, setScrollY] = useState(0);
 
   useEffect(() => {
-    setMounted(true);
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  if (!mounted) {
-    return null;
-  }
 
   const toggleSection = (section) => {
     setExpandedSection(expandedSection === section ? null : section);
@@ -47,14 +158,7 @@ const CareerAnalyticsPage = () => {
     performance: {
       score: 87,
       percentile: "85th",
-      kpis: [
-        { month: "Jan", value: 82 },
-        { month: "Feb", value: 85 },
-        { month: "Mar", value: 88 },
-        { month: "Apr", value: 86 },
-        { month: "May", value: 87 },
-        { month: "Jun", value: 89 }
-      ]
+      trend: "+12%"
     },
     compensation: {
       current: "1,800,000",
@@ -62,555 +166,582 @@ const CareerAnalyticsPage = () => {
       percentile: "70th"
     },
     skills: {
-      strengths: ["UX Research", "Prototyping", "Design Systems"],
-      gaps: ["AI/ML Basics", "Advanced Data Visualization", "Accessibility Certification"]
-    },
-    growth: [
-      {
-        action: "Enroll in AI for Designers course",
-        time: "2-4 hours/week",
-        platform: "Interaction Design Foundation"
-      },
-      {
-        action: "Join Design Leadership Forum",
-        platform: "ADPList"
-      },
-      {
-        action: "Complete WCAG 2.1 Certification",
-        time: "6 weeks",
-        platform: "Deque University"
-      }
-    ]
-  };
-
-  const careerSwitchData = {
-    transferableSkills: {
-      current: ["User Research", "Stakeholder Management", "Visual Storytelling"],
-      matchingRoles: ["UX Researcher", "Product Manager", "Design Educator"]
-    },
-    industryTrends: [
-      {
-        field: "AI/ML Design",
-        growth: "22% annual",
-        skills: ["AI Ethics", "Prompt Engineering", "Data Visualization"]
-      },
-      {
-        field: "Sustainability Consulting",
-        growth: "18% annual",
-        skills: ["Circular Design", "Lifecycle Analysis", "Regulatory Knowledge"]
-      }
-    ],
-    actionPlan: [
-      {
-        step: 1,
-        action: "Complete Product Management Fundamentals",
-        duration: "4 weeks",
-        resource: "Coursera"
-      },
-      {
-        step: 2,
-        action: "Build product strategy case study",
-        details: "Document full product lifecycle from research to launch"
-      },
-      {
-        step: 3,
-        action: "Network with PM community",
-        platform: "Lenny's Slack group"
-      }
-    ]
+      strengths: [
+        { name: "UX Research", level: 92 },
+        { name: "Prototyping", level: 88 },
+        { name: "Design Systems", level: 85 }
+      ],
+      gaps: [
+        { name: "AI/ML Basics", level: 45 },
+        { name: "Data Visualization", level: 52 },
+        { name: "Accessibility", level: 38 }
+      ]
+    }
   };
 
   return (
-    <ProductLayout 
-      title="Career Analytics Dashboard"
-      description="Track your career progress, skills development, and job market insights"
-      className={`${themeStyles.bgGradient} text-gray-900 dark:text-gray-100`}
-    >
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 text-white overflow-hidden">
+      {/* Animated Background */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div 
+          className="absolute top-10 right-10 w-96 h-96 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-full blur-3xl"
+          style={{ 
+            transform: `translate(${scrollY * 0.1}px, ${scrollY * 0.05}px) rotate(${scrollY * 0.1}deg)`,
+            animation: 'pulse 8s ease-in-out infinite' 
+          }}
+        />
+        <div 
+          className="absolute bottom-10 left-10 w-80 h-80 bg-gradient-to-r from-cyan-500/20 to-teal-500/20 rounded-full blur-3xl"
+          style={{ 
+            transform: `translate(${scrollY * -0.1}px, ${scrollY * -0.03}px) rotate(${scrollY * -0.1}deg)`,
+            animation: 'pulse 6s ease-in-out infinite reverse' 
+          }}
+        />
+        
+        {/* Data flow particles */}
+        {[...Array(15)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute w-1 h-1 bg-blue-400/40 rounded-full"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animation: `dataFlow ${4 + Math.random() * 3}s linear infinite`,
+              animationDelay: `${Math.random() * 2}s`
+            }}
+          />
+        ))}
+      </div>
+
       {/* Hero Section */}
-      <section className="relative py-24 overflow-hidden">
-        <div className="absolute inset-0 overflow-hidden">
-          <motion.div 
-            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 border-2 border-cyan-500/10 rounded-full"
-            animate={{ rotate: 360 }}
-            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-          />
-          
-          <motion.div 
-            className="absolute top-20 right-32 w-48 h-48 border border-purple-500/20 rounded-full"
-            animate={{
-              rotate: -360,
-              x: [0, 30, 0, -30, 0],
-              y: [0, -15, 0, 15, 0],
-            }}
-            transition={{
-              rotate: { duration: 25, repeat: Infinity, ease: "linear" },
-              x: { duration: 12, repeat: Infinity, ease: "easeInOut" },
-              y: { duration: 8, repeat: Infinity, ease: "easeInOut" },
-            }}
-          />
-        </div>
-
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h1 className={`text-4xl font-bold mb-4 ${themeStyles.textPrimary}`}>
-              Career Analytics Dashboard
-            </h1>
-            <p className={`text-xl ${themeStyles.textSecondary} max-w-3xl mx-auto`}>
-              AI-powered insights to track and optimize your career growth.
-            </p>
+      <section className="relative py-24 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto text-center">
+          {/* Agent Badge */}
+          <div className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-white/10 to-white/5 backdrop-blur-xl border border-white/20 rounded-full mb-8">
+            <Brain className="w-5 h-5 text-blue-400" />
+            <span className="text-sm font-medium bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+              Career Analytics Agent
+            </span>
           </div>
 
-          <div className="text-center">
-            <motion.div 
-              className="inline-flex items-center space-x-2 bg-gradient-to-r from-cyan-500/10 to-purple-500/10 rounded-full px-4 py-2 border border-cyan-500/20 mb-6"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-            >
-              <BarChart2 className="w-4 h-4 text-cyan-400" />
-              <span className="text-sm font-medium text-white/90">Career Analytics Agent</span>
-            </motion.div>
+          <h1 className="text-5xl lg:text-7xl font-bold leading-tight mb-8">
+            <span className="block bg-gradient-to-r from-white to-white/90 bg-clip-text text-transparent">
+              Data-Driven
+            </span>
+            <span className="block bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
+              Career Intelligence
+            </span>
+          </h1>
 
-            <motion.h1
-              className="text-5xl lg:text-6xl font-bold leading-tight text-white mb-6"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-            >
-              <span className="block">Data-Driven</span>
-              <span className="block bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                Career Insights
-              </span>
-            </motion.h1>
-
-            <motion.p 
-              className="text-xl text-gray-700 dark:text-white/80 max-w-3xl mx-auto mb-8"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.6 }}
-            >
-              Track your career growth, skill development, and market value with data-driven insights
-            </motion.p>
-          </div>
+          <p className="text-xl md:text-2xl text-white/70 max-w-4xl mx-auto mb-12">
+            AI-powered insights to track, analyze, and optimize every aspect of your professional growth with precision analytics.
+          </p>
 
           {/* Tab Navigation */}
-          <motion.div 
-            className="flex justify-center mb-12"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.8 }}
-          >
-            <div className="inline-flex bg-white/10 backdrop-blur-sm rounded-xl p-1 border border-white/20">
+          <div className="flex justify-center mb-16">
+            <div className="inline-flex bg-white/5 backdrop-blur-xl rounded-2xl p-2 border border-white/20">
               <button
                 onClick={() => setActiveTab('currentJob')}
-                className={`px-6 py-3 rounded-lg font-medium transition-all ${activeTab === 'currentJob' ? 'bg-gradient-to-r from-cyan-500 to-purple-600 text-white' : 'text-white/70 hover:text-white'}`}
+                className={`px-8 py-4 rounded-xl font-medium transition-all duration-300 ${
+                  activeTab === 'currentJob' 
+                    ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg' 
+                    : 'text-white/70 hover:text-white hover:bg-white/5'
+                }`}
               >
-                Current Job Deep Dive
+                <div className="flex items-center gap-2">
+                  <BarChart2 className="w-5 h-5" />
+                  Current Role Deep Dive
+                </div>
               </button>
               <button
                 onClick={() => setActiveTab('careerSwitch')}
-                className={`px-6 py-3 rounded-lg font-medium transition-all ${activeTab === 'careerSwitch' ? 'bg-gradient-to-r from-cyan-500 to-purple-600 text-white' : 'text-white/70 hover:text-white'}`}
+                className={`px-8 py-4 rounded-xl font-medium transition-all duration-300 ${
+                  activeTab === 'careerSwitch' 
+                    ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg' 
+                    : 'text-white/70 hover:text-white hover:bg-white/5'
+                }`}
               >
-                Career Switch Navigator
+                <div className="flex items-center gap-2">
+                  <Rocket className="w-5 h-5" />
+                  Career Switch Navigator
+                </div>
               </button>
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
 
       {/* Main Content */}
-      <section className="relative py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="relative py-16 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
           {activeTab === 'currentJob' ? (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-            >
-              {/* Chat Introduction */}
-              <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 mb-8">
-                <div className="flex items-start space-x-3">
-                  <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-full flex items-center justify-center">
-                    <BarChart2 className="w-5 h-5 text-white" />
+            <div className="space-y-8">
+              {/* AI Introduction */}
+              <GlassCard delay={0}>
+                <div className="flex items-start gap-4">
+                  <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
+                    <Brain className="w-6 h-6 text-white" />
                   </div>
-                  <div>
-                    <h3 className="text-lg font-bold text-white mb-1">Career Analytics Agent</h3>
-                    <p className="text-white/80">
-                      👋 Hi [User Name], I'm your Career Analytics Agent. Let's assess where you stand today!
+                  <div className="flex-1">
+                    <h3 className="text-xl font-bold text-white mb-2">Career Analytics Agent</h3>
+                    <p className="text-white/80 leading-relaxed">
+                      👋 Hi there! I'm analyzing your career data to provide personalized insights. Let's see where you stand today and identify growth opportunities.
                     </p>
                   </div>
                 </div>
+              </GlassCard>
+
+              {/* Performance Metrics Dashboard */}
+              <div className="grid md:grid-cols-3 gap-6 mb-8">
+                <GlassCard delay={100}>
+                  <AnimatedMetric 
+                    value={currentJobData.performance.score} 
+                    label="Performance Score" 
+                    suffix="/100"
+                    color="blue" 
+                  />
+                </GlassCard>
+                <GlassCard delay={200}>
+                  <AnimatedMetric 
+                    value={85} 
+                    label="Industry Percentile" 
+                    suffix="th"
+                    color="purple" 
+                  />
+                </GlassCard>
+                <GlassCard delay={300}>
+                  <AnimatedMetric 
+                    value={12} 
+                    label="Growth This Quarter" 
+                    prefix="+"
+                    suffix="%"
+                    color="green" 
+                  />
+                </GlassCard>
               </div>
 
               {/* Role Snapshot */}
-              <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 mb-8">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-xl font-bold text-white flex items-center">
-                    <Briefcase className="w-5 h-5 mr-2 text-cyan-400" />
-                    Role Snapshot
+              <GlassCard delay={100}>
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-2xl font-bold text-white flex items-center gap-3">
+                    <div className="p-2 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-xl">
+                      <Briefcase className="w-6 h-6 text-blue-400" />
+                    </div>
+                    Role Analysis
                   </h3>
                   <button 
                     onClick={() => toggleSection('roleSnapshot')}
-                    className="text-white/70 hover:text-white"
+                    className="p-2 hover:bg-white/10 rounded-lg transition-colors"
                   >
-                    {expandedSection === 'roleSnapshot' ? <ChevronUp /> : <ChevronDown />}
+                    {expandedSection === 'roleSnapshot' ? 
+                      <ChevronUp className="w-5 h-5 text-white/70" /> : 
+                      <ChevronDown className="w-5 h-5 text-white/70" />
+                    }
                   </button>
                 </div>
                 
-                <div className={`${expandedSection === 'roleSnapshot' ? 'block' : 'hidden'} space-y-4`}>
-                  <p className="text-white/80">
-                    You're currently a <span className="font-bold text-white">{currentJobData.roleSnapshot.title}</span> with{' '}
-                    <span className="font-bold text-white">{currentJobData.roleSnapshot.experience}</span> years of experience in{' '}
-                    <span className="font-bold text-white">{currentJobData.roleSnapshot.industry}</span>.
-                  </p>
-                </div>
-              </div>
+                {expandedSection === 'roleSnapshot' && (
+                  <div className="space-y-6">
+                    <div className="grid md:grid-cols-3 gap-6">
+                      <div className="text-center p-4 bg-white/5 rounded-2xl">
+                        <div className="text-2xl font-bold text-white mb-1">{currentJobData.roleSnapshot.title}</div>
+                        <div className="text-white/60">Current Role</div>
+                      </div>
+                      <div className="text-center p-4 bg-white/5 rounded-2xl">
+                        <div className="text-2xl font-bold text-white mb-1">{currentJobData.roleSnapshot.experience} Years</div>
+                        <div className="text-white/60">Experience</div>
+                      </div>
+                      <div className="text-center p-4 bg-white/5 rounded-2xl">
+                        <div className="text-2xl font-bold text-white mb-1">{currentJobData.roleSnapshot.industry}</div>
+                        <div className="text-white/60">Industry</div>
+                      </div>
+                    </div>
+                    
+                    <div className="p-6 bg-gradient-to-r from-blue-900/30 to-purple-900/30 rounded-2xl border border-blue-500/20">
+                      <div className="flex items-center gap-3 mb-3">
+                        <Eye className="w-5 h-5 text-blue-400" />
+                        <span className="font-semibold text-white">AI Insight</span>
+                      </div>
+                      <p className="text-white/90">
+                        Your profile shows strong technical expertise with room for leadership development. Consider focusing on strategic thinking and team management skills to reach the next level.
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </GlassCard>
 
-              {/* Performance Score */}
-              <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 mb-8">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-xl font-bold text-white flex items-center">
-                    <TrendingUp className="w-5 h-5 mr-2 text-purple-400" />
-                    Performance Score & Benchmark
-                  </h3>
-                  <button 
-                    onClick={() => toggleSection('performance')}
-                    className="text-white/70 hover:text-white"
-                  >
-                    {expandedSection === 'performance' ? <ChevronUp /> : <ChevronDown />}
-                  </button>
-                </div>
-                
-                <div className={`${expandedSection === 'performance' ? 'block' : 'hidden'} space-y-4`}>
-                  <div className="flex items-center space-x-4">
-                    <div className="text-4xl font-bold bg-gradient-to-r from-green-400 to-cyan-500 bg-clip-text text-transparent">
-                      {currentJobData.performance.score}%
+              {/* Skills Analysis */}
+              <GlassCard delay={200}>
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-2xl font-bold text-white flex items-center gap-3">
+                    <div className="p-2 bg-gradient-to-r from-green-500/20 to-teal-500/20 rounded-xl">
+                      <Zap className="w-6 h-6 text-green-400" />
                     </div>
-                    <div className="text-white/80">
-                      Landing you in the <span className="font-bold text-white">{currentJobData.performance.percentile}</span> among peers
-                    </div>
-                  </div>
-                  
-                  <div className="mt-4 bg-slate-800/50 rounded-lg p-4">
-                    <div className="flex justify-between text-xs text-white/60 mb-2">
-                      {currentJobData.performance.kpis.map((kpi) => (
-                        <span key={kpi.month}>{kpi.month}</span>
-                      ))}
-                    </div>
-                    <div className="flex items-end h-12 space-x-1">
-                      {currentJobData.performance.kpis.map((kpi) => (
-                        <div 
-                          key={kpi.month} 
-                          className="flex-1 bg-gradient-to-t from-purple-500 to-purple-300 rounded-t-sm"
-                          style={{ height: `${kpi.value * 0.5}%` }}
-                        />
-                      ))}
-                    </div>
-                    <div className="text-sm text-gray-700 dark:text-white/70">
-                      Better than {currentJobData.performance.percentile} of peers
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Compensation Analysis */}
-              <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 mb-8">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-xl font-bold text-white flex items-center">
-                    <DollarSign className="w-5 h-5 mr-2 text-yellow-400" />
-                    Compensation Analysis
-                  </h3>
-                  <button 
-                    onClick={() => toggleSection('compensation')}
-                    className="text-white/70 hover:text-white"
-                  >
-                    {expandedSection === 'compensation' ? <ChevronUp /> : <ChevronDown />}
-                  </button>
-                </div>
-                
-                <div className={`${expandedSection === 'compensation' ? 'block' : 'hidden'} space-y-4`}>
-                  <p className="text-white/80">
-                    Market salary for similar roles ranges from{' '}
-                    <span className="font-bold text-white">₹{currentJobData.compensation.range[0]}</span> to{' '}
-                    <span className="font-bold text-white">₹{currentJobData.compensation.range[1]}</span>. You're currently at{' '}
-                    <span className="font-bold text-white">₹{currentJobData.compensation.current}</span>, placing you in the{' '}
-                    <span className="font-bold text-white">{currentJobData.compensation.percentile}</span>.
-                  </p>
-                  
-                  <div className="mt-4 bg-slate-800/50 rounded-lg p-4">
-                    <h4 className="text-sm font-bold text-white mb-2">Negotiation Tips</h4>
-                    <p className="text-white/80 mb-3">
-                      "Based on my contributions to [Project], I'd like to discuss adjusting my compensation to the market median."
-                    </p>
-                    <p className="text-white/80">
-                      "Given my [Skill] expertise and the current market rates, could we review my compensation package?"
-                    </p>
-                  </div>
-                  <div className="text-4xl font-bold text-gray-900 dark:text-white">
-                    {currentJobData.performance.score}
-                    <span className="text-xl text-gray-700 dark:text-white/70">/100</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Skill Gap Analysis */}
-              <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 mb-8">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-xl font-bold text-white flex items-center">
-                    <Zap className="w-5 h-5 mr-2 text-orange-400" />
-                    Skill Gap & Growth Roadmap
+                    Skills Portfolio
                   </h3>
                   <button 
                     onClick={() => toggleSection('skills')}
-                    className="text-white/70 hover:text-white"
+                    className="p-2 hover:bg-white/10 rounded-lg transition-colors"
                   >
-                    {expandedSection === 'skills' ? <ChevronUp /> : <ChevronDown />}
+                    {expandedSection === 'skills' ? 
+                      <ChevronUp className="w-5 h-5 text-white/70" /> : 
+                      <ChevronDown className="w-5 h-5 text-white/70" />
+                    }
                   </button>
                 </div>
                 
-                <div className={`${expandedSection === 'skills' ? 'block' : 'hidden'} space-y-6`}>
-                  <div>
-                    <h4 className="text-md font-bold text-white mb-2">Your Strengths</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {currentJobData.skills.strengths.map((skill) => (
-                        <span key={skill} className="px-3 py-1 bg-green-500/20 text-green-400 rounded-full text-sm">
-                          {skill}
-                        </span>
-                      ))}
+                {expandedSection === 'skills' && (
+                  <div className="grid md:grid-cols-2 gap-8">
+                    <div>
+                      <h4 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                        <Star className="w-5 h-5 text-yellow-400" />
+                        Your Strengths
+                      </h4>
+                      <div className="space-y-4">
+                        {currentJobData.skills.strengths.map((skill, index) => (
+                          <SkillBar 
+                            key={skill.name} 
+                            skill={skill.name} 
+                            level={skill.level} 
+                            delay={index * 200}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <h4 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                        <Target className="w-5 h-5 text-purple-400" />
+                        Growth Opportunities
+                      </h4>
+                      <div className="space-y-4">
+                        {currentJobData.skills.gaps.map((skill, index) => (
+                          <SkillBar 
+                            key={skill.name} 
+                            skill={skill.name} 
+                            level={skill.level} 
+                            delay={index * 200 + 600}
+                          />
+                        ))}
+                      </div>
                     </div>
                   </div>
-                  
-                  <div>
-                    <h4 className="text-md font-bold text-white mb-2">Key Skills to Develop</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {currentJobData.skills.gaps.map((skill) => (
-                        <span key={skill} className="px-3 py-1 bg-purple-500/20 text-purple-400 rounded-full text-sm">
-                          {skill}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <h4 className="text-md font-bold text-white mb-3">Action Plan</h4>
-                    <div className="space-y-3">
-                      {currentJobData.growth.map((item, index) => (
-                        <div key={index} className="flex items-start space-x-3">
-                          <CheckCircle className="w-5 h-5 text-cyan-400 mt-0.5 flex-shrink-0" />
-                          <div>
-                            <p className="text-white">{item.action}</p>
-                            <p className="text-white/60 text-sm">
-                              {item.time && <span>{item.time} • </span>}
-                              {item.platform}
-                            </p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
+                )}
+              </GlassCard>
 
-              {/* Input Prompt */}
-              <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 mb-8">
-                <h3 className="text-lg font-bold text-white mb-3">Help me refine your analysis</h3>
-                <p className="text-white/80 mb-4">
-                  Please share or confirm: your current role, years of experience, top 3 responsibilities.
-                </p>
-                <div className="flex space-x-3">
-                  <input 
-                    type="text" 
-                    placeholder="Type your response..." 
-                    className="flex-1 bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  />
-                  <button className="bg-gradient-to-r from-cyan-500 to-purple-600 text-white px-6 py-3 rounded-lg font-medium">
-                    Submit
+              {/* Compensation Analysis */}
+              <GlassCard delay={300}>
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-2xl font-bold text-white flex items-center gap-3">
+                    <div className="p-2 bg-gradient-to-r from-yellow-500/20 to-orange-500/20 rounded-xl">
+                      <DollarSign className="w-6 h-6 text-yellow-400" />
+                    </div>
+                    Market Position
+                  </h3>
+                  <button 
+                    onClick={() => toggleSection('compensation')}
+                    className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+                  >
+                    {expandedSection === 'compensation' ? 
+                      <ChevronUp className="w-5 h-5 text-white/70" /> : 
+                      <ChevronDown className="w-5 h-5 text-white/70" />
+                    }
                   </button>
                 </div>
-              </div>
+                
+                {expandedSection === 'compensation' && (
+                  <div className="space-y-6">
+                    <div className="grid md:grid-cols-3 gap-6">
+                      <div className="text-center p-4 bg-gradient-to-r from-green-900/30 to-teal-900/30 rounded-2xl border border-green-500/20">
+                        <div className="text-xl font-bold text-white mb-1">₹{currentJobData.compensation.current}</div>
+                        <div className="text-white/60">Current Salary</div>
+                      </div>
+                      <div className="text-center p-4 bg-gradient-to-r from-blue-900/30 to-purple-900/30 rounded-2xl border border-blue-500/20">
+                        <div className="text-xl font-bold text-white mb-1">{currentJobData.compensation.percentile}</div>
+                        <div className="text-white/60">Market Percentile</div>
+                      </div>
+                      <div className="text-center p-4 bg-gradient-to-r from-orange-900/30 to-red-900/30 rounded-2xl border border-orange-500/20">
+                        <div className="text-xl font-bold text-white mb-1">₹2.5L</div>
+                        <div className="text-white/60">Growth Potential</div>
+                      </div>
+                    </div>
+                    
+                    <div className="p-6 bg-gradient-to-r from-yellow-900/20 to-orange-900/20 rounded-2xl border border-yellow-500/20">
+                      <h4 className="font-bold text-white mb-3 flex items-center gap-2">
+                        <Award className="w-5 h-5 text-yellow-400" />
+                        Negotiation Strategy
+                      </h4>
+                      <div className="space-y-3 text-white/90">
+                        <p>• "Based on my contributions to [Project], I'd like to discuss market-rate alignment"</p>
+                        <p>• "Given my UX expertise and current market rates, let's review compensation"</p>
+                        <p>• "I've consistently exceeded targets - let's discuss growth opportunities"</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </GlassCard>
+
+              {/* Action Input */}
+              <GlassCard delay={400}>
+                <h3 className="text-xl font-bold text-white mb-4">Help me personalize your analysis</h3>
+                <p className="text-white/70 mb-6">
+                  Share your current role, key responsibilities, and career goals for more targeted insights.
+                </p>
+                <div className="flex gap-3">
+                  <input 
+                    type="text" 
+                    placeholder="Tell me about your current role and aspirations..." 
+                    className="flex-1 bg-white/5 border border-white/20 rounded-xl px-6 py-4 text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent backdrop-blur-sm"
+                  />
+                  <button className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-8 py-4 rounded-xl font-medium hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-300 flex items-center gap-2">
+                    <Sparkles className="w-5 h-5" />
+                    Analyze
+                  </button>
+                </div>
+              </GlassCard>
 
               {/* Primary CTA */}
-              <div className="text-center">
-                <button className="bg-gradient-to-r from-cyan-500 to-purple-600 text-white px-8 py-4 text-lg font-semibold rounded-lg hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-300 inline-flex items-center">
-                  Generate My Role Analysis
-                  <ArrowRight className="w-5 h-5 ml-2" />
+              <div className="text-center pt-8">
+                <button className="group bg-gradient-to-r from-blue-500 to-purple-600 text-white px-12 py-6 text-xl font-bold rounded-2xl hover:shadow-2xl hover:shadow-purple-500/25 transition-all duration-300 transform hover:scale-105">
+                  <span className="flex items-center gap-3">
+                    Generate Complete Analysis
+                    <ArrowRight className="w-6 h-6 transform group-hover:translate-x-1 transition-transform" />
+                  </span>
                 </button>
               </div>
-            </motion.div>
+            </div>
           ) : (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-            >
-              {/* Chat Introduction */}
-              <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 mb-8">
-                <div className="flex items-start space-x-3">
-                  <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-600 rounded-full flex items-center justify-center">
-                    <BarChart2 className="w-5 h-5 text-white" />
+            /* Career Switch Tab Content */
+            <div className="space-y-8">
+              {/* AI Introduction for Career Switch */}
+              <GlassCard delay={0}>
+                <div className="flex items-start gap-4">
+                  <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center shadow-lg">
+                    <Rocket className="w-6 h-6 text-white" />
                   </div>
-                  <div>
-                    <h3 className="text-lg font-bold text-white mb-1">Career Analytics Agent</h3>
-                    <p className="text-white/80">
-                      🤔 Dreaming of a change? Share your passions, and I'll recommend fitting career paths.
+                  <div className="flex-1">
+                    <h3 className="text-xl font-bold text-white mb-2">Career Transition Specialist</h3>
+                    <p className="text-white/80 leading-relaxed">
+                      🚀 Ready for a change? I'll analyze your transferable skills and map the perfect career transition path based on market trends and your strengths.
                     </p>
                   </div>
                 </div>
+              </GlassCard>
+
+              {/* Transition Metrics */}
+              <div className="grid md:grid-cols-3 gap-6 mb-8">
+                <GlassCard delay={100}>
+                  <AnimatedMetric 
+                    value={78} 
+                    label="Skill Transferability" 
+                    suffix="%"
+                    color="purple" 
+                  />
+                </GlassCard>
+                <GlassCard delay={200}>
+                  <AnimatedMetric 
+                    value={24} 
+                    label="Matching Career Paths" 
+                    color="blue" 
+                  />
+                </GlassCard>
+                <GlassCard delay={300}>
+                  <AnimatedMetric 
+                    value={6} 
+                    label="Months to Transition" 
+                    color="green" 
+                  />
+                </GlassCard>
               </div>
 
               {/* Transferable Skills */}
-              <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 mb-8">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-xl font-bold text-white flex items-center">
-                    <Users className="w-5 h-5 mr-2 text-pink-400" />
-                    Transferable Skills Matcher
-                  </h3>
-                  <button 
-                    onClick={() => toggleSection('transferableSkills')}
-                    className="text-white/70 hover:text-white"
-                  >
-                    {expandedSection === 'transferableSkills' ? <ChevronUp /> : <ChevronDown />}
-                  </button>
-                </div>
+              <GlassCard delay={100}>
+                <h3 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                  <div className="p-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-xl">
+                    <Users className="w-6 h-6 text-purple-400" />
+                  </div>
+                  Skills Translation Matrix
+                </h3>
                 
-                <div className={`${expandedSection === 'transferableSkills' ? 'block' : 'hidden'} space-y-4`}>
-                  <p className="text-white/80">
-                    Your top transferable skills—{' '}
-                    {careerSwitchData.transferableSkills.current.map((skill, index) => (
-                      <React.Fragment key={skill}>
-                        <span className="font-bold text-white">{skill}</span>
-                        {index < careerSwitchData.transferableSkills.current.length - 1 ? ', ' : ''}
-                      </React.Fragment>
-                    ))}—align with roles like{' '}
-                    {careerSwitchData.transferableSkills.matchingRoles.map((role, index) => (
-                      <React.Fragment key={role}>
-                        <span className="font-bold text-white">{role}</span>
-                        {index < careerSwitchData.transferableSkills.matchingRoles.length - 1 ? ', ' : ''}
-                      </React.Fragment>
-                    ))}.
-                  </p>
+                <div className="grid md:grid-cols-2 gap-8">
+                  <div>
+                    <h4 className="text-lg font-bold text-white mb-4">Your Transferable Assets</h4>
+                    <div className="space-y-3">
+                      {['User Research', 'Stakeholder Management', 'Visual Storytelling'].map((skill, index) => (
+                        <div key={skill} className="flex items-center gap-3 p-3 bg-white/5 rounded-xl">
+                          <CheckCircle className="w-5 h-5 text-green-400" />
+                          <span className="text-white/90">{skill}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <h4 className="text-lg font-bold text-white mb-4">Matching Career Paths</h4>
+                    <div className="space-y-3">
+                      {['UX Researcher', 'Product Manager', 'Design Educator'].map((role, index) => (
+                        <div key={role} className="flex items-center gap-3 p-3 bg-gradient-to-r from-purple-900/30 to-pink-900/30 rounded-xl border border-purple-500/20">
+                          <Target className="w-5 h-5 text-purple-400" />
+                          <span className="text-white/90">{role}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
-              </div>
+              </GlassCard>
 
               {/* Industry Trends */}
-              <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 mb-8">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-xl font-bold text-white flex items-center">
-                    <TrendingUp className="w-5 h-5 mr-2 text-green-400" />
-                    Industry Trend Insights
-                  </h3>
-                  <button 
-                    onClick={() => toggleSection('industryTrends')}
-                    className="text-white/70 hover:text-white"
-                  >
-                    {expandedSection === 'industryTrends' ? <ChevronUp /> : <ChevronDown />}
-                  </button>
-                </div>
+              <GlassCard delay={200}>
+                <h3 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                  <div className="p-2 bg-gradient-to-r from-green-500/20 to-teal-500/20 rounded-xl">
+                    <TrendingUp className="w-6 h-6 text-green-400" />
+                  </div>
+                  High-Growth Opportunities
+                </h3>
                 
-                <div className={`${expandedSection === 'industryTrends' ? 'block' : 'hidden'} space-y-6`}>
-                  <p className="text-white/80">
-                    Fields with fastest growth: AI/ML, Digital Marketing, Sustainability Consulting.
-                  </p>
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="p-6 bg-gradient-to-r from-blue-900/30 to-cyan-900/30 rounded-2xl border border-blue-500/20">
+                    <h4 className="text-xl font-bold text-white mb-3">AI/ML Design</h4>
+                    <div className="text-2xl font-bold bg-gradient-to-r from-green-400 to-teal-400 bg-clip-text text-transparent mb-2">
+                      +22% YoY
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {['AI Ethics', 'Prompt Engineering', 'Data Viz'].map((skill) => (
+                        <span key={skill} className="px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-sm">
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
                   
-                  <div className="space-y-4">
-                    {careerSwitchData.industryTrends.map((trend, index) => (
-                      <div key={index} className="bg-slate-800/50 rounded-lg p-4">
-                        <h4 className="text-lg font-bold text-white mb-2">{trend.field}</h4>
-                        <p className="text-white/80 mb-3">
-                          Projected <span className="font-bold text-green-400">{trend.growth}</span> through 2028
-                        </p>
-                        <div className="flex flex-wrap gap-2">
-                          {trend.skills.map((skill) => (
-                            <span key={skill} className="px-2 py-1 bg-blue-500/20 text-blue-400 rounded-full text-sm">
-                              {skill}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    ))}
+                  <div className="p-6 bg-gradient-to-r from-green-900/30 to-teal-900/30 rounded-2xl border border-green-500/20">
+                    <h4 className="text-xl font-bold text-white mb-3">Sustainability Consulting</h4>
+                    <div className="text-2xl font-bold bg-gradient-to-r from-green-400 to-teal-400 bg-clip-text text-transparent mb-2">
+                      +18% YoY
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {['Circular Design', 'ESG Analysis', 'Policy'].map((skill) => (
+                        <span key={skill} className="px-3 py-1 bg-green-500/20 text-green-300 rounded-full text-sm">
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 </div>
-              </div>
+              </GlassCard>
 
-              {/* Action Plan */}
-              <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 mb-8">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-xl font-bold text-white flex items-center">
-                    <Target className="w-5 h-5 mr-2 text-cyan-400" />
-                    Action-Plan Blueprint
-                  </h3>
-                  <button 
-                    onClick={() => toggleSection('actionPlan')}
-                    className="text-white/70 hover:text-white"
-                  >
-                    {expandedSection === 'actionPlan' ? <ChevronUp /> : <ChevronDown />}
-                  </button>
-                </div>
+              {/* Transition Roadmap */}
+              <GlassCard delay={300}>
+                <h3 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                  <div className="p-2 bg-gradient-to-r from-orange-500/20 to-red-500/20 rounded-xl">
+                    <Target className="w-6 h-6 text-orange-400" />
+                  </div>
+                  90-Day Transition Plan
+                </h3>
                 
-                <div className={`${expandedSection === 'actionPlan' ? 'block' : 'hidden'} space-y-6`}>
-                  <div className="space-y-4">
-                    {careerSwitchData.actionPlan.map((step) => (
-                      <div key={step.step} className="flex items-start space-x-4">
-                        <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                          {step.step}
+                <div className="space-y-6">
+                  {[
+                    { 
+                      phase: "Month 1", 
+                      title: "Foundation Building", 
+                      actions: ["Complete PM Fundamentals Course", "Join Product Communities", "Start Industry Newsletter"],
+                      color: "blue"
+                    },
+                    { 
+                      phase: "Month 2", 
+                      title: "Portfolio Development", 
+                      actions: ["Build Case Study Portfolio", "Network with PMs", "Attend Industry Events"],
+                      color: "purple"
+                    },
+                    { 
+                      phase: "Month 3", 
+                      title: "Market Entry", 
+                      actions: ["Apply to Target Roles", "Practice PM Interviews", "Leverage Network"],
+                      color: "green"
+                    }
+                  ].map((phase, index) => (
+                    <div key={phase.phase} className="relative">
+                      <div className="flex items-start gap-4">
+                        <div className={`w-12 h-12 bg-gradient-to-r from-${phase.color}-500 to-${phase.color}-600 rounded-2xl flex items-center justify-center shadow-lg text-white font-bold`}>
+                          {index + 1}
                         </div>
-                        <div>
-                          <h4 className="text-lg font-bold text-white mb-1">{step.action}</h4>
-                          {step.duration && (
-                            <p className="text-white/60 text-sm flex items-center mb-1">
-                              <Clock className="w-4 h-4 mr-1" /> {step.duration}
-                            </p>
-                          )}
-                          {step.resource && (
-                            <p className="text-white/60 text-sm flex items-center">
-                              <BookOpen className="w-4 h-4 mr-1" /> {step.resource}
-                            </p>
-                          )}
-                          {step.platform && (
-                            <p className="text-white/60 text-sm flex items-center">
-                              <Users className="w-4 h-4 mr-1" /> {step.platform}
-                            </p>
-                          )}
-                          {step.details && (
-                            <p className="text-white/60 text-sm mt-1">{step.details}</p>
-                          )}
+                        <div className="flex-1">
+                          <div className="flex items-center gap-3 mb-2">
+                            <h4 className="text-xl font-bold text-white">{phase.title}</h4>
+                            <span className="px-3 py-1 bg-white/10 rounded-full text-sm text-white/70">{phase.phase}</span>
+                          </div>
+                          <div className="space-y-2">
+                            {phase.actions.map((action, actionIndex) => (
+                              <div key={actionIndex} className="flex items-center gap-2 text-white/80">
+                                <CheckCircle className="w-4 h-4 text-green-400" />
+                                <span>{action}</span>
+                              </div>
+                            ))}
+                          </div>
                         </div>
                       </div>
-                    ))}
-                  </div>
+                      {index < 2 && (
+                        <div className="absolute left-6 top-12 w-px h-8 bg-gradient-to-b from-white/20 to-transparent" />
+                      )}
+                    </div>
+                  ))}
                 </div>
-              </div>
+              </GlassCard>
 
-              {/* Input Prompt */}
-              <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 mb-8">
-                <h3 className="text-lg font-bold text-white mb-3">Help me refine your recommendations</h3>
-                <p className="text-white/80 mb-4">
-                  Tell me your interests and strengths, and any industries you're curious about.
+              {/* Action Input */}
+              <GlassCard delay={400}>
+                <h3 className="text-xl font-bold text-white mb-4">Tell me about your dream transition</h3>
+                <p className="text-white/70 mb-6">
+                  Share your interests, target industries, and any specific roles you're considering.
                 </p>
-                <div className="flex space-x-3">
+                <div className="flex gap-3">
                   <input 
                     type="text" 
-                    placeholder="Type your response..." 
-                    className="flex-1 bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    placeholder="I'm interested in transitioning to..." 
+                    className="flex-1 bg-white/5 border border-white/20 rounded-xl px-6 py-4 text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-transparent backdrop-blur-sm"
                   />
-                  <button className="bg-gradient-to-r from-purple-500 to-pink-600 text-white px-6 py-3 rounded-lg font-medium">
-                    Submit
+                  <button className="bg-gradient-to-r from-purple-500 to-pink-600 text-white px-8 py-4 rounded-xl font-medium hover:shadow-lg hover:shadow-pink-500/25 transition-all duration-300 flex items-center gap-2">
+                    <Rocket className="w-5 h-5" />
+                    Explore
                   </button>
                 </div>
-              </div>
+              </GlassCard>
 
               {/* Primary CTA */}
-              <div className="text-center">
-                <button className="bg-gradient-to-r from-purple-500 to-pink-600 text-white px-8 py-4 text-lg font-semibold rounded-lg hover:shadow-lg hover:shadow-pink-500/25 transition-all duration-300 inline-flex items-center">
-                  Show Me Switch Plans
-                  <ArrowRight className="w-5 h-5 ml-2" />
+              <div className="text-center pt-8">
+                <button className="group bg-gradient-to-r from-purple-500 to-pink-600 text-white px-12 py-6 text-xl font-bold rounded-2xl hover:shadow-2xl hover:shadow-pink-500/25 transition-all duration-300 transform hover:scale-105">
+                  <span className="flex items-center gap-3">
+                    Build My Transition Plan
+                    <ArrowRight className="w-6 h-6 transform group-hover:translate-x-1 transition-transform" />
+                  </span>
                 </button>
               </div>
-            </motion.div>
+            </div>
           )}
         </div>
       </section>
-    </ProductLayout>
+
+      <style jsx>{`
+        @keyframes pulse {
+          0%, 100% { opacity: 0.3; transform: scale(1); }
+          50% { opacity: 0.8; transform: scale(1.05); }
+        }
+        
+        @keyframes dataFlow {
+          0% { transform: translateY(100vh) translateX(0px); opacity: 0; }
+          10% { opacity: 1; }
+          90% { opacity: 1; }
+          100% { transform: translateY(-100vh) translateX(50px); opacity: 0; }
+        }
+        
+        .rotateX-1 { transform: rotateX(1deg); }
+        .rotateY-1 { transform: rotateY(1deg); }
+        .rotateX-2 { transform: rotateX(2deg); }
+        .rotateY-2 { transform: rotateY(2deg); }
+        .rotateX-0 { transform: rotateX(0deg); }
+        .rotateY-0 { transform: rotateY(0deg); }
+      `}</style>
+    </div>
   );
 };
 

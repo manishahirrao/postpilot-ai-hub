@@ -4,10 +4,43 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-
-import { ArrowRight, Target, Heart, Users, Award, Rocket, Globe } from 'lucide-react';
-import MainLayout from '@/components/Layout/MainLayout';
+import { ArrowRight, Target, Heart, Users, Award, Rocket, Globe, Sparkles } from 'lucide-react';
 import { ComplexOrbitalSystem } from '@/components/OrbitalSystem';
+
+// Floating Animation Component
+interface FloatingElementProps {
+  children: React.ReactNode;
+  delay?: number;
+  className?: string;
+}
+
+const FloatingElement: React.FC<FloatingElementProps> = ({ 
+  children, 
+  delay = 0, 
+  className = '' 
+}) => {
+  const style = {
+    animation: `float 6s ease-in-out infinite`,
+    animationDelay: `${delay}s`,
+  } as React.CSSProperties;
+
+  return (
+    <div 
+      className={`transform-gpu ${className}`}
+      style={style}
+    >
+      {children}
+      <style>
+        {`
+          @keyframes float {
+            0%, 100% { transform: translateY(0px) rotateZ(0deg); }
+            50% { transform: translateY(10px) rotateZ(2deg); }
+          }
+        `}
+      </style>
+    </div>
+  );
+};
 
 const AboutUsPage: React.FC = () => {
   const values = [
@@ -63,165 +96,143 @@ const AboutUsPage: React.FC = () => {
   ];
 
   return (
-    
-      <main className="flex-1 relative overflow-hidden ">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white">
+      {/* Animated background elements */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-purple-500/5 to-pink-500/5" />
+        
+        {/* Large floating orbs */}
+        <div 
+          className="absolute top-20 right-20 w-96 h-96 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-full blur-3xl animate-pulse"
+          style={{ animationDelay: '0.5s' }}
+        />
+        <div 
+          className="absolute bottom-20 left-20 w-80 h-80 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-full blur-3xl animate-pulse"
+          style={{ animationDelay: '1s' }}
+        />
+        <div 
+          className="absolute top-1/3 right-1/3 w-40 h-40 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-full blur-2xl animate-pulse"
+          style={{ animationDelay: '1.5s' }}
+        />
+        
+        {/* Grid pattern */}
+        <div 
+          className="absolute inset-0 opacity-5" 
+          style={{
+            backgroundImage: 'linear-gradient(to right, rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.1) 1px, transparent 1px)',
+            backgroundSize: '60px 60px'
+          }} 
+        />
+      </div>
+      
+      {/* Page content wrapper */}
+      <div className="relative z-10">
         {/* Hero Section */}
-        <section className="relative ">
-          {/* Animated background elements */}
-          <div className="absolute inset-0 overflow-hidden">
-            {/* Complex multi-layer orbital system */}
-            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-              <ComplexOrbitalSystem className="w-96 h-96 opacity-30" />
+        <section className="relative min-h-screen flex items-center overflow-hidden">
+          <div className="absolute inset-0">
+            {/* Floating elements */}
+            <FloatingElement className="absolute top-1/4 left-1/4" delay={0.3}>
+              <div className="w-16 h-16 rounded-full bg-gradient-to-r from-blue-500/20 to-cyan-500/20 backdrop-blur-sm border border-blue-500/30" />
+            </FloatingElement>
+            
+            <FloatingElement className="absolute bottom-1/3 right-1/3" delay={0.6}>
+              <div className="w-24 h-24 rounded-full bg-gradient-to-r from-purple-500/20 to-pink-500/20 backdrop-blur-sm border border-purple-500/30" />
+            </FloatingElement>
+            
+            {/* Main orbital system */}
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-20">
+              <ComplexOrbitalSystem className="w-full max-w-2xl" />
             </div>
+          </div>
           
-          {/* Secondary orbital systems with dynamic movement */}
-          <motion.div 
-            className="absolute top-20 right-32 w-48 h-48"
-            animate={{
-              rotate: -360,
-              x: [0, 30, 0, -30, 0],
-              y: [0, -15, 0, 15, 0],
-            }}
-            transition={{
-              rotate: { duration: 25, repeat: Infinity, ease: "linear" },
-              x: { duration: 12, repeat: Infinity, ease: "easeInOut" },
-              y: { duration: 8, repeat: Infinity, ease: "easeInOut" },
-            }}
-          >
-            <ComplexOrbitalSystem className="opacity-20" />
-          </motion.div>
-          
-          <motion.div 
-            className="absolute bottom-20 left-20 w-32 h-32"
-            animate={{
-              rotate: 360,
-              scale: [1, 1.2, 1],
-            }}
-            transition={{
-              rotate: { duration: 20, repeat: Infinity, ease: "linear" },
-              scale: { duration: 10, repeat: Infinity, ease: "easeInOut" },
-            }}
-          >
-            <ComplexOrbitalSystem className="opacity-25" />
-          </motion.div>
-          
-          {/* Floating elements */}
-          <motion.div 
-            className="absolute w-4 h-4 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full"
-            animate={{
-              x: [100, 200, 300, 200, 100],
-              y: [100, 50, 100, 150, 100],
-              scale: [1, 1.5, 1, 1.5, 1],
-              opacity: [0.6, 1, 0.6, 1, 0.6],
-            }}
-            transition={{
-              duration: 12,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          />
-          
-          <motion.div 
-            className="absolute w-6 h-6 bg-gradient-to-r from-purple-400 to-pink-500 rounded-full"
-            animate={{
-              x: [300, 200, 100, 200, 300],
-              y: [300, 250, 300, 350, 300],
-              scale: [1, 1.3, 1, 1.3, 1],
-              rotate: [0, 180, 360],
-            }}
-            transition={{
-              duration: 15,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: 2,
-            }}
-          />
-          
-          {/* Energy pulse waves */}
-          <motion.div 
-            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 border-2 border-cyan-500/10 rounded-full"
-            animate={{
-              scale: [1, 1.8, 1],
-              opacity: [0.3, 0, 0.3],
-            }}
-            transition={{
-              duration: 8,
-              repeat: Infinity,
-              ease: "easeOut",
-            }}
-          />
-          
-          <motion.div 
-            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 border border-purple-500/10 rounded-full"
-            animate={{
-              scale: [1, 2.2, 1],
-              opacity: [0.2, 0, 0.2],
-            }}
-            transition={{
-              duration: 6,
-              repeat: Infinity,
-              ease: "easeOut",
-              delay: 3,
-            }}
-          />
-        </div>
-        {/* Hero Section */}
-        <section className="relative py-32 hero-gradient">
-          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <motion.div 
-              className="text-center mb-16"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-            >
-              <motion.div 
-                className="inline-flex items-center space-x-2 bg-gradient-to-r from-cyan-500/10 to-purple-500/10 rounded-full px-4 py-2 border border-cyan-500/20 mb-6"
-                whileHover={{ scale: 1.05 }}
+          {/* Hero content */}
+          <div className="container mx-auto px-4 relative z-10 text-center">
+            <div className="max-w-4xl mx-auto">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                className="inline-flex items-center px-6 py-2.5 rounded-full bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-white/10 backdrop-blur-md mb-8"
               >
-                <Rocket className="w-4 h-4 text-cyan-400" />
-                <span className="text-sm font-medium">Empowering Professional Success</span>
-              </motion.div>
-              <h1 className="text-5xl lg:text-7xl font-bold leading-tight mb-6">
-                <span className="block">Empowering Careers</span>
-                <span className="block gradient-text">Through AI Innovation</span>
-                <span className="text-3xl lg:text-4xl font-normal opacity-80 mt-4">
-                  Creating opportunities for professionals worldwide
+                <Sparkles className="w-5 h-5 mr-2 text-cyan-400" />
+                <span className="text-sm font-medium bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
+                  The Future of Career Development
                 </span>
-              </h1>
-              <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
-                We're on a mission to democratize professional success by making AI-powered 
-                career tools accessible to everyone, everywhere.
-              </p>
-            </motion.div>
-
-            {/* Stats */}
-            <motion.div 
-              className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-16"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-            >
-              {stats.map((stat, index) => (
-                <motion.div
-                  key={stat.label}
-                  initial={{ opacity: 0, scale: 0.5 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5, delay: 0.5 + index * 0.1 }}
-                  whileHover={{ y: -5, transition: { duration: 0.2 } }}
+              </motion.div>
+              
+              <motion.h1 
+                className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+              >
+                <span className="block bg-gradient-to-r from-white to-white/90 bg-clip-text text-transparent">
+                  Empowering Careers with
+                </span>
+                <span className="block bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent mt-2">
+                  Intelligent Technology
+                </span>
+              </motion.h1>
+              
+              <motion.p 
+                className="text-xl text-gray-300 mb-10 max-w-2xl mx-auto leading-relaxed"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+              >
+                We're revolutionizing career development through cutting-edge AI and data-driven insights that deliver real results.
+              </motion.p>
+              
+              <motion.div 
+                className="flex flex-wrap gap-4 justify-center"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+              >
+                <Button 
+                  className="group relative overflow-hidden px-8 py-6 text-lg font-medium bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-xl transition-all duration-300 transform hover:-translate-y-1 hover:shadow-2xl hover:shadow-blue-500/20"
                 >
-                  <Card className="shadow-lg rounded-2xl bg-white/70 backdrop-blur-md border border-border/50 hover:shadow-xl transition-all duration-300">
-                    <CardContent className="flex flex-col items-center py-8">
-                      <div className="text-4xl font-bold bg-gradient-to-r from-cyan-600 to-purple-600 bg-clip-text text-transparent mb-2">
-                        {stat.number}
-                      </div>
-                      <div className="text-muted-foreground text-lg">{stat.label}</div>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
-            </motion.div>
+                  <span className="relative z-10 flex items-center">
+                    Get Started Free
+                    <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                  </span>
+                  <span className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                </Button>
+                
+                <Button 
+                  variant="outline" 
+                  className="group relative overflow-hidden px-8 py-6 text-lg font-medium text-white border-white/20 hover:bg-white/5 hover:border-white/30 rounded-xl transition-all duration-300 transform hover:-translate-y-1"
+                >
+                  <span className="relative z-10 flex items-center">
+                    Learn More
+                    <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                  </span>
+                </Button>
+              </motion.div>
+              
+              {/* Trust indicators */}
+              <motion.div 
+                className="mt-16 pt-8 border-t border-white/10"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.4 }}
+              >
+                <p className="text-sm text-gray-400 mb-6">TRUSTED BY INNOVATIVE COMPANIES WORLDWIDE</p>
+                <div className="flex flex-wrap justify-center items-center gap-8 opacity-70">
+                  {['TechCorp', 'InnovateX', 'FutureLabs', 'Nexus', 'Quantum', 'Horizon'].map((company, i) => (
+                    <div key={i} className="text-gray-300 font-medium hover:text-white transition-colors cursor-pointer">
+                      {company}
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+            </div>
           </div>
         </section>
+        
+        {/* Rest of the page content */}
+       
 
         {/* Mission & Vision */}
         <section className="py-20 relative z-10">
@@ -651,11 +662,10 @@ const AboutUsPage: React.FC = () => {
               duration: 10,
               repeat: Infinity,
               ease: "easeInOut",
-              repeatType: "reverse",
+              repeatType: "reverse" as const,
             }}
           />
         </div>
-        </section>
         
         {/* Divider */}
         <div className="relative py-12">
@@ -663,9 +673,9 @@ const AboutUsPage: React.FC = () => {
             <div className="w-full border-t border-border/20" />
           </div>
         </div>
-      </section>
-      </main>
-    
+        </section>
+      </div>
+    </div>
   );
 };
 

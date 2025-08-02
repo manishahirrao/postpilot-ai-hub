@@ -43,7 +43,7 @@ import LoginPersonalPage from "./pages/Auth/LoginPersonalPage";
 import Callback from "./pages/Auth/Callback";
 
 // Dashboard Pages
-import DashboardPage from "./pages/Dashboard/Dashboard";
+
 // import PersonalDashboard from "./pages/Dashboard/PersonalDashboard";
 // import CompanyDashboard from "./pages/Dashboard/CompanyDashboard";
 
@@ -65,12 +65,24 @@ import Blog from "./pages/Blog";
 import Chatbot from "./ChatBot/Chatbot";
 import PersonalRegisterPage from "./pages/Auth/PersonalRegisterPage";
 
-import ResumeEnhancerPage from "./pages/ResumeEnhancerPage";
+
 
 const queryClient = new QueryClient();
 
 // Import MainLayout component
 import MainLayout from '@/components/Layout/MainLayout';
+import Navbar from '@/components/Layout/Navbar';
+import Footer from '@/components/Layout/Footer';
+
+const AppLayout = ({ children }: { children: React.ReactNode }) => (
+  <div className="flex flex-col min-h-screen">
+    <Navbar />
+    <main className="flex-1">
+      {children}
+    </main>
+    <Footer />
+  </div>
+);
 
 const App: React.FC = () => (
   <QueryClientProvider client={queryClient}>
@@ -81,19 +93,55 @@ const App: React.FC = () => (
             <Sonner position="top-center" richColors />
             <Toaster />
             <Routes>
-              {/* Product Pages - No Navbar/Footer */}
-              <Route path="/product" element={<ProductIndexPage />} />
-              <Route path="/product/resume-builder" element={<ResumeBuilderPage />} />
-              <Route path="/product/mock-interview" element={<MockInterviewPage />} />
-              <Route path="/product/job-matcher" element={<JobMatcherPage />} />
-              <Route path="/product/career-analytics" element={<CareerAnalyticsPage />} />
-              <Route path="/product/post-generation" element={<PersonalPostGeneration />} />
-              <Route path="/product/post-generator" element={<PostGeneration />} />
-              <Route path="/product/job-board" element={<JobBoard />} />
-              <Route path="/product/resume-enhancer" element={<ResumeEnhancerPage />} />
+              {/* Product Pages */}
+              <Route path="/product" element={
+                <AppLayout>
+                  <ProductIndexPage />
+                </AppLayout>
+              } />
+              <Route path="/product/resume-builder" element={
+                <AppLayout>
+                  <ResumeBuilderPage />
+                </AppLayout>
+              } />
+              <Route path="/product/mock-interview" element={
+                <AppLayout>
+                  <MockInterviewPage />
+                </AppLayout>
+              } />
+              <Route path="/product/job-matcher" element={
+                <AppLayout>
+                  <JobMatcherPage />
+                </AppLayout>
+              } />
+              <Route path="/product/career-analytics" element={
+                <AppLayout>
+                  <CareerAnalyticsPage />
+                </AppLayout>
+              } />
+              <Route path="/product/post-generation" element={
+                <AppLayout>
+                  <PersonalPostGeneration />
+                </AppLayout>
+              } />
+              <Route path="/product/post-generator" element={
+                <AppLayout>
+                  <PostGeneration />
+                </AppLayout>
+              } />
+              <Route path="/product/job-board" element={
+                <AppLayout>
+                  <JobBoard />
+                </AppLayout>
+              } />
+              
               
               {/* Solutions Pages */}
-              <Route path="/solutions" element={<SolutionsIndexPage />} />
+              <Route path="/solutions" element={
+                <AppLayout>
+                  <SolutionsIndexPage />
+                </AppLayout>
+              } />
               
               {/* All other pages with Navbar and Footer */}
               <Route path="*" element={
@@ -108,14 +156,7 @@ const App: React.FC = () => (
                     <Route path="/auth/callback" element={<Callback />} />
 
                     {/* Protected Dashboard Routes */}
-                    <Route
-                      path="/dashboard"
-                      element={
-                        <ProtectedRoute>
-                          <DashboardPage />
-                        </ProtectedRoute>
-                      }
-                    />
+                    
 
                     {/* Protected Profile Routes */}
                     <Route
